@@ -9,6 +9,9 @@
 /unity-arml-sdk/[Bb]uilds/
 /unity-arml-sdk/[Ll]ogs/
 /unity-arml-sdk/[Uu]ser[Ss]ettings/
+/unity-arml-sdk/_iOSBuild/
+/unity-arml-sdk/_iOSBuild_BurstDebugInformation_DoNotShip/
+/unity-arml-sdk/_build/
 
 # MemoryCaptures can get excessive in size.
 # They also could contain extremely sensitive data
@@ -46,6 +49,7 @@ ExportedObj/
 *.mdb
 *.opendb
 *.VC.db
+*.blob
 
 # Unity3D generated meta files
 *.pidb.meta
