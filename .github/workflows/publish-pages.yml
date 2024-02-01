@@ -32,9 +32,12 @@ jobs:
           with:
             node-version: 16.x
             cache: yarn
+            cache-dependency-path: arml-website/yarn.lock
         - name: Install dependencies
+          working-directory: arml-website
           run: yarn install --frozen-lockfile --non-interactive
         - name: Build
+          working-directory: arml-website
           run: yarn build
         # 👆 Build steps
         - name: Setup Pages
@@ -43,7 +46,7 @@ jobs:
           uses: actions/upload-pages-artifact@v2
           with:
             # 👇 Specify build output path
-            path: build
+            path: arml-website/build
         - name: Deploy to GitHub Pages
           id: deployment
           uses: actions/deploy-pages@v2
