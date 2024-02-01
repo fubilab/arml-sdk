@@ -1,0 +1,12 @@
+.footerContent {
+  width: 300px;
+  margin-right: 100px;
+  margin-bottom: 50px;
+}
+
+.footerColumns {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+}
