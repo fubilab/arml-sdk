@@ -49,27 +49,6 @@
   color: var(--ifm-navbar-link-hover-color);
 }
 
-
-.nav-link_download-app-store {
-  background-image: url('https://elysium-cdn-01.nyc3.cdn.digitaloceanspaces.com/app-store-button-white.svg');
-  color: transparent;
-  background-size:contain;
-  background-repeat: no-repeat;
-  height: 46px;
-  width: 137px;
-  padding-bottom: 0;
-  margin-left: 14px;
-}
-
-@media (max-width: 996px) { 
-  .nav-link_download-app-store {
-    position: absolute;
-    bottom: 20px;
-    height: 60px;
-    width: auto;
-  }
-}
-
 .navbar__toggle {
   position: absolute;
   right: 20px;
