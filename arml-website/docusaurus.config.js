@@ -13,7 +13,7 @@ module.exports = {
   title: 'AR Magic Lantern',
   tagline: '',
   url: process.env.DOCUSAURUS_URL,
-  baseUrl: '/',
+  baseUrl: process.env.DOCUSAURUS_BASE_URL,
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
@@ -21,8 +21,8 @@ module.exports = {
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'FuBILab', // Usually your GitHub org/user name.
-  projectName: 'ARML SDK', // Usually your repo name.
+  organizationName: 'fubilab', // Usually your GitHub org/user name.
+  projectName: 'arml-sdk', // Usually your repo name.
 
   // Even if you don't use internalization, you can use this field to set useful
   // metadata like html lang. For example, if your site is Chinese, you may want
@@ -78,18 +78,18 @@ module.exports = {
       },
     }),
   plugins: [
-    [
-      '@docusaurus/plugin-client-redirects',
-      {
-        redirects: [
-          // /docs/oldDoc -> /docs/newDoc
-          {
-            from: '/docs',
-            to: '/docs/guide/',
-          },
-        ],
-      },
-    ],
+    // [
+    //   '@docusaurus/plugin-client-redirects',
+    //   {
+    //     redirects: [
+    //       // /docs/oldDoc -> /docs/newDoc
+    //       {
+    //         from: '/docs',
+    //         to: '/docs/guide/',
+    //       },
+    //     ],
+    //   },
+    // ],
     async function docusaurusTailwindCss() {
       return {
         name: 'docusaurus-tailwindcss',
