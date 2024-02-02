@@ -24,7 +24,7 @@ jobs:
         url: ${{ steps.deployment.outputs.page_url }}
       env: 
         DOCUSAURUS_URL: https://fubilab.github.io
-        DOCUSAURUS_BASE_URL: /arml/
+        DOCUSAURUS_BASE_URL: /arml-sdk/
       runs-on: ubuntu-latest
       # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
       permissions:
