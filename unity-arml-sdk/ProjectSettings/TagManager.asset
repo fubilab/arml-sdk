@@ -3,7 +3,14 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Stair
+  - WallRun
+  - Climb
+  - Fly
+  - anchor
+  - Animal
+  - Water
   layers:
   - Default
   - TransparentFX
@@ -12,12 +19,12 @@ TagManager:
   - Water
   - UI
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Grabbable
+  - Grabbed
+  - Ignore_Grabbables
+  - Block_Raycast
+  - StencilLayer1
+  - CantCollideWithItself
   - 
   - 
   - 

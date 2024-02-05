@@ -1,0 +1,103 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!319 &31900000
+AvatarMask:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Head_Mask
+  m_Mask: 00000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+  m_Elements:
+  - m_Path: 
+    m_Weight: 1
+  - m_Path: hellenic_hund_exp3_0_0
+    m_Weight: 1
+  - m_Path: hellenic_hund_exp3_0_0/polySurface1
+    m_Weight: 1
+  - m_Path: hellenic_hund_exp3_0_0/polySurface30
+    m_Weight: 1
+  - m_Path: hellenic_hund_exp3_0_0/polySurface31
+    m_Weight: 1
+  - m_Path: hellenic_hund_exp3_0_0/polySurface34
+    m_Weight: 1
+  - m_Path: Root_M
+    m_Weight: 1
+  - m_Path: Root_M/backRump_L
+    m_Weight: 1
+  - m_Path: Root_M/backRump_L/backHip_L
+    m_Weight: 1
+  - m_Path: Root_M/backRump_L/backHip_L/backKnee_L
+    m_Weight: 1
+  - m_Path: Root_M/backRump_L/backHip_L/backKnee_L/backAnkle_L
+    m_Weight: 1
+  - m_Path: Root_M/backRump_L/backHip_L/backKnee_L/backAnkle_L/backToes_L
+    m_Weight: 1
+  - m_Path: Root_M/backRump_R
+    m_Weight: 1
+  - m_Path: Root_M/backRump_R/backHip_R
+    m_Weight: 1
+  - m_Path: Root_M/backRump_R/backHip_R/backKnee_R
+    m_Weight: 1
+  - m_Path: Root_M/backRump_R/backHip_R/backKnee_R/backAnkle_R
+    m_Weight: 1
+  - m_Path: Root_M/backRump_R/backHip_R/backKnee_R/backAnkle_R/backToes_R
+    m_Weight: 1
+  - m_Path: Root_M/RootPart1_M
+    m_Weight: 1
+  - m_Path: Root_M/RootPart1_M/Spine1_M
+    m_Weight: 1
+  - m_Path: Root_M/RootPart1_M/Spine1_M/Spine1Part1_M
+    m_Weight: 1
+  - m_Path: Root_M/RootPart1_M/Spine1_M/Spine1Part1_M/Chest_M
+    m_Weight: 1
+  - m_Path: Root_M/RootPart1_M/Spine1_M/Spine1Part1_M/Chest_M/frontRump_L
+    m_Weight: 1
+  - m_Path: Root_M/RootPart1_M/Spine1_M/Spine1Part1_M/Chest_M/frontRump_L/frontHip_L
+    m_Weight: 1
+  - m_Path: Root_M/RootPart1_M/Spine1_M/Spine1Part1_M/Chest_M/frontRump_L/frontHip_L/frontKnee_L
+    m_Weight: 1
+  - m_Path: Root_M/RootPart1_M/Spine1_M/Spine1Part1_M/Chest_M/frontRump_L/frontHip_L/frontKnee_L/frontAnkle_L
+    m_Weight: 1
+  - m_Path: Root_M/RootPart1_M/Spine1_M/Spine1Part1_M/Chest_M/frontRump_L/frontHip_L/frontKnee_L/frontAnkle_L/frontToes_L
+    m_Weight: 1
+  - m_Path: Root_M/RootPart1_M/Spine1_M/Spine1Part1_M/Chest_M/frontRump_R
+    m_Weight: 1
+  - m_Path: Root_M/RootPart1_M/Spine1_M/Spine1Part1_M/Chest_M/frontRump_R/frontHip_R
+    m_Weight: 1
+  - m_Path: Root_M/RootPart1_M/Spine1_M/Spine1Part1_M/Chest_M/frontRump_R/frontHip_R/frontKnee_R
+    m_Weight: 1
+  - m_Path: Root_M/RootPart1_M/Spine1_M/Spine1Part1_M/Chest_M/frontRump_R/frontHip_R/frontKnee_R/frontAnkle_R
+    m_Weight: 1
+  - m_Path: Root_M/RootPart1_M/Spine1_M/Spine1Part1_M/Chest_M/frontRump_R/frontHip_R/frontKnee_R/frontAnkle_R/frontToes_R
+    m_Weight: 1
+  - m_Path: Root_M/RootPart1_M/Spine1_M/Spine1Part1_M/Chest_M/Neck_M
+    m_Weight: 1
+  - m_Path: Root_M/RootPart1_M/Spine1_M/Spine1Part1_M/Chest_M/Neck_M/NeckPart1_M
+    m_Weight: 1
+  - m_Path: Root_M/RootPart1_M/Spine1_M/Spine1Part1_M/Chest_M/Neck_M/NeckPart1_M/NeckPart2_M
+    m_Weight: 1
+  - m_Path: Root_M/RootPart1_M/Spine1_M/Spine1Part1_M/Chest_M/Neck_M/NeckPart1_M/NeckPart2_M/NeckPart3_M
+    m_Weight: 1
+  - m_Path: Root_M/RootPart1_M/Spine1_M/Spine1Part1_M/Chest_M/Neck_M/NeckPart1_M/NeckPart2_M/NeckPart3_M/Head_M
+    m_Weight: 1
+  - m_Path: Root_M/RootPart1_M/Spine1_M/Spine1Part1_M/Chest_M/Neck_M/NeckPart1_M/NeckPart2_M/NeckPart3_M/Head_M/Ear_L
+    m_Weight: 1
+  - m_Path: Root_M/RootPart1_M/Spine1_M/Spine1Part1_M/Chest_M/Neck_M/NeckPart1_M/NeckPart2_M/NeckPart3_M/Head_M/Ear_R
+    m_Weight: 1
+  - m_Path: Root_M/RootPart1_M/Spine1_M/Spine1Part1_M/Chest_M/Neck_M/NeckPart1_M/NeckPart2_M/NeckPart3_M/Head_M/Jaw_M
+    m_Weight: 1
+  - m_Path: Root_M/Tail0_M
+    m_Weight: 1
+  - m_Path: Root_M/Tail0_M/Tail1_M
+    m_Weight: 1
+  - m_Path: Root_M/Tail0_M/Tail1_M/Tail2_M
+    m_Weight: 1
+  - m_Path: Root_M/Tail0_M/Tail1_M/Tail2_M/Tail3_M
+    m_Weight: 1
+  - m_Path: Root_M/Tail0_M/Tail1_M/Tail2_M/Tail3_M/Tail4_M
+    m_Weight: 1
+  - m_Path: Root_M/Tail0_M/Tail1_M/Tail2_M/Tail3_M/Tail4_M/Tail5_M
+    m_Weight: 1
+  - m_Path: Root_M/Tail0_M/Tail1_M/Tail2_M/Tail3_M/Tail4_M/Tail5_M/Tail6_M
+    m_Weight: 1

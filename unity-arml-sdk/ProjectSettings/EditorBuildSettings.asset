@@ -6,6 +6,20 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
-    guid: 99c9720ab356a0642a771bea13969a05
-  m_configObjects: {}
+    path: Assets/Scenes/Logic.unity
+    guid: dfacc51e72fdf104dbac5b5ecffd54ce
+  - enabled: 0
+    path: Assets/Scenes/Examples/WallGame.unity
+    guid: 86b687a1b53cce04eb66e50920c9b632
+  - enabled: 1
+    path: Assets/Scenes/Examples/GarumRemake.unity
+    guid: 56ef7fc428721074a916adc622573501
+  m_configObjects:
+    Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 2a7aa5aa2dfff7040b09dac11562d92e, type: 2}
+    UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: 654a2a1d96e86364ba52c10a6680e2be, type: 2}
+    UnityEditor.XR.ARKit.ARKitSettings: {fileID: 11400000, guid: 187fedefd40b5414cbfccc97ba4a6a1d, type: 2}
+    com.unity.adaptiveperformance.loader_settings: {fileID: 11400000, guid: 4ebeba8f068d26544be72d89f0292dd4, type: 2}
+    com.unity.adaptiveperformance.simulator.provider_settings: {fileID: 11400000, guid: 5a8f941a4acfa594886a75f76254d7e7, type: 2}
+    com.unity.xr.arfoundation.simulation_settings: {fileID: 11400000, guid: 14049886788ed92428ce86a68e9cb4db, type: 2}
+    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 38f70711513784c47b6d937745d05034, type: 2}
+    com.unity.xr.openxr.settings4: {fileID: 11400000, guid: d4f5002e42c6ee140afb1f018018a789, type: 2}
