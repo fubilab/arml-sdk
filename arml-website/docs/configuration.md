@@ -3,7 +3,7 @@ title: SDK Configuration
 sidebar_position: 7
 ---
 
-The SDK has a some global parameters that the user can change to configure the application runtime. 
+The SDK has a some global parameters that you can change to configure the application runtime. 
 
 ### Game scene
 _Logic Scene -> Controllers -> Game Controllers_  

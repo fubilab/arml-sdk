@@ -8,7 +8,7 @@ const prismThemes = require('prism-react-renderer').themes
 
 /** @type {import('@docusaurus/types').Config} */
 module.exports = {
-  title: 'AR Magic Lantern',
+  title: 'AR Magic Lantern SDK',
   tagline: '',
   url: process.env.DOCUSAURUS_URL,
   baseUrl: process.env.DOCUSAURUS_BASE_URL,
@@ -65,7 +65,7 @@ module.exports = {
         disableSwitch: true,
       },
       navbar: {
-        title: 'AR Magic Lantern',
+        title: 'AR Magic Lantern SDK',
       },
       footer: {
         style: 'dark',
