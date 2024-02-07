@@ -8,6 +8,7 @@
 
 
 <p align="center">
+  <a href="#abouttheproject"><strong>About the project</strong></a> ·
   <a href="#whoisitfor"><strong>Who is it for?</strong></a> ·
   <a href="#requirements"><strong>Requirements</strong></a> ·
    <a href="#requirements"><strong>Installation</strong></a> ·
@@ -16,6 +17,10 @@
 </p>
 <br/>
 This repository contains a Software Development Kit (SDK) for creating augmented reality (AR) experiences for the AR Magic Lantern (ARML), a novel AR device that has the form-factor of a flashlight and projects AR content onto physical surfaces around the user. 
+
+### About the project
+
+The AR Magic Lantern is part of an ongoing research project led by the [Full-Body Interaction Lab](https://www.upf.edu/web/fubintlab) at [Universitat Pompeu Fabra](https://www.upf.edu/). In 2022, it received funding as part of EU Horizon 2020 to be developed into a market-ready prototype. It is also the [Lighthouse Project](https://emil-xr.eu/lighthouse-projects/upf-ar-magic-lantern/) of the UPF Node of the [European Media and Immersion Laboratory](https://emil-xr.eu) (EMIL).
 
 ### Who is it for?
 
@@ -32,3 +37,9 @@ In order to run and test applications, you will need to obtain an ARML-1 hardwar
 ### Installation
 
 The SDK is released as a 2022.3.8 Unity project that can be used as a template for other projects. To get started, download the [Unity project](https://github.com/fubilab/arml-sdk/releases/download/pre-release/unity-arml-sdk-v0.1.0.zip) from the latest release and open it in Unity. Then it is recommended to follow the walkthroughs for the [WallGame](https://fubilab.github.io/arml-sdk/SDK/examples/WallGame) and [GarumGame](https://fubilab.github.io/arml-sdk/SDK/examples/GarumGame) sample scenes in the [SDK Docs](https://fubilab.github.io/arml-sdk/SDK/).
+
+<hr>
+<img src="./arml-website/static/funded-by-the-eu.png" height="50" style="margin-bottom: 5px"/>
+<img src="./arml-website/static/emil-logo.png" height="50" style="margin-bottom: 5px"/>
+<img src="./arml-website/static/UPF.png" height="50" style="margin-bottom: 5px"/>
+<img src="./arml-website/static/FubIntLab.jpg" height="50" style="margin-bottom: 5px"/>
