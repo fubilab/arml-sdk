@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System;
 using UnityEditor;
 using UnityEngine;
 
@@ -28,17 +30,34 @@ public abstract class Interactable : MonoBehaviour
     [Header("Feedback")]
     [SerializeField] protected ActionFeedback actionFeedback;
 
+    [Header("Voice Commands"), Tooltip("List of Voice Command Keywords that the Interactable will react to. Make sure each Keyword is just one word")]
+    [SerializeField] protected List<string> voiceCommandKeywords = new List<string>();
+    public static Action<string> OnVoiceCommandAction;
+
     protected Transform cameraTransform;
     protected InteractionTimer interactionTimer;
     protected STTMicController sttMicController;
 
     /// <summary>
-    /// Initializes the interactable object, setting up necessary components and the interaction timer.
+    /// Sets up voice command subscriptions if necessary.
     /// </summary>
     protected virtual void Awake()
     {
         InitializeComponents();
         InitializeInteractionTimer();
+    }
+
+    protected virtual void Start()
+    {
+        foreach (string keyword in voiceCommandKeywords)
+        {
+            OnVoiceCommandAction?.Invoke(keyword);
+        }
+
+        if (interactionType == InteractionType.VOICE)
+        {
+            STTMicController.OnVoiceCommandAction += CheckVoiceCommand;
+        }
     }
 
     private void InitializeComponents()
@@ -59,6 +78,15 @@ public abstract class Interactable : MonoBehaviour
             interactionTimer.stateText.text = interactingText;
             interactionTimer.RequiredInteractionTime = requiredInteractionTime;
         }
+    }
+
+    /// <summary>
+    /// Checks if the provided voice command matches the assigned keyword.
+    /// </summary>
+    /// <param name="command">The voice command to check.</param>
+    protected virtual void CheckVoiceCommand(string command)
+    {
+
     }
 
     /// <summary>
@@ -241,6 +269,15 @@ public abstract class Interactable : MonoBehaviour
         if (outlineMaterial == null)
         {
             outlineMaterial = Resources.Load("M_Outline") as Material;
+        }
+
+        //Prevent inputtins space on VoiceCommand keywords
+        foreach (string keyword in voiceCommandKeywords)
+        {
+            if (keyword.Contains(" "))
+            {
+                Debug.LogWarning($"A space was inputted in one of the VoiceCommandKeywords for {gameObject.name}. Make sure there are no spaces.");
+            }
         }
     }
 #endif

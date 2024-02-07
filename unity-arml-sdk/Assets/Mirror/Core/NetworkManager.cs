@@ -1199,7 +1199,7 @@ namespace Mirror
             }
 
             // Call virtual method regardless of whether a scene change is expected or not.
-            OnClientConnect();
+            OnServerConnect();
         }
 
         // Transport callback, invoked after client fully disconnected.
@@ -1293,7 +1293,7 @@ namespace Mirror
             // can be overwritten for cases like delayed logouts in MMOs to
             // avoid players escaping from PvP situations by logging out.
             NetworkServer.DestroyPlayerForConnection(conn);
-            //Debug.Log("OnServerDisconnect: Client disconnected.");
+            Debug.Log("OnServerDisconnect: Client disconnected.");
         }
 
         /// <summary>Called on the server when a client is ready (= loaded the scene)</summary>
@@ -1332,7 +1332,7 @@ namespace Mirror
         public virtual void OnServerSceneChanged(string sceneName) { }
 
         /// <summary>Called on the client when connected to a server. By default it sets client as ready and adds a player.</summary>
-        public virtual void OnClientConnect()
+        public virtual void OnServerConnect()
         {
             // OnClientConnect by default calls AddPlayer but it should not do
             // that when we have online/offline scenes. so we need the

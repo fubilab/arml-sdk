@@ -67,9 +67,9 @@ public class ARMLNetworkManager : NetworkManager
             StartCoroutine(UnloadScenes());
     }
 
-    public override void OnServerConnect(NetworkConnectionToClient conn)
+    public override void OnServerConnect()
     {
-        base.OnServerConnect(conn);
+        base.OnServerConnect();
         Debug.Log("Client has connected to server");
     }
 

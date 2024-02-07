@@ -3,7 +3,6 @@ using System;
 using UltEvents;
 using System.Collections.Generic;
 
-
 #if UNITY_EDITOR
 using TNRD.Utilities;
 #endif
@@ -28,28 +27,19 @@ public class CameraPointedObject : Interactable
     [SerializeField, Tooltip("Collider used for trigger-based interaction. If null, uses angle-based interaction.")]
     private Collider triggerCollider;
 
-    // Re-triggering
-
-    private bool alreadyTriggered = false;
-    private bool triggerEntered = false;
-    private Transform cachedTransform;
-    private Transform mainCameraTransform;
-
-    [Header("Voice Commands"), Tooltip("List of Voice Command Keywords that the Interactable will react to. Make sure each Keyword is just one word")]
-    [SerializeField] private List<string> voiceCommandKeywords = new List<string>();
-    public static Action<string> OnVoiceCommandAction;
-
     [Header("Event")]
     [SerializeField] protected UltEvent OnObjectInteractedEvent;
 
     [Tooltip("These Events will only fire if the game is currently in the specified Level")]
     [SerializeField] protected List<LevelEvent> levelFilterEvents;
 
-    private DebugCanvasController debugCanvasController;
-
     private LevelController levelController;
 
-    private bool playerLoaded;
+    // Re-triggering
+    private bool alreadyTriggered = false;
+    private bool triggerEntered = false;
+    private Transform cachedTransform;
+    private Transform mainCameraTransform;
 
 #if UNITY_EDITOR
     /// <summary>
@@ -71,38 +61,9 @@ public class CameraPointedObject : Interactable
         cachedTransform = transform;
         mainCameraTransform = Camera.main?.transform;
         levelController = FindObjectOfType<LevelController>();
-
-        NetworkPlayer.OnPlayerLoaded += SetPlayerLoaded;
     }
 
-    /// <summary>
-    /// Sets up voice command subscriptions if necessary.
-    /// </summary>
-    private void Start()
-    {
-        foreach (string keyword in voiceCommandKeywords)
-        {
-            OnVoiceCommandAction?.Invoke(keyword);
-        }
-
-        debugCanvasController = FindObjectOfType<DebugCanvasController>();
-
-        if (interactionType == InteractionType.VOICE)
-        {
-            STTMicController.OnVoiceCommandAction += CheckVoiceCommand;
-        }
-    }
-
-    private void SetPlayerLoaded()
-    {
-        playerLoaded = true;
-    }
-
-    /// <summary>
-    /// Checks if the provided voice command matches the assigned keyword.
-    /// </summary>
-    /// <param name="command">The voice command to check.</param>
-    private void CheckVoiceCommand(string command)
+    protected override void CheckVoiceCommand(string command)
     {
         foreach (string keyword in voiceCommandKeywords)
         {
@@ -119,8 +80,6 @@ public class CameraPointedObject : Interactable
     /// </summary>
     void Update()
     {
-        //if (!playerLoaded) return;
-
         if (alreadyTriggered)
             UpdateOutlineFill(renderer);
 
@@ -234,9 +193,6 @@ public class CameraPointedObject : Interactable
     /// </summary>
     private void CheckSuccessful()
     {
-        if (debugCanvasController.freePlacementMode)
-            return;
-
         if (alreadyTriggered && !canRetrigger) return;
 
         switch (interactionType)
@@ -303,16 +259,5 @@ public class CameraPointedObject : Interactable
             return;
 
         triggerEntered = false;
-    }
-
-    private void OnValidate()
-    {
-        foreach (string keyword in voiceCommandKeywords)
-        {
-            if (keyword.Contains(" "))
-            {
-                Debug.LogWarning($"A space was inputted in one of the VoiceCommandKeywords for {gameObject.name}. Make sure there are no spaces.");
-            }
-        }
     }
 }
