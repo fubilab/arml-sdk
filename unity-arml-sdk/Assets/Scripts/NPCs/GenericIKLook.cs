@@ -12,7 +12,6 @@ public class GenericIKLook : MonoBehaviour
     [SerializeField] private float lerpDuration;
     [SerializeField] private Vector3 rotationOffset;
     private Quaternion startBoneRotation;
-    private Quaternion startLocalBoneRotation;
     private Vector3 startParentRotation;
     private bool lerpRunning;
     private bool currentlyOverLimit;
@@ -23,7 +22,6 @@ public class GenericIKLook : MonoBehaviour
             return;
 
         startBoneRotation = bone.rotation;
-        startLocalBoneRotation = bone.localRotation;
         startParentRotation = transform.eulerAngles;
     }
 
@@ -52,23 +50,21 @@ public class GenericIKLook : MonoBehaviour
         {
             Vector3 direction = (target.position - bone.position).normalized;
             Vector3 lookRotation = (Quaternion.LookRotation(direction) * startBoneRotation).eulerAngles;
-            Vector3 lookRotationLocal = (Quaternion.LookRotation(direction) * startLocalBoneRotation).eulerAngles;
 
             //Account for initial rotation
             lookRotation = lookRotation - startParentRotation;
             //Remap to invert X axis
-            lookRotation = new Vector3(-lookRotation.x, lookRotation.y, lookRotation.z);
+            //lookRotation = new Vector3(-lookRotation.x, lookRotation.y, lookRotation.z);
+            lookRotation = new Vector3(bone.eulerAngles.x, lookRotation.y, bone.eulerAngles.z); //Limit Rotation to Y Axis
 
             if (!currentlyOverLimit)
             {
-                bone.eulerAngles = new Vector3(bone.eulerAngles.x, lookRotation.y, bone.eulerAngles.z);
-                //bone.localEulerAngles = new Vector3(bone.localEulerAngles.x, bone.localEulerAngles.y, lookRotationLocal.z);
+                bone.eulerAngles = lookRotation;
                 //This check is used so we can lerp to the first valid target rotation AFTER it has been over limit (first look at rotation after resetting to 0)
                 currentlyOverLimit = false;
             }
             else
             {
-                if (lerpRunning) return;
                 StartCoroutine(LerpRotation(Quaternion.Euler(lookRotation), lerpDuration, false));
                 lerpRunning = true;
             }

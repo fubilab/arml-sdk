@@ -313,7 +313,7 @@ namespace Mirror
             }
 #endif
         }
-
+        
         // pass full function name to avoid ClassA.Func <-> ClassB.Func collisions
         protected void SendCommandInternal(string functionFullName, int functionHashCode, NetworkWriter writer, int channelId, bool requiresAuthority = true)
         {
