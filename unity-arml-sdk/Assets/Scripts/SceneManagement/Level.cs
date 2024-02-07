@@ -2,10 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UltEvents;
 using UnityEngine;
 using UnityEngine.Playables;
-using UltEvents;
-using UnityEngine.Events;
 
 /// <summary>
 /// A grouping of game objectives represented as Tasks. It controls the sequence of events that happen during the game, and the current state and goals of the game stage. 

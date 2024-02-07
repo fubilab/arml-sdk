@@ -12,7 +12,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Examples/WallGame.unity
     guid: 86b687a1b53cce04eb66e50920c9b632
   - enabled: 1
-    path: Assets/Scenes/Examples/GarumRemake.unity
+    path: Assets/Scenes/Examples/GarumGame.unity
     guid: 56ef7fc428721074a916adc622573501
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 2a7aa5aa2dfff7040b09dac11562d92e, type: 2}
