@@ -1,5 +1,5 @@
 
-# Garum Game Scene
+# GarumGame Scene
 ![](../../assets/Pasted%20image%2020240123163632.png)
 ## Scene Hierarchy
 ![](../../assets/Pasted%20image%2020240124152918.png)
