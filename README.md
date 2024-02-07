@@ -38,9 +38,8 @@ In order to run and test applications, you will need to obtain an ARML-1 hardwar
 
 The SDK is released as a 2022.3.8 Unity project that can be used as a template for other projects. To get started, download the [Unity project](https://github.com/fubilab/arml-sdk/releases/download/pre-release/unity-arml-sdk-v0.1.0.zip) from the latest release and open it in Unity. Then it is recommended to follow the walkthroughs for the [WallGame](https://fubilab.github.io/arml-sdk/SDK/examples/WallGame) and [GarumGame](https://fubilab.github.io/arml-sdk/SDK/examples/GarumGame) sample scenes in the [SDK Docs](https://fubilab.github.io/arml-sdk/SDK/).
 
-<hr>
-<br />
-<div align="center">
+<hr size="1">
+<p align="center">
 <a href="https://www.upf.edu/web/fubintlab">
 <img src="./arml-website/static/FubIntLab.jpg" height="50" margin="5"/></a>
 &nbsp;&nbsp;
@@ -51,4 +50,4 @@ The SDK is released as a 2022.3.8 Unity project that can be used as a template f
 <img src="./arml-website/static/UPF.png" height="50"/></a>
 &nbsp;&nbsp;
 <img src="./arml-website/static/funded-by-the-eu.png" height="50" />
-</div>
+</p>
