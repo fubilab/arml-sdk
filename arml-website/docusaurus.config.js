@@ -4,9 +4,7 @@
 require('dotenv').config()
 
 const customFields = require('./src/customFields')
-
-const lightCodeTheme = require('prism-react-renderer/themes/github')
-const darkCodeTheme = require('prism-react-renderer/themes/dracula')
+const prismThemes = require('prism-react-renderer').themes
 
 /** @type {import('@docusaurus/types').Config} */
 module.exports = {
@@ -73,8 +71,8 @@ module.exports = {
         style: 'dark',
       },
       prism: {
-        theme: lightCodeTheme,
-        darkTheme: darkCodeTheme,
+        theme: prismThemes.github,
+        darkTheme: prismThemes.dracula,
       },
     }),
   plugins: [

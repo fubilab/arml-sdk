@@ -15,10 +15,9 @@
     "typecheck": "tsc"
   },
   "dependencies": {
-    "@docusaurus/core": "^2.0.0-rc.1",
-    "@docusaurus/plugin-client-redirects": "^2.0.0-rc.1",
-    "@docusaurus/preset-classic": "^2.0.0-rc.1",
-    "@mdx-js/react": "^1.6.22",
+    "@docusaurus/core": "3.1.1",
+    "@docusaurus/preset-classic": "3.1.1",
+    "@mdx-js/react": "^3.0.0",
     "autoprefixer": "^10.4.7",
     "browserify-fs": "^1.0.0",
     "clsx": "^1.1.1",
@@ -27,17 +26,17 @@
     "markdown-to-jsx": "^7.1.7",
     "postcss": "^8.4.14",
     "prettier-plugin-tailwindcss": "^0.5.6",
-    "prism-react-renderer": "^1.3.3",
+    "prism-react-renderer": "^2.1.0",
     "raw-loader": "^4.0.2",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "react-markdown": "^8.0.3",
-    "tailwindcss": "^3.3.3",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-markdown": "^9.0.1",
+    "tailwindcss": "^3.4.1",
     "use-immer": "0.5.1"
   },
   "devDependencies": {
-    "@docusaurus/module-type-aliases": "^2.0.0-rc.1",
-    "@tsconfig/docusaurus": "^1.0.5",
+    "@docusaurus/module-type-aliases": "3.1.1",
+    "@docusaurus/types": "3.1.1",
     "typescript": "^4.6.4"
   },
   "browserslist": {
