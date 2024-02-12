@@ -10,24 +10,45 @@ The Wall Game showcases simple interaction with the ARML, stencil effects, and t
 
 Open `Scenes > WallGame`.
 
-![](./assets/Pasted%20image%2020240119121346.png)
+![](./assets/Pasted%20image%2020240119121346.png)  
+*Screenshot of WallGame hierarchy, scene view and camera view*
+
 ## Scene Hierarchy
-- As a Content scene, it contains parent GameObjects holding both visual and interactive elements.
-	- ORIGIN. Determines the initial Transform of the LANTERN when the Scene is loaded.
-	- LEVELS. Holds a #LevelController. Controls and manages the Levels in the game, including their activation and progression. Each Level is a child GameObject of this one.
-	- LIGHTING. Holds all the Lights in the scene as well as Particle Effects if relevant.
-	- CHARACTERS. Holds all the Characters in the scene, in this case the Roman Centurion that can be interacted with as well as 2 farmers with an ox and cart that move in the background.
-	- GEOMETRY. Holds all the meshes and visual elements of the scene that don't belong to other categories. Can be further divided into Interactive elements and purely visual environment ones. In the case of this scene. It's divided into "BrickWallParent" which holds all the GameObjects related to the breakable Wall, and "Environment" which is everything behind the Wall (everything that is affected by a stencil effect in order to create a "Portal effect").
-	- AUDIO. Holds music and global ambience AudioSources. In this scene it only has a looped ambience of sheep sound effects.
-	- CANVAS. Holds world space Canvases related to the scene. For this one it holds a DialogueCanvas in order to display the conversation with the Centurion character.
+As a Content scene, it contains parent GameObjects holding both visual and interactive elements.  
+
+| Node       | Description |
+|:-----------|:------------|  
+| ORIGIN     | Determines the initial Transform of the LANTERN when the Scene is loaded. |
+| LEVELS     | Holds a #LevelController. Controls and manages the Levels in the game, including their activation and progression. Each Level is a child GameObject of this one. |
+| LIGHTING   | Holds all the Lights in the scene as well as Particle Effects if relevant. |
+| CHARACTERS | Holds all the Characters in the scene, in this case the Roman Centurion that can be interacted with as well as 2 farmers with an ox and cart that move in the background. |
+| GEOMETRY   | Holds all the meshes and visual elements of the scene that don't belong to other categories. Can be further divided into Interactive elements and purely visual environment ones. In the case of this scene. It's divided into "BrickWallParent" which holds all the GameObjects related to the breakable Wall, and "Environment" which is everything behind the Wall (everything that is affected by a stencil effect in order to create a "Portal effect"). |
+| AUDIO      | Holds music and global ambience AudioSources. In this scene it only has a looped ambience of sheep sound effects. |
+| CANVAS     | Holds world space Canvases related to the scene. For this one it holds a DialogueCanvas in order to display the conversation with the Centurion character. |
 
 ## Visual Assets
+
 ![](./assets/Pasted%20image%2020240119123008.png)
-- Visually, the scene consists of a terrain made based on height-map information of Barcelona, with a series of roman-themed assets portraying farms, crops, trees, a road, and a villa in the distance. All of these assets are seen through a Wall made of bricks. Some of these bricks can be interacted with to be pushed outward, in order to progressively reveal the environment behind. 
-![](./assets/Pasted%20image%2020240119123352.png)
-- Apart from the Wall itself, all the visual environments are placed on a "Stencil" layer that determines that they will only be rendered when seen through a GameObject with a specific material "M_Stencil". This creates an illusion that helps bridge the physical and digital elements of the application.
-- Due to licensing we have replaced some paid Unity assets that we used for the environment with some placeholders. Specifically, we used some house and vegetation assets from this pack https://assetstore.unity.com/packages/3d/environments/historic/polygon-ancient-empire-low-poly-3d-art-by-synty-224020, as well as some horses with this pack https://assetstore.unity.com/packages/3d/characters/animals/animal-pack-deluxe-99702. For this release they were replaced by this Roman Villa asset (https://sketchfab.com/3d-models/roman-villa-fcc3241662174fbbb146e6cf658293a9) and a sheep shed (https://sketchfab.com/3d-models/sheep-shed-024cd7a8d35147c8b3e3064685c6bf4b).
-![](./assets/placeholder%20environment.png)
+*Left: top-down view of WallGame scene, showing camera, wall, and landscape*  
+*Right: View of the landscape through the wall, showing the use of the stencil layer*
+
+Visually, the scene consists of a terrain made based on height-map information of Barcelona, with a series of roman-themed assets portraying farms, crops, trees, a road, and a villa in the distance. All of these assets are seen through a Wall made of bricks. Some of these bricks can be interacted with to be pushed outward, in order to progressively reveal the environment behind.  
+
+Apart from the Wall itself, all the visual environments are placed on a "Stencil" layer that determines that they will only be rendered when seen through a GameObject with a specific material "M_Stencil". This creates an illusion that helps bridge the physical and digital elements of the application.
+
+### Asset Attribution
+
+The following table lists the source of 3D models used in the SDK (if we did not model them internally). The screenshots are from an internal demonstrator version that contain some commercial assets that could not be included in the SDK. The commercial alternatives are noted and linked in the table below.
+
+| Visual asset       | License | Author | Commercial alternative |
+|:---|:---|:---|:---|  
+| [Wheat Bag](https://www.cgtrader.com/free-3d-models/military/other/sandbag-1) | Royalty Free No AI | [icekazim](https://www.cgtrader.com/designers/icekazim) |
+| [Sheep shed](https://sketchfab.com/3d-models/sheep-shed-024cd7a8d35147c8b3e3064685c6bf4b) | CC Attribution | [Maria Stashko](https://sketchfab.com/maria_stashko) | [POLYGON Ancient Empire](https://assetstore.unity.com/packages/3d/environments/historic/polygon-ancient-empire-low-poly-3d-art-by-synty-224020) |
+| [Animated Sheep](https://sketchfab.com/3d-models/sheep-test-non-commercial-196bb78e6e6343888d09f468a6a9dbc7) | CC Attribution-NonCommercial | [Nyilonelycompany](https://sketchfab.com/Nyilonelycompany) | [Animal pack deluxe](https://assetstore.unity.com/packages/3d/characters/animals/animal-pack-deluxe-99702) |
+| [Wooden Crate](https://sketchfab.com/3d-models/ikea-wooden-crate-4c5d81d4b18644df9f9f2959f198f186) | CC Attribution | [szymon.burek](https://sketchfab.com/szymon.burek) 
+| [Roman Villa](https://sketchfab.com/3d-models/roman-villa-fcc3241662174fbbb146e6cf658293a9) | CC Attribution | [deltorvik](https://sketchfab.com/deltorvik) | [POLYGON Ancient Empire](https://assetstore.unity.com/packages/3d/environments/historic/polygon-ancient-empire-low-poly-3d-art-by-synty-224020) |
+| [Roman Centurion Armor](https://sketchfab.com/3d-models/roman-centurion-armor-d0c6de99f16c49f386a9f8d7c3120dec) | CC Attribution | [Tactical_Beard](https://sketchfab.com/Tactical_Beard) |
+
 
 ## Interactables
 ![](./assets/Pasted%20image%2020240119123837.png)
