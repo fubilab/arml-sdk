@@ -119,6 +119,11 @@ public class LevelController : MonoBehaviour
             }
         }
     }
+
+    public void SetCompassTarget(Transform target)
+    {
+        CompassController.Instance.compassTarget = target;
+    }
 }
 
 [Serializable]

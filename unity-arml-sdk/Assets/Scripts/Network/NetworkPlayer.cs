@@ -1,12 +1,7 @@
 using AClockworkBerry;
-using ARML.GameBuilder;
 using Mirror;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.XR.CoreUtils;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 /// <summary>
 /// Represents a network player in the ARML application. This class handles different player types, their behaviors, 
@@ -17,7 +12,6 @@ public class NetworkPlayer : NetworkBehaviour
     GameObject geometryParent;
     AdminUIController adminUI;
     ARMLNetworkManager manager;
-    float speed = 1f;
     public static event Action OnPlayerLoaded;
 
     enum PlayerType
@@ -60,11 +54,11 @@ public class NetworkPlayer : NetworkBehaviour
     /// </summary>
     public override void OnStartLocalPlayer()
     {
-
         if (isServer)
         {
             playerType = PlayerType.LanternPlayer;
-            adminUI.SetCanvasVisibility(false);
+            if (adminUI != null)
+                adminUI.SetCanvasVisibility(false);
         }
         else if (manager.isAdmin)
         {
@@ -103,7 +97,6 @@ public class NetworkPlayer : NetworkBehaviour
         name = playerType.ToString();
 
         //geometryParent = GameObject.Find("--GEOMETRY--");
-
     }
 
     /// <summary>
@@ -206,7 +199,7 @@ public class NetworkPlayer : NetworkBehaviour
 
             //Change Sync Mode to Client to Server
             NetworkTransformReliable t = i.GetComponent<NetworkTransformReliable>();
-            if(t != null)
+            if (t != null)
             {
                 t.syncDirection = SyncDirection.ClientToServer;
             }

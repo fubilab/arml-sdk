@@ -86,8 +86,6 @@ public class CameraGrabber : MonoBehaviour
         canGrabLastGrabbedObject = false;
     }
 
-    //I have to do this extremely stupid collision checks because Unity
-    //doesn't register trigger exits on modifyed mesh colliders
     private void FixedUpdate()
     {
         if (grabbedObject != null)

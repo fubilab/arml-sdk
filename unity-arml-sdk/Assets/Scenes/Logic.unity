@@ -746,15 +746,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3026953980991145799, guid: 79cecb298a5e3bf40a2048ff98890029, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.21
+      value: 1.3366
       objectReference: {fileID: 0}
     - target: {fileID: 3026953980991145799, guid: 79cecb298a5e3bf40a2048ff98890029, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.626
+      value: -0.604
       objectReference: {fileID: 0}
     - target: {fileID: 3026953980991145799, guid: 79cecb298a5e3bf40a2048ff98890029, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.955
+      value: 0.487
       objectReference: {fileID: 0}
     - target: {fileID: 3026953980991145799, guid: 79cecb298a5e3bf40a2048ff98890029, type: 3}
       propertyPath: m_LocalRotation.x
@@ -856,6 +856,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7751715731476709973, guid: 79cecb298a5e3bf40a2048ff98890029, type: 3}
+      propertyPath: m_VertexColorAlwaysGammaSpace
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7756904292992657832, guid: 79cecb298a5e3bf40a2048ff98890029, type: 3}
       propertyPath: m_Name
       value: --LANTERN--
@@ -898,12 +902,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1149350298963853579, guid: f2b7cdb81f9566e4196bd9d7706ce54c, type: 3}
       propertyPath: loadOnStart
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1149350298963853579, guid: f2b7cdb81f9566e4196bd9d7706ce54c, type: 3}
       propertyPath: loadedGameSO
       value: 
-      objectReference: {fileID: 11400000, guid: 4734cdc849d46d841a9bb4c49d1a0563, type: 2}
+      objectReference: {fileID: 11400000, guid: 10740ebbc0b8a1141818e2df3a45c01e, type: 2}
     - target: {fileID: 1619379334752497443, guid: f2b7cdb81f9566e4196bd9d7706ce54c, type: 3}
       propertyPath: sceneId
       value: 3749822854
@@ -971,6 +975,14 @@ PrefabInstance:
     - target: {fileID: 8487569028831823833, guid: f2b7cdb81f9566e4196bd9d7706ce54c, type: 3}
       propertyPath: ModelPath
       value: vosk-model-small-es-0.42.zip
+      objectReference: {fileID: 0}
+    - target: {fileID: 8487569028831823833, guid: f2b7cdb81f9566e4196bd9d7706ce54c, type: 3}
+      propertyPath: KeyPhrases.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8487569028831823833, guid: f2b7cdb81f9566e4196bd9d7706ce54c, type: 3}
+      propertyPath: KeyPhrases.Array.data[0]
+      value: Brick
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:

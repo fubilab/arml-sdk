@@ -32,7 +32,7 @@ public abstract class Grabbable : Interactable
 
     [Header("Collider Scaling")]
     [SerializeField, Tooltip("Multiplies the collider by this amount when grabbed, useful for interacting with things at a distance or to avoid having" +
-        "to move to a very specific point to place it etc.")] 
+        "to move to a very specific point to place it etc.")]
     private Vector3 grabColliderScaleMultiplier = new Vector3(1f, 1f, 1f);
     private Vector3 originalColliderSize;
 
@@ -302,6 +302,33 @@ public abstract class Grabbable : Interactable
             if (state == GrabbableState.GRABBED)
             {
                 OnButtonUpWhileGrabbedEvent?.Invoke();
+            }
+        }
+    }
+
+    protected override void CheckVoiceCommand(string incomingKeyword)
+    {
+        //Filter through commands based on their VoiceCommandAction
+        foreach (VoiceCommandKeyword command in voiceCommandKeywords)
+        {
+            if (incomingKeyword.Contains(command.keyword, StringComparison.InvariantCultureIgnoreCase))
+            {
+                switch (command.action)
+                {
+                    case VoiceCommandAction.GRAB_OR_PLACE:
+                        if (attemptingToGrab)
+                            iTimer.OnFinishInteraction();
+                        //else if(state == GrabbableState.GRABBED)
+                            //TODO Add Place logic here
+                        break;
+                    case VoiceCommandAction.USE:
+                        if (state == GrabbableState.GRABBED)
+                            OnButtonDownWhileGrabbedEvent?.Invoke();
+                        break;
+                    case VoiceCommandAction.FREE:                    
+                            command.FreeActionEvent?.Invoke();
+                        break;
+                }
             }
         }
     }

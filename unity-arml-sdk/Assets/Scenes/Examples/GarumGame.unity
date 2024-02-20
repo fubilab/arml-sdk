@@ -613,8 +613,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   iTimer: {fileID: 984391300}
-  interactionType: 0
+  interactionType: 1
   requiredInteractionTime: 1.5
+  voiceCommandKeywords:
+  - keyword: 
+    action: 0
+    FreeActionEvent:
+      _PersistentCalls: []
   model: {fileID: 1381239819}
   interactingText: Interacting...
   outlineMaterial: {fileID: 2100000, guid: f41185843d05ccd46a6c88fe521721ef, type: 2}
@@ -835,6 +840,7 @@ MonoBehaviour:
   iTimer: {fileID: 926945694}
   interactionType: 1
   requiredInteractionTime: 1.5
+  voiceCommandKeywords: []
   model: {fileID: 0}
   interactingText: Interacting...
   outlineMaterial: {fileID: 2100000, guid: f41185843d05ccd46a6c88fe521721ef, type: 2}
@@ -849,7 +855,6 @@ MonoBehaviour:
     m_Bits: 0
   canRetrigger: 1
   triggerCollider: {fileID: 0}
-  voiceCommandKeyword: 
   OnObjectInteractedEvent:
     _PersistentCalls:
     - _Target: {fileID: 379734568}
@@ -1533,6 +1538,7 @@ MonoBehaviour:
   iTimer: {fileID: 479144705}
   interactionType: 1
   requiredInteractionTime: 1.5
+  voiceCommandKeywords: []
   model: {fileID: 0}
   interactingText: Interacting...
   outlineMaterial: {fileID: 2100000, guid: f41185843d05ccd46a6c88fe521721ef, type: 2}
@@ -1547,7 +1553,6 @@ MonoBehaviour:
     m_Bits: 0
   canRetrigger: 1
   triggerCollider: {fileID: 0}
-  voiceCommandKeyword: 
   OnObjectInteractedEvent:
     _PersistentCalls:
     - _Target: {fileID: 622868149}
@@ -1961,8 +1966,33 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   iTimer: {fileID: 2073377730}
-  interactionType: 0
+  interactionType: 1
   requiredInteractionTime: 1.5
+  voiceCommandKeywords:
+  - keyword: Grab
+    action: 0
+    FreeActionEvent:
+      _PersistentCalls: []
+  - keyword: Chop
+    action: 1
+    FreeActionEvent:
+      _PersistentCalls: []
+  - keyword: Help
+    action: 2
+    FreeActionEvent:
+      _PersistentCalls:
+      - _Target: {fileID: 5866666020009424221}
+        _MethodName: ChangeDialogueContainer
+        _PersistentArguments:
+        - _Type: 13
+          _Int: 0
+          _String: DS.ScriptableObjects.DSDialogueContainerSO, Assembly-CSharp, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+          _X: 0
+          _Y: 0
+          _Z: 0
+          _W: 0
+          _Object: {fileID: 11400000, guid: 0eb54eb7bab43824ab223798cc86a24c, type: 2}
   model: {fileID: 9198969677716232009}
   interactingText: Interacting...
   outlineMaterial: {fileID: 2100000, guid: f41185843d05ccd46a6c88fe521721ef, type: 2}
@@ -1992,8 +2022,9 @@ MonoBehaviour:
   OnButtonUpWhileGrabbedEvent:
     m_PersistentCalls:
       m_Calls: []
-  <MatchRotation>k__BackingField: 1
-  <DistanceToTargetOffset>k__BackingField: 0.7
+  MatchRotation: 1
+  DistanceToTargetOffset: -0.45
+  PositionAtRaycastHit: 1
 --- !u!65 &661519544
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2300,6 +2331,7 @@ MonoBehaviour:
   iTimer: {fileID: 899165847}
   interactionType: 1
   requiredInteractionTime: 1.5
+  voiceCommandKeywords: []
   model: {fileID: 847290383}
   interactingText: Interacting...
   outlineMaterial: {fileID: 2100000, guid: f41185843d05ccd46a6c88fe521721ef, type: 2}
@@ -2317,8 +2349,9 @@ MonoBehaviour:
   OnButtonUpWhileGrabbedEvent:
     m_PersistentCalls:
       m_Calls: []
-  <MatchRotation>k__BackingField: 0
-  <DistanceToTargetOffset>k__BackingField: 0
+  MatchRotation: 0
+  DistanceToTargetOffset: 0
+  PositionAtRaycastHit: 1
 --- !u!1 &847290383
 GameObject:
   m_ObjectHideFlags: 0
@@ -2669,11 +2702,27 @@ PrefabInstance:
       propertyPath: m_Name
       value: MapScan
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 26733af721b707c49a876c92140d76e1, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 26733af721b707c49a876c92140d76e1, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 26733af721b707c49a876c92140d76e1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1141838832}
   m_SourcePrefab: {fileID: 100100000, guid: 26733af721b707c49a876c92140d76e1, type: 3}
+--- !u!1 &900643834 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 26733af721b707c49a876c92140d76e1, type: 3}
+  m_PrefabInstance: {fileID: 900643833}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &926945692
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3024,6 +3073,7 @@ MonoBehaviour:
   iTimer: {fileID: 245998511}
   interactionType: 1
   requiredInteractionTime: 1.5
+  voiceCommandKeywords: []
   model: {fileID: 1972557105}
   interactingText: Interacting...
   outlineMaterial: {fileID: 2100000, guid: f41185843d05ccd46a6c88fe521721ef, type: 2}
@@ -3257,6 +3307,7 @@ MonoBehaviour:
   iTimer: {fileID: 783622475}
   interactionType: 1
   requiredInteractionTime: 1.5
+  voiceCommandKeywords: []
   model: {fileID: 0}
   interactingText: Interacting...
   outlineMaterial: {fileID: 2100000, guid: f41185843d05ccd46a6c88fe521721ef, type: 2}
@@ -3271,7 +3322,6 @@ MonoBehaviour:
     m_Bits: 0
   canRetrigger: 1
   triggerCollider: {fileID: 0}
-  voiceCommandKeyword: 
   OnObjectInteractedEvent:
     _PersistentCalls:
     - _Target: {fileID: 1102858652}
@@ -3484,7 +3534,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -5439128475087092429, guid: f22356de9ecb26c488984e26bdd767c6, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0
+      value: 0.0044
       objectReference: {fileID: 0}
     - target: {fileID: -5439128475087092429, guid: f22356de9ecb26c488984e26bdd767c6, type: 3}
       propertyPath: m_LocalPosition.y
@@ -3528,7 +3578,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6708571949128858873, guid: f22356de9ecb26c488984e26bdd767c6, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0
+      value: -0.0002
       objectReference: {fileID: 0}
     - target: {fileID: 6708571949128858873, guid: f22356de9ecb26c488984e26bdd767c6, type: 3}
       propertyPath: m_LocalPosition.y
@@ -3536,7 +3586,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6708571949128858873, guid: f22356de9ecb26c488984e26bdd767c6, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.3091
+      value: -0.3106
       objectReference: {fileID: 0}
     - target: {fileID: 7831499846472865499, guid: f22356de9ecb26c488984e26bdd767c6, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3570,6 +3620,15 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: f22356de9ecb26c488984e26bdd767c6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1141203905}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: f22356de9ecb26c488984e26bdd767c6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1141203904}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: f22356de9ecb26c488984e26bdd767c6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1141203901}
     - targetCorrespondingSourceObject: {fileID: -9153103054920751601, guid: f22356de9ecb26c488984e26bdd767c6, type: 3}
       insertIndex: -1
       addedObject: {fileID: 223441365}
@@ -3676,6 +3735,11 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1842570654}
   m_SourcePrefab: {fileID: 100100000, guid: f22356de9ecb26c488984e26bdd767c6, type: 3}
+--- !u!1 &1141203899 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: f22356de9ecb26c488984e26bdd767c6, type: 3}
+  m_PrefabInstance: {fileID: 1141203898}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1141203900
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3767,6 +3831,40 @@ MonoBehaviour:
     _PersistentCalls: []
   OnCollisionStayCheckMetEvent:
     _PersistentCalls: []
+--- !u!114 &1141203901
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1141203899}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ff3ba0becae47b8b9381191598957c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 1
+  syncMode: 0
+  syncInterval: 0
+  target: {fileID: 756136048}
+  clientAuthority: 0
+  syncPosition: 1
+  syncRotation: 1
+  syncScale: 0
+  interpolatePosition: 1
+  interpolateRotation: 1
+  interpolateScale: 1
+  sendIntervalMultiplier: 1
+  timelineOffset: 0
+  showGizmos: 0
+  showOverlay: 0
+  overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
+  onlySyncOnChange: 1
+  onlySyncOnChangeCorrectionMultiplier: 2
+  rotationSensitivity: 0.01
+  compressRotation: 0
+  positionPrecision: 0.01
+  scalePrecision: 0.01
 --- !u!114 &1141203902
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3807,11 +3905,62 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &1141203904
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1141203899}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba9ef03843e3c3248a70e50b5d9b7514, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1141203905
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1141203899}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 2737215864
+  _assetId: 885950240
+  serverOnly: 0
+  visible: 0
+  hasSpawned: 0
 --- !u!4 &1141838831 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 26733af721b707c49a876c92140d76e1, type: 3}
   m_PrefabInstance: {fileID: 900643833}
   m_PrefabAsset: {fileID: 0}
+--- !u!64 &1141838832
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 900643834}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 5461320835613783329, guid: 26733af721b707c49a876c92140d76e1, type: 3}
 --- !u!1 &1190306062
 GameObject:
   m_ObjectHideFlags: 0
@@ -4011,6 +4160,7 @@ MonoBehaviour:
   iTimer: {fileID: 1628663968}
   interactionType: 1
   requiredInteractionTime: 1.5
+  voiceCommandKeywords: []
   model: {fileID: 0}
   interactingText: Interacting...
   outlineMaterial: {fileID: 2100000, guid: f41185843d05ccd46a6c88fe521721ef, type: 2}
@@ -4025,7 +4175,6 @@ MonoBehaviour:
     m_Bits: 0
   canRetrigger: 1
   triggerCollider: {fileID: 0}
-  voiceCommandKeyword: 
   OnObjectInteractedEvent:
     _PersistentCalls:
     - _Target: {fileID: 1351589241}
@@ -4319,6 +4468,7 @@ MonoBehaviour:
   iTimer: {fileID: 879595934}
   interactionType: 1
   requiredInteractionTime: 1.5
+  voiceCommandKeywords: []
   model: {fileID: 0}
   interactingText: Interacting...
   outlineMaterial: {fileID: 2100000, guid: f41185843d05ccd46a6c88fe521721ef, type: 2}
@@ -4333,7 +4483,6 @@ MonoBehaviour:
     m_Bits: 0
   canRetrigger: 1
   triggerCollider: {fileID: 0}
-  voiceCommandKeyword: 
   OnObjectInteractedEvent:
     _PersistentCalls:
     - _Target: {fileID: 1402625244}
@@ -4897,7 +5046,7 @@ Transform:
   m_GameObject: {fileID: 1469466224}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.849, y: 0.626, z: -0.955}
+  m_LocalPosition: {x: 1.3366, y: -0.604, z: 0.487}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5966,6 +6115,15 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 959114322}
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 1b69bed3d62d4e24092f638761809cbe, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1989032002}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 1b69bed3d62d4e24092f638761809cbe, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1989032003}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 1b69bed3d62d4e24092f638761809cbe, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1989032006}
     - targetCorrespondingSourceObject: {fileID: -7360512336589095098, guid: 1b69bed3d62d4e24092f638761809cbe, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1351589242}
@@ -6009,6 +6167,11 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 622868149}
   m_SourcePrefab: {fileID: 100100000, guid: 1b69bed3d62d4e24092f638761809cbe, type: 3}
+--- !u!1 &1851379272 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 1b69bed3d62d4e24092f638761809cbe, type: 3}
+  m_PrefabInstance: {fileID: 1851379271}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1928327995
 GameObject:
   m_ObjectHideFlags: 0
@@ -11028,6 +11191,7 @@ MonoBehaviour:
   iTimer: {fileID: 1714141821}
   interactionType: 1
   requiredInteractionTime: 1.5
+  voiceCommandKeywords: []
   model: {fileID: 0}
   interactingText: Interacting...
   outlineMaterial: {fileID: 2100000, guid: f41185843d05ccd46a6c88fe521721ef, type: 2}
@@ -11042,7 +11206,6 @@ MonoBehaviour:
     m_Bits: 0
   canRetrigger: 1
   triggerCollider: {fileID: 0}
-  voiceCommandKeyword: 
   OnObjectInteractedEvent:
     _PersistentCalls:
     - _Target: {fileID: 1943861795}
@@ -11187,6 +11350,69 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 1b69bed3d62d4e24092f638761809cbe, type: 3}
   m_PrefabInstance: {fileID: 1851379271}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1989032002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1851379272}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 3528515250
+  _assetId: 1823655830
+  serverOnly: 0
+  visible: 0
+  hasSpawned: 0
+--- !u!114 &1989032003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1851379272}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ff3ba0becae47b8b9381191598957c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 1
+  syncMode: 0
+  syncInterval: 0
+  target: {fileID: 1989032000}
+  clientAuthority: 0
+  syncPosition: 1
+  syncRotation: 1
+  syncScale: 0
+  interpolatePosition: 1
+  interpolateRotation: 1
+  interpolateScale: 1
+  sendIntervalMultiplier: 1
+  timelineOffset: 0
+  showGizmos: 0
+  showOverlay: 0
+  overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
+  onlySyncOnChange: 1
+  onlySyncOnChangeCorrectionMultiplier: 2
+  rotationSensitivity: 0.01
+  compressRotation: 0
+  positionPrecision: 0.01
+  scalePrecision: 0.01
+--- !u!114 &1989032006
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1851379272}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba9ef03843e3c3248a70e50b5d9b7514, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2001804919 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -980273251119764385, guid: f22356de9ecb26c488984e26bdd767c6, type: 3}
@@ -11414,6 +11640,7 @@ MonoBehaviour:
   iTimer: {fileID: 1364233534}
   interactionType: 1
   requiredInteractionTime: 1.5
+  voiceCommandKeywords: []
   model: {fileID: 0}
   interactingText: Interacting...
   outlineMaterial: {fileID: 2100000, guid: f41185843d05ccd46a6c88fe521721ef, type: 2}
@@ -11428,7 +11655,6 @@ MonoBehaviour:
     m_Bits: 0
   canRetrigger: 1
   triggerCollider: {fileID: 0}
-  voiceCommandKeyword: 
   OnObjectInteractedEvent:
     _PersistentCalls:
     - _Target: {fileID: 2007723432}
@@ -12148,13 +12374,79 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 543450651643431461}
+  - component: {fileID: 919132147990204578}
+  - component: {fileID: 919132147990204576}
+  - component: {fileID: 919132147990204579}
   m_Layer: 0
   m_Name: salt_bowl_garum
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &919132147990204576
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919132147990204575}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ff3ba0becae47b8b9381191598957c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 1
+  syncMode: 0
+  syncInterval: 0
+  target: {fileID: 543450651643431461}
+  clientAuthority: 0
+  syncPosition: 1
+  syncRotation: 1
+  syncScale: 0
+  interpolatePosition: 1
+  interpolateRotation: 1
+  interpolateScale: 1
+  sendIntervalMultiplier: 1
+  timelineOffset: 0
+  showGizmos: 0
+  showOverlay: 0
+  overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
+  onlySyncOnChange: 1
+  onlySyncOnChangeCorrectionMultiplier: 2
+  rotationSensitivity: 0.01
+  compressRotation: 0
+  positionPrecision: 0.01
+  scalePrecision: 0.01
+--- !u!114 &919132147990204578
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919132147990204575}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 3772255604
+  _assetId: 0
+  serverOnly: 0
+  visible: 0
+  hasSpawned: 0
+--- !u!114 &919132147990204579
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919132147990204575}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba9ef03843e3c3248a70e50b5d9b7514, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!23 &1054108531161677233
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -12692,7 +12984,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &2725632613768180264
 Transform:
@@ -13255,7 +13547,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!33 &3965377105662097339
 MeshFilter:
@@ -17405,7 +17697,6 @@ MonoBehaviour:
   selectedDialogueIndex: 0
   dialogueDisplayText: {fileID: 0}
   choiceDisplayTexts: []
-  dialogueInteractionType: 0
   autoContinueSingleChoice: 1
   secondsToAutoContinue: 0
   autoStartDialogue: 1
@@ -17640,6 +17931,7 @@ MonoBehaviour:
   iTimer: {fileID: 273990576}
   interactionType: 1
   requiredInteractionTime: 1.5
+  voiceCommandKeywords: []
   model: {fileID: 1062194727}
   interactingText: Interacting...
   outlineMaterial: {fileID: 2100000, guid: f41185843d05ccd46a6c88fe521721ef, type: 2}
@@ -17669,8 +17961,9 @@ MonoBehaviour:
   OnButtonUpWhileGrabbedEvent:
     m_PersistentCalls:
       m_Calls: []
-  <MatchRotation>k__BackingField: 1
-  <DistanceToTargetOffset>k__BackingField: 0.63
+  MatchRotation: 1
+  DistanceToTargetOffset: -0.67
+  PositionAtRaycastHit: 1
 --- !u!95 &6231146514568404051
 Animator:
   serializedVersion: 5

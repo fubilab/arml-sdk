@@ -54,17 +54,24 @@ public class PlacementTarget : Interactable
     /// </summary>
     private void Start()
     {
+        base.Start();
+
         //Auto-place target object
         if (StartWithObjectPlaced && ObjectToAutoPlace != null)
         {
-            //Grabbable
-            ObjectToAutoPlace.pendingPlaceable = this;
-            ObjectToAutoPlace.Place();
-
-            //Placeable
-            pendingPlacedObject = ObjectToAutoPlace.gameObject;
-            Place();
+            AutoPlaceObject();
         }
+    }
+
+    private void AutoPlaceObject()
+    {
+        //Grabbable
+        ObjectToAutoPlace.pendingPlaceable = this;
+        ObjectToAutoPlace.Place();
+
+        //Placeable
+        pendingPlacedObject = ObjectToAutoPlace.gameObject;
+        Place();
     }
 
     /// <summary>
@@ -194,6 +201,19 @@ public class PlacementTarget : Interactable
         if (Input.GetMouseButtonDown(0))
         {
             iTimer.OnFinishInteraction();
+        }
+    }
+
+    protected override void CheckVoiceCommand(string _command)
+    {
+        //Check all voice commands regardless of their VoiceCommandAction enum
+        foreach (var command in voiceCommandKeywords)
+        {
+            if (_command.Contains(command.keyword, StringComparison.InvariantCultureIgnoreCase))
+            {
+                AutoPlaceObject();
+                break;
+            }
         }
     }
 }

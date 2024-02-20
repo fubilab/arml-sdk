@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using System;
 using UnityEditor;
 using UnityEngine;
+using NaughtyAttributes;
+using UltEvents;
 
 /// <summary>
 /// An abstract base class for creating interactable objects in a game.
@@ -13,9 +15,37 @@ public abstract class Interactable : MonoBehaviour
 
     [Header("Interaction")]
     [SerializeField] public InteractionType interactionType;
+
+    [ShowIf("interactionType", InteractionType.DWELL)]
+    [Header("Dwell Time")] 
     [SerializeField] protected float requiredInteractionTime = 1.5f;
 
-    [SerializeField]
+    #region "Voice Commands"
+    [ShowIf("interactionType", InteractionType.VOICE)]
+    [Header("Voice Commands"), Tooltip("List of Voice Command Keywords that the Interactable will react to. Make sure each Keyword is just one word")]
+    [SerializeField] 
+    protected List<VoiceCommandKeyword> voiceCommandKeywords = new List<VoiceCommandKeyword>();
+    public static Action<string> OnVoiceCommandAction;
+
+    [Serializable]
+    public struct VoiceCommandKeyword
+    {
+        public string keyword;
+        public VoiceCommandAction action;
+        public UltEvent FreeActionEvent;
+    }
+
+    [Serializable]
+    public enum VoiceCommandAction
+    {
+        GRAB_OR_PLACE,
+        USE,
+        FREE
+    }
+
+    #endregion
+
+    [Header("Model"), SerializeField]
     protected GameObject model;
 
     [Header("Visual")]
@@ -30,13 +60,9 @@ public abstract class Interactable : MonoBehaviour
     [Header("Feedback")]
     [SerializeField] protected ActionFeedback actionFeedback;
 
-    [Header("Voice Commands"), Tooltip("List of Voice Command Keywords that the Interactable will react to. Make sure each Keyword is just one word")]
-    [SerializeField] protected List<string> voiceCommandKeywords = new List<string>();
-    public static Action<string> OnVoiceCommandAction;
-
     protected Transform cameraTransform;
     protected InteractionTimer interactionTimer;
-    protected STTMicController sttMicController;
+    protected VoskSpeechToText voskSTT;
 
     /// <summary>
     /// Sets up voice command subscriptions if necessary.
@@ -49,13 +75,22 @@ public abstract class Interactable : MonoBehaviour
 
     protected virtual void Start()
     {
-        foreach (string keyword in voiceCommandKeywords)
-        {
-            OnVoiceCommandAction?.Invoke(keyword);
-        }
-
         if (interactionType == InteractionType.VOICE)
         {
+            voskSTT = FindObjectOfType<VoskSpeechToText>(true);
+
+            //Add keywords to voskSTT
+            foreach (var command in voiceCommandKeywords)
+            {
+                if (command.keyword == "" || command.keyword.Contains(" "))
+                    return;
+
+                if (voskSTT.KeyPhrases.Contains(command.keyword))
+                    return;
+
+                voskSTT.KeyPhrases.Add(command.keyword);
+            }
+
             STTMicController.OnVoiceCommandAction += CheckVoiceCommand;
         }
     }
@@ -64,7 +99,6 @@ public abstract class Interactable : MonoBehaviour
     {
         cameraTransform = Camera.main?.transform;
         interactionTimer = GetComponentInChildren<InteractionTimer>(true);
-        sttMicController = FindObjectOfType<STTMicController>(true);
         actionFeedback = GetComponent<ActionFeedback>();
         renderer = model ? model.GetComponent<Renderer>() : GetComponent<Renderer>();
 
@@ -271,12 +305,12 @@ public abstract class Interactable : MonoBehaviour
             outlineMaterial = Resources.Load("M_Outline") as Material;
         }
 
-        //Prevent inputtins space on VoiceCommand keywords
-        foreach (string keyword in voiceCommandKeywords)
+        //Prevent inputting space on VoiceCommand keywords
+        foreach (var command in voiceCommandKeywords)
         {
-            if (keyword.Contains(" "))
+            if (command.keyword.Contains(" "))
             {
-                Debug.LogWarning($"A space was inputted in one of the VoiceCommandKeywords for {gameObject.name}. Make sure there are no spaces.");
+                Debug.LogError($"A space was inputted in one of the VoiceCommandKeywords for {gameObject.name}. Make sure there are no spaces.");
             }
         }
     }

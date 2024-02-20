@@ -41,6 +41,7 @@ public class CameraPointedObject : Interactable
     private Transform cachedTransform;
     private Transform mainCameraTransform;
 
+
 #if UNITY_EDITOR
     /// <summary>
     /// Sets up the icon in the Unity Editor when this script is added to a GameObject.
@@ -63,11 +64,12 @@ public class CameraPointedObject : Interactable
         levelController = FindObjectOfType<LevelController>();
     }
 
-    protected override void CheckVoiceCommand(string command)
+    protected override void CheckVoiceCommand(string _command)
     {
-        foreach (string keyword in voiceCommandKeywords)
+        //Check all voice commands regardless of their VoiceCommandAction enum
+        foreach (var command in voiceCommandKeywords)
         {
-            if (command.Contains(keyword, StringComparison.InvariantCultureIgnoreCase))
+            if (_command.Contains(command.keyword, StringComparison.InvariantCultureIgnoreCase))
             {
                 OnObjectInteracted();
                 break;
@@ -91,7 +93,10 @@ public class CameraPointedObject : Interactable
         }
 
         if (!mainCameraTransform)
-            mainCameraTransform = Camera.main.transform;
+        {
+            mainCameraTransform = Camera.main?.transform;
+            return;
+        }
 
         if (IsBeyondInteractionDistance() || IsObstructedByRaycast()) return;
 
