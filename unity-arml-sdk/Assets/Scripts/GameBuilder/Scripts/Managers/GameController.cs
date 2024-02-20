@@ -45,8 +45,8 @@ namespace ARML.GameBuilder
             //If there are 2 scenes loaded already (logic + content), don't load more
             if (loadOnStart && SceneManager.sceneCount < 2)
             {
-                //StartCoroutine(SceneController.Instance.LoadSceneByReference(loadedGameSO.gameScene));
-                //loadOnStart = false;
+                StartCoroutine(SceneController.Instance.LoadSceneByReference(loadedGameSO.gameScene));
+                loadOnStart = false;
             }
 
             // Check if the loaded game scriptable object uses scores.
