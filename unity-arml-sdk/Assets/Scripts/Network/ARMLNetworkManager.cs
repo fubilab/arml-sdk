@@ -5,7 +5,6 @@ using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class ARMLNetworkManager : NetworkManager
 {
