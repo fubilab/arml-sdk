@@ -902,12 +902,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1149350298963853579, guid: f2b7cdb81f9566e4196bd9d7706ce54c, type: 3}
       propertyPath: loadOnStart
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1149350298963853579, guid: f2b7cdb81f9566e4196bd9d7706ce54c, type: 3}
       propertyPath: loadedGameSO
       value: 
-      objectReference: {fileID: 11400000, guid: 10740ebbc0b8a1141818e2df3a45c01e, type: 2}
+      objectReference: {fileID: 11400000, guid: 54f04830437e8b64f89ed1f367648dea, type: 2}
     - target: {fileID: 1619379334752497443, guid: f2b7cdb81f9566e4196bd9d7706ce54c, type: 3}
       propertyPath: sceneId
       value: 3749822854

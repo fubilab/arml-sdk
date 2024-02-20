@@ -30,7 +30,7 @@ public class ARMLNetworkManager : NetworkManager
     void Start()
     {
 #if UNITY_EDITOR || UNITY_STANDALONE_WIN
-        isAdmin = true; // Uncomment when network is used again
+        //isAdmin = true; // Uncomment when network is used again
 #elif !UNITY_EDITOR && UNITY_STANDALONE_LINUX
         isAdmin = false; // Auto Host when running from Linux Lantern
 #endif
