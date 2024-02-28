@@ -1,13 +1,14 @@
-﻿using System;
+﻿using UnityEngine;
 using System.Collections.Generic;
-using UnityEngine;
+using System;
 using UnityEngine.SceneManagement;
 
 namespace AClockworkBerry
 {
+
     public class ScreenLogger : MonoBehaviour
     {
-        public static bool IsPersistent = false;
+        public static bool IsPersistent = true;
 
         private static ScreenLogger instance;
         private static bool instantiated = false;
@@ -72,10 +73,7 @@ namespace AClockworkBerry
         int padding = 5;
 
         private bool destroying = false;
-        private bool styleChanged = true;
-
-        //ARML Custom
-        public static Action<bool> OnScreenLoggerToggled;
+		private bool styleChanged = true;
 
         public static ScreenLogger Instance
         {
@@ -122,7 +120,7 @@ namespace AClockworkBerry
             if (obj.Length > 1)
             {
                 Debug.Log("Destroying ScreenLogger, already exists...");
-
+                
                 destroying = true;
 
                 Destroy(gameObject);
@@ -134,15 +132,15 @@ namespace AClockworkBerry
             if (IsPersistent)
                 DontDestroyOnLoad(this);
 
-            SceneManager.sceneLoaded += OnSceneLoaded;
+			SceneManager.sceneLoaded += OnSceneLoaded;
         }
 
-        void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-        {
-            styleChanged = true;
-        }
+		void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+		{
+			styleChanged = true;
+		}
 
-        private void InitStyles()
+		private void InitStyles()
         {
             Texture2D back = new Texture2D(1, 1);
             BackgroundColor.a = BackgroundOpacity;
@@ -157,8 +155,8 @@ namespace AClockworkBerry
             styleText = new GUIStyle();
             styleText.fontSize = FontSize;
 
-            styleChanged = false;
-        }
+			styleChanged = false;
+		}
 
         void OnEnable()
         {
@@ -190,7 +188,7 @@ namespace AClockworkBerry
             if (!ShowInEditor && Application.isEditor) return;
 
             float InnerHeight = (Screen.height - 2 * Margin) * Height - 2 * padding;
-            int TotalRows = (int)(InnerHeight / styleText.lineHeight);
+            int TotalRows = (int) (InnerHeight / styleText.lineHeight);
 
             // Remove overflowing rows
             while (queue.Count > TotalRows)
@@ -202,7 +200,7 @@ namespace AClockworkBerry
             if (!ShowLog) return;
             if (!ShowInEditor && Application.isEditor) return;
 
-            if (styleChanged) InitStyles();
+			if (styleChanged) InitStyles();
 
             float w = (Screen.width - 2 * Margin) * Width;
             float h = (Screen.height - 2 * Margin) * Height;
@@ -289,16 +287,8 @@ namespace AClockworkBerry
 
         public void InspectorGUIUpdated()
         {
-            styleChanged = true;
-        }
-
-        //ARML Custom
-        public void ToggleLog()
-        {
-            Instance.ShowLog = !Instance.ShowLog;
-            OnScreenLoggerToggled?.Invoke(Instance.ShowLog);
-        }
-
+			styleChanged = true;
+		}
     }
 }
 

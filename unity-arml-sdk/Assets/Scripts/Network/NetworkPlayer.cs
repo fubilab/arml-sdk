@@ -73,7 +73,7 @@ public class NetworkPlayer : NetworkBehaviour
 
         //Subscribe to events only if local player
         PostProcessingController.OnPostProcessingChanged += CmdUpdatePostProcessing;
-        ScreenLogger.OnScreenLoggerToggled += CmdToggleScreenLogger;
+        //ScreenLogger.OnScreenLoggerToggled += CmdToggleScreenLogger;
 
     }
 

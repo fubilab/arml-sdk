@@ -74,3 +74,7 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /unity-arml-sdk/[Aa]ssets/[Ss]treamingAssets/aa.meta
 /unity-arml-sdk/[Aa]ssets/[Ss]treamingAssets/aa/*
+
+# Non-open source plugins 
+/unity-arml-sdk/[Aa]ssets/Plugins/
+/unity-arml-sdk/[Pp]ackages/com.kybernetik.ultevents/
