@@ -5,7 +5,6 @@ using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class ARMLNetworkManager : NetworkManager
 {
@@ -52,8 +51,6 @@ public class ARMLNetworkManager : NetworkManager
     {
         base.OnStartServer();
         Debug.Log("Host has started server");
-        if (GameController.Instance.loadOnStart)
-            StartCoroutine(SceneController.Instance.LoadSceneByReference(GameController.Instance.GetCurrentGameSceneName()));
     }
 
     public override void OnStopServer()
@@ -76,11 +73,6 @@ public class ARMLNetworkManager : NetworkManager
     IEnumerator UnloadScenes()
     {
         Debug.Log("Unloading Subscenes");
-
-
-        if (SceneManager.GetSceneByName(GameController.Instance.GetCurrentGameSceneName()).IsValid())
-            yield return SceneManager.UnloadSceneAsync(GameController.Instance.GetCurrentGameSceneName());
-
         yield return Resources.UnloadUnusedAssets();
     }
 

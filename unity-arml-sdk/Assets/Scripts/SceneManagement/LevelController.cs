@@ -1,7 +1,10 @@
+using ARML.GameBuilder;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UltEvents;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Controls and manages the Levels in the game, including their activation and progression.
@@ -17,6 +20,10 @@ public class LevelController : MonoBehaviour
 
     private void Awake()
     {
+#if UNITY_EDITOR
+        CheckForLogicScene();
+#endif
+
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject); // Destroy the GameObject if an instance already exists
@@ -123,6 +130,18 @@ public class LevelController : MonoBehaviour
     public void SetCompassTarget(Transform target)
     {
         CompassController.Instance.compassTarget = target;
+    }
+
+    /// <summary>
+    /// Utility function that automatically adds the Logic scene if a Content scene is played from the Editor by itself. Deactivates loadOnStart on GameController
+    /// </summary>
+    private void CheckForLogicScene()
+    {
+        if (!SceneManager.GetSceneByName("Logic").isLoaded)
+        {
+
+            SceneManager.LoadScene("Logic", LoadSceneMode.Additive);
+        }
     }
 }
 

@@ -25,6 +25,9 @@ public class DebugDisplayVector : MonoBehaviour
     /// </summary>
     void Update()
     {
+        if (targetTransform == null)
+            return;
+
         if (isPosition)
             m_TextMeshPro.text = targetTransform?.position.ToString();
         else

@@ -21,29 +21,18 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: 4_meshes_Merge_Pbr
-  m_Shader: {fileID: 4800000, guid: e88aeddd2ef1f934d805981244872e27, type: 3}
+  m_Shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
   - _ALPHATEST_ON
-  - _HALFTONESHAPE_STRIPE
-  - _OUTLINE
   - _RECEIVE_SHADOWS_OFF
-  - _SPECULAR_COLOR
-  m_InvalidKeywords:
-  - _ADDITIONAL_LIGHTS_ENABLED
-  - _ALPHACLIP_ON
-  - _ENVIRONMENT_LIGHTING_ENABLED
-  - _FOG
-  - _RAMP_TRIPLE
-  - _RECEIVESHADOWS_OFF
   - _SPECULARHIGHLIGHTS_OFF
-  - _STEPVIARAMPTEXTURE_ON
-  - _ZWRITE_ON
+  m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 2470
+  m_CustomRenderQueue: 2480
   stringTagMap:
     RenderType: TransparentCutout
   disabledShaderPasses: []
@@ -258,7 +247,7 @@ Material:
     - _ZWrite: 1
     m_Colors:
     - _BaseColor: {r: 0.7830189, g: 0.70751435, b: 0.6759078, a: 1}
-    - _Color: {r: 1, g: 0.83217764, b: 0.759434, a: 1}
+    - _Color: {r: 0.7830189, g: 0.70751435, b: 0.6759078, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 0}
     - _FaceFrontDirection: {r: 0, g: 0, b: 1, a: 0}
     - _FaceRightDirection: {r: 1, g: 0, b: 0, a: 0}

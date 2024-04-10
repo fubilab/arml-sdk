@@ -77,3 +77,7 @@ crashlytics-build.properties
 
 # Mac 
 .DS_Store
+
+# Non-open source plugins 
+/unity-arml-sdk/[Aa]ssets/Plugins/
+/unity-arml-sdk/[Pp]ackages/com.kybernetik.ultevents/
