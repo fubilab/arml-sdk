@@ -74,3 +74,6 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /unity-arml-sdk/[Aa]ssets/[Ss]treamingAssets/aa.meta
 /unity-arml-sdk/[Aa]ssets/[Ss]treamingAssets/aa/*
+
+# Mac 
+.DS_Store
