@@ -14,7 +14,7 @@ module.exports = {
   baseUrl: process.env.DOCUSAURUS_BASE_URL,
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
-  favicon: 'img/favicon.ico',
+  favicon: 'favicon.ico',
   customFields,
 
   // GitHub pages deployment config.
@@ -66,6 +66,26 @@ module.exports = {
       },
       navbar: {
         title: 'AR Magic Lantern SDK',
+        items: [
+          {
+            href: 'https://github.com/fubilab/arml-sdk',
+            position: 'right',
+            className: 'header-github-link',
+            label: 'GitHub',
+            'aria-label': 'GitHub repository',
+          },
+        ],
+        logo: {
+          alt: 'AR Magic Lantern logo',
+          src: 'ARML-logo-circular.png',
+          // srcDark: 'img/logo_dark.svg',
+          // href: 'https://docusaurus.io/',
+          // target: '_self',
+          // width: 250,
+          // height: 173,
+          className: 'custom-navbar-logo-class',
+          // style: {border: 'solid red'},
+        },
       },
       footer: {
         style: 'dark',

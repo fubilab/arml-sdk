@@ -68,6 +68,12 @@
   height: 50px;
 }
 
+.navbar__title {
+  font-size: 22px;
+  font-weight: 200;
+  margin-left: 4px;
+}
+
 .footer {
   display: flex;
 }
