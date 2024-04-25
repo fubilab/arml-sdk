@@ -52,19 +52,32 @@ The following table lists the source of 3D models used in the SDK (if we did not
 
 ## Interactables
 ![](./assets/Pasted%20image%2020240119123837.png)
-- All the interactable bricks in the Wall are CameraPointedObjects. These objects allow to trigger UnityEvents when interacted with. They can be interacted with through the use of trigger colliders attached to the Camera, or by measuring the angle between the Camera and the object to determine if it's currently being pointed at by the Lantern. Once a brick has been interacted with (via Dwell, Button, or Voice command), it calls a function from another component called "RigidBodyInteraction", pushing the object's RigidBody in the opposite direction to the forward Vector of the camera. Essentially pushing the brick towards the Camera and removing them from the wall.
 ![](./assets/Pasted%20image%2020240119124256.png)
-- The game is currently set-up so that it will advance once 28 or more bricks have been removed from the wall. In order to monitor the fallen bricks, we use a component called "CollisionCheck" which allows for triggering of UnityEvents once a specific collision has been triggered a determined number of times. In this case, we are monitoring for "OnCollisionExit" events with GameObjects that are a child of a parent "Interactables" object which holds all of the interactable bricks. Once the condition is met, the "PlayNextLevel" function from the #LevelController is called.
-- After the user has a brief conversation with a character, they are asked to help rebuild the wall. The user can then interact with the fallen bricks and they will return to their original position via the #MoveTransformToTarget component.
-- We can determine the behaviour of a CameraPointedObject depending on the current Level of the game by using LevelFilterEvents, stating the index of the Level where that behaviour should run when the object is interacted with.
+*Screenshots from Unity editor showing parameters of interactable objects in the WallGame example scene.*
+
+All the interactable bricks in the Wall are CameraPointedObjects. These objects allow to trigger UnityEvents when interacted with. They can be interacted with through the use of trigger colliders attached to the Camera, or by measuring the angle between the Camera and the object to determine if it's currently being pointed at by the Lantern. Once a brick has been interacted with (via Dwell, Button, or Voice command), it calls a function from another component called "RigidBodyInteraction", pushing the object's RigidBody in the opposite direction to the forward Vector of the camera. Essentially pushing the brick towards the Camera and removing them from the wall.
+
+The game is currently set-up so that it will advance once 28 or more bricks have been removed from the wall. In order to monitor the fallen bricks, we use a component called "CollisionCheck" which allows for triggering of UnityEvents once a specific collision has been triggered a determined number of times. In this case, we are monitoring for "OnCollisionExit" events with GameObjects that are a child of a parent "Interactables" object which holds all of the interactable bricks. Once the condition is met, the "PlayNextLevel" function from the #LevelController is called.
+
+After the user has a brief conversation with a character, they are asked to help rebuild the wall. The user can then interact with the fallen bricks and they will return to their original position via the #MoveTransformToTarget component.
+
+We can determine the behaviour of a CameraPointedObject depending on the current Level of the game by using LevelFilterEvents, stating the index of the Level where that behaviour should run when the object is interacted with.
+
  ![](./assets/Pasted%20image%2020240124142303.png)
+ *Screenshot from Unity editor showing the use of Level Filter Events to trigger different actions from an interactable depending on the current level of the game.*
 ## Characters
 ![](./assets/Pasted%20image%2020240119130528.png)
-- Roman Centurion. This character appears through an animation once the bricks have been removed from the wall. It serves to give audiovisual feedback to users after they interact with the wall, and to allow for voice-based Dialogue interaction. The character was designed with Character Creator 3 and Blender.
+
+**Roman Centurion** This character appears through an animation once the bricks have been removed from the wall. It serves to give audiovisual feedback to users after they interact with the wall, and to allow for voice-based Dialogue interaction. The character was designed with Character Creator 3 and Blender.
+
 ## Timeline
 ![](./assets/Pasted%20image%2020240119130931.png)
-- The Unity Timeline system allows for the execution of code, animations, sound playback, etc. at specific times through a convenient and intuitive time-based UI. It comes with an API that allows a developer to easily extend its functionality through the creation of custom clips and tracks. For the ARML, we have created some of these custom tracks, most relevant to this scene is the DialogueSystemTrack, which lets characters start their Dialogue at specific times. In this scene, once the bricks are removed, a Timeline is played which includes an animation of the Centurion climbing up a ladder and reacting to the player with some sound effects. Once the animation is over, its Dialogue System is called.
+*Screenshot from Unity editor showing extended timeline editor.*
+
+The Unity timeline system allows for the execution of code, animations, sound playback, etc. at specific times through a convenient and intuitive time-based UI. It comes with an API that allows a developer to easily extend its functionality through the creation of custom clips and tracks. For the ARML, we have created some of these custom tracks, most relevant to this scene is the DialogueSystemTrack, which lets characters start their dialogue at specific times. In this scene, once the bricks are removed, a timeline is played which includes an animation of the Centurion climbing up a ladder and reacting to the player with some sound effects. Once the animation is over, its dialogue system is called.
+
 ## Dialogue
-![[Pasted image 20240119131638.png]]
-![](./assets/Pasted%20image%2020240119131638.png)
-- The ARML SDK comes with a Dialogue Graph system built with the Unity GraphView API. It was used for this scene in order to create a Dialogue for the Centurion character with the option of offering several reply options to the player, which change the way the dialogue will go. For example, the player can answer whether he will help with rebuilding the wall or not.
+![](./assets/arml-wallgame-dialogue.png)
+*Screenshot from Unity editor showing dialogue system editor for Wall Game example.*
+
+The ARML SDK comes with a Dialogue Graph system built with the Unity GraphView API. It was used for this scene in order to create a Dialogue for the Centurion character with the option of offering several reply options to the player, which change the way the dialogue will go. For example, the player can answer whether he will help with rebuilding the wall or not.
