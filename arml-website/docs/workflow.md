@@ -6,22 +6,39 @@ sidebar_position: 5
 # Building and running applications
 The following steps describe in broad terms the workflow of developing an application and deploying it on the ARML device.
 
-## 1. Edit Unity project
-The SDK includes a Unity project that contains all the components and libraries needed to build and
-run applications for the ARML. Use this project as a template by duplicating it and using the copy as the starting point for your application.
+## 1. Initialize Unity project:
+The SDK includes a Unity project that contains all the components and libraries needed to build and run applications for the ARML.  
+- Use this project as a template by duplicating it and using the copy as the starting point for your application.
+- Open the project. You will see some errors because some plugins could not be included in the SDK due to licensing restrictions. Ignore these errors and then, once the project is loaded, download and install these free plugins using the standard method of installing assets from the Unity Asset Store. 
+  - [ScreenLogger](https://assetstore.unity.com/packages/a/49114)
+  - [DOTween](https://assetstore.unity.com/packages/a/27676)
+  - [NaughtyAttributes](https://assetstore.unity.com/packages/a/129996)
+  - [UltEvents](https://assetstore.unity.com/packages/a/111307)
+  - [Mobile Tree Package](https://assetstore.unity.com/packages/a/18866)
 
-## 2. Build the application
-In the “Unity Build Settings,” choose platform “Windows, Mac, Linux” and choose Linux as the “Target Platform.” Use the “Build” button to build the application to a local directory. Choose a name for the “Save as” value that clearly identifies your application, because this is the name that will show in the ARML launcher.
+## 2. Edit Unity project: 
+1. Open the project and navigate to the Scenes -> Examples folder (in project Assets) and open one of the example scenes (Wall Game or Garum Game).
+2.  Press the play button to start the game in the editor. You will notice that the Logic Scene is loaded in the hierarchy automatically. 
+3. If you want to edit the scene, we suggest duplicating it and editing the duplicate.
 
-## 3. Copy application files to ARML device
+
+## 3. Build the application
+![](./assets/unity-build-settings.png) 
+
+When ready to build the application for the ARML, follow these configuration steps in the Build Settings window:
+1. In the “Scenes in Build” list, make sure Logic Scene is checked, as well as the game scene you want to run. Make sure the game scene checked here is also set as the “Load on start” property in the GameController component in the Logic Scene. See SDK Configuration section for details.
+2. Choose platform “Windows, Mac, Linux” and choose Linux as the “Target Platform.” Use the “Build” button to build the application to a local directory. Choose a name for the “Save as” value that clearly identifies your application, because this is the name that will show in the ARML launcher.
+
+## 4. Copy application files to ARML device
+![](./assets/arml-dev-mode.png) 
+
 1. Copy the build directory to a USB drive. 
-2. Open the battery compartment of the ARML and remove the battery so the USB hub is accessible. 
-3. Plug a mouse, keyboard and the USB drive into the hub inside the ARML.
-4. Turn on the ARML and once the launcher app is visible, press “ESC” key on keyboard to return to the Ubuntu desktop.
-5. Copy the build directory from the USB drive into the “unitybuilds” directory on the Ubuntu desktop.
-6. In the build directory that you just copied, find the executable file which ends in “.x86_64”, right click and choose “Properties” from the context menu. Navigate to the “Permissions” tab and check the box for “Allow executing file as program.”
-7. Close the Properties window.
-8. Double click the executable file to run the application.
+2. Using a hub, plug a mouse, keyboard, monitor and USB-C power supply (PD) into the USB-C port on the back of the ARML. The ARML will boot and show the launcher app on the monitor.
+3. Press “ESC” key on keyboard to return to the Ubuntu desktop.
+4. Insert the USB drive into the hub and copy the build directory to the “unitybuilds” directory on the Ubuntu desktop.
+5. In the build directory that you just copied, find the executable file which ends in “.x86_64”, right click and choose “Properties” from the context menu. Navigate to the “Permissions” tab and check the box for “Allow executing file as program.”
+6. Close the Properties window.
+7. Double click the executable file to run the application.
 
 ## 4. Debug the application
 While the application is running on the ARML, press the “Q” on the keyboard or the menu button (3 horizontal lines) on the ARML remote control to show debug information in the projection. Debug information includes:  
