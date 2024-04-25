@@ -63,10 +63,11 @@ After the user has a brief conversation with a character, they are asked to help
 
 We can determine the behaviour of a CameraPointedObject depending on the current Level of the game by using LevelFilterEvents, stating the index of the Level where that behaviour should run when the object is interacted with.
 
- ![](./assets/Pasted%20image%2020240124142303.png)
+ ![](./assets/Pasted%20image%2020240124142303.png)  
  *Screenshot from Unity editor showing the use of Level Filter Events to trigger different actions from an interactable depending on the current level of the game.*
 ## Characters
-![](./assets/Pasted%20image%2020240119130528.png)
+![](./assets/Pasted%20image%2020240119130528.png)  
+*Screenshot from Unity editor showing the Roman Centurion character.*
 
 **Roman Centurion** This character appears through an animation once the bricks have been removed from the wall. It serves to give audiovisual feedback to users after they interact with the wall, and to allow for voice-based Dialogue interaction. The character was designed with Character Creator 3 and Blender.
 
