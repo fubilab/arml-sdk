@@ -28,12 +28,11 @@ For an example of these interactions and more detailed explanation of the variou
 There are a few utility components in the SDK to help users create engaging non-playable characters (NPCs) in their applications. These components primarily assist with tasks related to the character’s face, including adding a life-like blinking effect and a component that moves the face towards where the player is standing. See the NPC section of the component reference for details.
 
 ##	Dialogue system
-![](./assets/arml-wallgame-dialogue.png)  
-*Screenshot from Unity editor showing dialogue system editor for Wall Game example.*
 
 The SDK implements and extends an open source dialogue system for Unity (Wafflus/unity-dialog-system on GitHub) that uses Unity’s new Graph View API to present a node-based form of designing character dialogue. The system allows the user to create dialogue nodes that defines the audio, text and animation of a piece of the dialogue script. Users create dialogue flow and branching by adding multiple-choice options to a node and connecting them to other nodes. 
 
-![](./assets/Pasted%20image%2020240119131638.png)
+![](./assets/arml-wallgame-dialogue.png)  
+*Screenshot from Unity editor showing dialogue system editor for Wall Game example.*
 
 Dialogues are attached to objects with which the player will interact, which would normally be non-playable characters (NPCs). The process of creating and editing a dialogue flow for an NPC is covered in the Wall Game walkthrough below. 
 
