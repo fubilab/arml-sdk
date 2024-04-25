@@ -9,12 +9,10 @@ The Garum Game is designed to showcase a wider range of interactions with the AR
 
 Open `Scenes > GarumGame`.
 
-![](./assets/Pasted%20image%2020240123163632.png)
+![](./assets/Pasted%20image%2020240123163632.png)  
 *Screenshot from Unity editor showing the elements of the GarumGame example.*
 
 ## Scene Hierarchy
-![](./assets/Pasted%20image%2020240124152918.png)
-
 Similar to the Wall Game Scene, this is a Content Scene so it contains geometry, interactables, and logic. We will skip the elements that serve the same purpose as in the previous scene.
 - **CHARACTERS:** There is a Garum Cook character that offers explanations to prepare the Garum sauce. Says different things based on the way the player is interacting with the scene.
 - **GEOMETRY:** During development it holds a 3D scan of the physical space where the activity will be performer, in order to help with the placement of virtual objects etc.
@@ -28,25 +26,26 @@ This scene has a focus on the interactables elements and not so much on the envi
 ### Knife and Fish
 The Knife is an AnchoredGrabbable that attaches to the camera. It uses the "OnButtonDownWhileGrabbed" Event of the Grabbable in order to activate an Animation Trigger that plays a downward cutting motion Animation. This Animation also activates a Trigger Collider in the edge of the Knife. This specific Collider is the one that the sectioned mackerel fish will react to through its CollisionCheck. When this CollisionCheck passes, each of the fish parts will move towards the location of the garum sauce in the dolium via its MoveTransformToTarget component.
 
-![](./assets/Pasted%20image%2020240124155606.png)*ScreenshotS of knife interacting with fish*
+![](./assets/Pasted%20image%2020240124155606.png)  
+*Screenshots of knife interacting with fish*
 
 ### Spoon and Salt
 The Spoon is an AnchoredGrabbable. The OnButtonDownWhileGrabbed activates an Animation Trigger that plays a turning motion animation. If this animation is played while in direct contact with the Salt Bowl, another animation will play that will "fill up" (increase the scale) of a salt mound on the spoon. When the Spoon plays the animation while not in contact with the salt bowl, it plays a ParticleAnimation simulating the falling of grains of salt, which also reduces the scale of the mound until it becomes 0, and the "salt" runs out. The goal is to fill the spoon with salt and to activate the falling ParticleSystem so that the salt particles fall on the Garum Dolium. 
 
-![](./assets/Pasted%20image%2020240124155712.png) 
-*ScreenshotS of spoon interacting with salt*
+![](./assets/Pasted%20image%2020240124155712.png)  
+*Screenshots of spoon interacting with salt*
 
 ### Tool Placement Targets
 
 These are two PlacementTarget objects (shown in blue in the image), one each for the Knife and the spoon, so that they can be placed and picked up again. Those 2 actions can be performed via dwell, button, or voice command interactions.
 
-![](./assets/Pasted%20image%2020240124155757.png)
+![](./assets/Pasted%20image%2020240124155757.png)  
 *Screenshot of tool placement targets*
 
 ### Herbs
 Some of the leaves of this mesh are separated from the rest and have a CameraPointedObject controller. When interacted with they will move towards the garum dolium via MoveTransformToTarger.
 
-![](./assets/Pasted%20image%2020240124160558.png)
+![](./assets/Pasted%20image%2020240124160558.png)  
 *Screenshot of herbs*
 
 ### Garum Dolium and Stirring Stick

@@ -28,12 +28,18 @@ For an example of these interactions and more detailed explanation of the variou
 There are a few utility components in the SDK to help users create engaging non-playable characters (NPCs) in their applications. These components primarily assist with tasks related to the character’s face, including adding a life-like blinking effect and a component that moves the face towards where the player is standing. See the NPC section of the component reference for details.
 
 ##	Dialogue system
+![](./assets/arml-wallgame-dialogue.png)  
+*Screenshot from Unity editor showing dialogue system editor for Wall Game example.*
+
 The SDK implements and extends an open source dialogue system for Unity (Wafflus/unity-dialog-system on GitHub) that uses Unity’s new Graph View API to present a node-based form of designing character dialogue. The system allows the user to create dialogue nodes that defines the audio, text and animation of a piece of the dialogue script. Users create dialogue flow and branching by adding multiple-choice options to a node and connecting them to other nodes. 
+
+![](./assets/Pasted%20image%2020240119131638.png)
 
 Dialogues are attached to objects with which the player will interact, which would normally be non-playable characters (NPCs). The process of creating and editing a dialogue flow for an NPC is covered in the Wall Game walkthrough below. 
 
 ##	Voice Commands
 ![](./assets/arml-voice-commands.png) 
+*Screenshot of the Build Settings window configured for building the Garum Game example scene to the ARML.*
 
 When configuring object interaction (see above), the SDK user may choose “VOICE” as the interaction type. When the player points the ARML at an object with voice interaction enabled, a microphone icon is shown in the crosshair area of the projection. The player begins the voice command by pressing and holding the physical button on the lantern. The ARML plays an audio tone and changes the microphone icon colour to red to indicate that it is listening for a voice command. It may also show text next to the object listing the voice commands that are possible on the object. When the player releases the button, another tone sounds and the microphone icon is replaced with an icon that indicates that the ARML is processing the voice command. If the command is understood, the game proceeds with the action specified by the command. Otherwise, the ARML shows a message next to the object asking the player to try again.
 
