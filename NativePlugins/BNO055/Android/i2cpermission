@@ -1,9 +1,0 @@
-adb root
-adb shell
-cd /vendor/etc
-mount -o remount,rw /vendor
-cp ueventd.rc ueventd.rc.bak
-echo "/dev/i2c-5              0666   system     system" >> ueventd.rc
-reboot
-
-

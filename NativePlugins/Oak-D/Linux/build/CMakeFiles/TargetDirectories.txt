@@ -1,3 +1,0 @@
-/home/fubintlab/libraries/magic_lantern_unity/NativePluggins/Oak-D/Linux/build/CMakeFiles/arml_cpp.dir
-/home/fubintlab/libraries/magic_lantern_unity/NativePluggins/Oak-D/Linux/build/CMakeFiles/edit_cache.dir
-/home/fubintlab/libraries/magic_lantern_unity/NativePluggins/Oak-D/Linux/build/CMakeFiles/rebuild_cache.dir

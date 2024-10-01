@@ -68,6 +68,12 @@ module.exports = {
         title: 'AR Magic Lantern SDK',
         items: [
           {
+            href: 'https://emil-xr.eu/lighthouse-projects/upf-ar-magic-lantern/',
+            position: 'right',
+            // className: 'header-github-link',
+            label: 'ARML Overview',
+          },
+          {
             href: 'https://github.com/fubilab/arml-sdk',
             position: 'right',
             className: 'header-github-link',
