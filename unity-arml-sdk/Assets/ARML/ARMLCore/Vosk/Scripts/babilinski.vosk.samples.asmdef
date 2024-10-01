@@ -1,0 +1,35 @@
+{
+    "name": "babilinski.vosk.samples",
+    "rootNamespace": "",
+    "references": [
+        "GUID:a396f93d908fe8d45984a3f02f32e050",
+        "GUID:92e1f1300db3e504c970bd884323c57b"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [
+        "EmbeddedLinux",
+        "GameCoreScarlett",
+        "GameCoreXboxOne",
+        "iOS",
+        "CloudRendering",
+        "macOSStandalone",
+        "PS4",
+        "PS5",
+        "QNX",
+        "Stadia",
+        "Switch",
+        "tvOS",
+        "WSA",
+        "VisionOS",
+        "WebGL",
+        "WindowsStandalone32",
+        "XboxOne"
+    ],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

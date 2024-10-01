@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f262818b55b0f4418296bad0176bdab, type: 3}
+  m_Name: 3
+  m_EditorClassIdentifier: 
+  <DialogueName>k__BackingField: 3
+  <TextEN>k__BackingField: It is now time for a quiz apprentice. How many pieces
+    of fish did I tell you to cut?
+  <TextES>k__BackingField: Dialogue text.
+  <TextCA>k__BackingField: Dialogue text.
+  <Choices>k__BackingField:
+  - <TextEN>k__BackingField: One
+    <TextES>k__BackingField: Una/Uno
+    <TextCA>k__BackingField: Catalan
+    <NextDialogue>k__BackingField: {fileID: 11400000, guid: 18d9d4023df5d7340bea43ec6af36a6b, type: 2}
+  - <TextEN>k__BackingField: Two/True
+    <TextES>k__BackingField: Dos
+    <TextCA>k__BackingField: Catalan
+    <NextDialogue>k__BackingField: {fileID: 11400000, guid: 18d9d4023df5d7340bea43ec6af36a6b, type: 2}
+  - <TextEN>k__BackingField: Three
+    <TextES>k__BackingField: Tres
+    <TextCA>k__BackingField: Catalan
+    <NextDialogue>k__BackingField: {fileID: 11400000, guid: 0fde42691cea1bf409f1840d50a17e9f, type: 2}
+  <DialogueType>k__BackingField: 1
+  <IsStartingDialogue>k__BackingField: 1
+  <IsEndingDialogue>k__BackingField: 0
+  <AudioClipEN>k__BackingField: {fileID: 8300000, guid: e98531f20702b1548a6cd14ad3cf30a9, type: 3}
+  <AudioClipES>k__BackingField: {fileID: 8300000, guid: cd83f9dde6acb504486a0350c9bc9929, type: 3}
+  <AudioClipCA>k__BackingField: {fileID: 0}
+  <EventID>k__BackingField: 0

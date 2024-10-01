@@ -1,0 +1,35 @@
+{
+    "name": "ARMLCore",
+    "rootNamespace": "",
+    "references": [
+        "Unity.TextMeshPro",
+        "Unity.Robotics.ROSTCPConnector",
+        "babilinski.vosk.unity",
+        "babilinski.vosk.samples",
+        "Unity.Robotics.ROSTCPConnector.Messages",
+        "NaughtyAttributes.Core",
+        "FishNet.Runtime",
+        "Unity.Robotics.ROSTCPConnector.MessageGeneration",
+        "UltEvents",
+        "TNRD.IconManager.Editor",
+        "Unity.RenderPipelines.Universal.Runtime",
+        "Unity.RenderPipelines.Universal.Editor",
+        "Unity.Timeline",
+        "Unity.RenderPipelines.Core.Runtime",
+        "UnityEngine.UI.Tests"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "DOTween.dll",
+        "FishNet.CodeAnalysis.dll",
+        "Ionic.Zip.Unity.dll",
+        "Newtonsoft.Json.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

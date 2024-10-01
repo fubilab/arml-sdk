@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: caaa76378291a144d849f29230be0a5a, type: 3}
+  m_Name: Guard2
+  m_EditorClassIdentifier: 
+  <FileName>k__BackingField: Guard2
+  <DialogueGroups>k__BackingField:
+    list: []
+  <UngroupedDialogues>k__BackingField:
+  - {fileID: 11400000, guid: b0f1822ecdf59ab40a3c26b5c25b8740, type: 2}
+  - {fileID: 11400000, guid: 3f5604cdb4b432046a41ee5970fb08d0, type: 2}
+  - {fileID: 11400000, guid: cd44e55e067c4994baf027daf42c17fd, type: 2}

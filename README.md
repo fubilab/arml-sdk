@@ -12,7 +12,7 @@
   <a href="#whoisitfor"><strong>Who is it for?</strong></a> ·
   <a href="#requirements"><strong>Requirements</strong></a> ·
    <a href="#requirements"><strong>Installation</strong></a> ·
-  <a href="https://fubilab.github.io/arml-sdk/SDK/"><strong>Docs</strong></a> ·
+  <a href="https://fubilab.github.io/arml-sdk/"><strong>Docs</strong></a> ·
   <a href="https://discord.gg/zWZT3yKf4q"><strong>Discord</strong></a>
 </p>
 <br/>
@@ -36,7 +36,7 @@ In order to run and test applications, you will need to obtain an ARML-1 hardwar
 
 ### Installation
 
-The SDK is released as a 2022.3.8 Unity project that can be used as a template for other projects. To get started, download the [Unity project](https://github.com/fubilab/arml-sdk/releases/download/pre-release/unity-arml-sdk-v0.1.0.zip) from the latest release and open it in Unity. Then it is recommended to follow the walkthroughs for the [WallGame](https://fubilab.github.io/arml-sdk/SDK/examples/WallGame) and [GarumGame](https://fubilab.github.io/arml-sdk/SDK/examples/GarumGame) sample scenes in the [SDK Docs](https://fubilab.github.io/arml-sdk/SDK/).
+The SDK is released as a 2022.3.8 Unity project that can be used as a template for other projects. To get started, download the [Unity project](https://github.com/fubilab/arml-sdk/releases/download/pre-release/unity-arml-sdk-v0.1.0.zip) from the latest release and open it in Unity. Then it is recommended to follow the walkthroughs for the [WallGame](https://fubilab.github.io/arml-sdk/WallGame) and [GarumGame](https://fubilab.github.io/arml-sdk/GarumGame) sample scenes in the [SDK Docs](https://fubilab.github.io/arml-sdk/).
 
 <hr size="1">
 <p align="center">

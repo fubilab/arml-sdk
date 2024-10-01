@@ -4,13 +4,7 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Stair
-  - WallRun
-  - Climb
-  - Fly
   - anchor
-  - Animal
-  - Water
   layers:
   - Default
   - TransparentFX
@@ -25,8 +19,8 @@ TagManager:
   - Block_Raycast
   - StencilLayer1
   - CantCollideWithItself
-  - 
-  - 
+  - Map
+  - ParticleCollision
   - 
   - 
   - 

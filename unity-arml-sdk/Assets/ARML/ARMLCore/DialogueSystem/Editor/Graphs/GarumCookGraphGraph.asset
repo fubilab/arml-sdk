@@ -1,0 +1,263 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0202a3095b7477a4091d56344f0af6b3, type: 3}
+  m_Name: GarumCookGraphGraph
+  m_EditorClassIdentifier: 
+  <FileName>k__BackingField: GarumCookGraph
+  <Groups>k__BackingField: []
+  <Nodes>k__BackingField:
+  - <ID>k__BackingField: 8786e667-dd4c-4691-858b-cd48c79ee37a
+    <Name>k__BackingField: 3
+    <TextEN>k__BackingField: It is now time for a quiz apprentice. How many pieces
+      of fish did I tell you to cut?
+    <TextES>k__BackingField: Dialogue text.
+    <TextCA>k__BackingField: Dialogue text.
+    <Choices>k__BackingField:
+    - <TextEN>k__BackingField: One
+      <TextES>k__BackingField: Una/Uno
+      <TextCA>k__BackingField: Catalan
+      <NodeID>k__BackingField: 4726b510-8bc9-4ee4-ad2c-d6581c812ff4
+    - <TextEN>k__BackingField: Two/True
+      <TextES>k__BackingField: Dos
+      <TextCA>k__BackingField: Catalan
+      <NodeID>k__BackingField: 4726b510-8bc9-4ee4-ad2c-d6581c812ff4
+    - <TextEN>k__BackingField: Three
+      <TextES>k__BackingField: Tres
+      <TextCA>k__BackingField: Catalan
+      <NodeID>k__BackingField: bd82431d-6b70-4c01-adfc-bb2a0756adc3
+    <GroupID>k__BackingField: 
+    <DialogueType>k__BackingField: 1
+    <Position>k__BackingField: {x: 1039, y: 374}
+    <AudioClipEN>k__BackingField: {fileID: 8300000, guid: e98531f20702b1548a6cd14ad3cf30a9, type: 3}
+    <AudioClipES>k__BackingField: {fileID: 8300000, guid: cd83f9dde6acb504486a0350c9bc9929, type: 3}
+    <AudioClipCA>k__BackingField: {fileID: 0}
+    <EventID>k__BackingField: 0
+  - <ID>k__BackingField: 4726b510-8bc9-4ee4-ad2c-d6581c812ff4
+    <Name>k__BackingField: 4
+    <TextEN>k__BackingField: You fucking idiot
+    <TextES>k__BackingField: Dialogue text.
+    <TextCA>k__BackingField: Dialogue text.
+    <Choices>k__BackingField:
+    - <TextEN>k__BackingField: Next Dialogue
+      <TextES>k__BackingField: 
+      <TextCA>k__BackingField: 
+      <NodeID>k__BackingField: 107aaa77-8019-472e-9398-eb9d08ac515d
+    <GroupID>k__BackingField: 
+    <DialogueType>k__BackingField: 0
+    <Position>k__BackingField: {x: 1850, y: 286}
+    <AudioClipEN>k__BackingField: {fileID: 8300000, guid: 8ab856b4d2996944688bd2cd13e40346, type: 3}
+    <AudioClipES>k__BackingField: {fileID: 8300000, guid: 57c3b9efb86e0154dbb1607482989901, type: 3}
+    <AudioClipCA>k__BackingField: {fileID: 0}
+    <EventID>k__BackingField: 0
+  - <ID>k__BackingField: bd82431d-6b70-4c01-adfc-bb2a0756adc3
+    <Name>k__BackingField: 5
+    <TextEN>k__BackingField: Yeah!
+    <TextES>k__BackingField: Dialogue text.
+    <TextCA>k__BackingField: Dialogue text.
+    <Choices>k__BackingField:
+    - <TextEN>k__BackingField: Next Dialogue
+      <TextES>k__BackingField: 
+      <TextCA>k__BackingField: 
+      <NodeID>k__BackingField: 107aaa77-8019-472e-9398-eb9d08ac515d
+    <GroupID>k__BackingField: 
+    <DialogueType>k__BackingField: 0
+    <Position>k__BackingField: {x: 1850, y: 776}
+    <AudioClipEN>k__BackingField: {fileID: 8300000, guid: 30d82dbb36899d949a773fd1c33ac6c0, type: 3}
+    <AudioClipES>k__BackingField: {fileID: 8300000, guid: 11a4efd709d89f748a36153b73ce98ae, type: 3}
+    <AudioClipCA>k__BackingField: {fileID: 0}
+    <EventID>k__BackingField: 0
+  - <ID>k__BackingField: 107aaa77-8019-472e-9398-eb9d08ac515d
+    <Name>k__BackingField: 6
+    <TextEN>k__BackingField: How many scoops of salt did you pour?
+    <TextES>k__BackingField: Dialogue text.
+    <TextCA>k__BackingField: Dialogue text.
+    <Choices>k__BackingField:
+    - <TextEN>k__BackingField: One
+      <TextES>k__BackingField: Una/Uno
+      <TextCA>k__BackingField: Catalan
+      <NodeID>k__BackingField: cd5a3b46-a6cd-4863-a5e5-217c38b4c136
+    - <TextEN>k__BackingField: Two/True
+      <TextES>k__BackingField: Dos
+      <TextCA>k__BackingField: Catalan
+      <NodeID>k__BackingField: be97aea7-333c-45e8-b5db-7b783a680966
+    - <TextEN>k__BackingField: Three
+      <TextES>k__BackingField: Tres
+      <TextCA>k__BackingField: Catalan
+      <NodeID>k__BackingField: cd5a3b46-a6cd-4863-a5e5-217c38b4c136
+    <GroupID>k__BackingField: 
+    <DialogueType>k__BackingField: 1
+    <Position>k__BackingField: {x: 2331, y: 353}
+    <AudioClipEN>k__BackingField: {fileID: 8300000, guid: e102e2b07403e1144a66e2e1e00d069f, type: 3}
+    <AudioClipES>k__BackingField: {fileID: 8300000, guid: a1e64e46141e0b0408f1f8306b5ed204, type: 3}
+    <AudioClipCA>k__BackingField: {fileID: 0}
+    <EventID>k__BackingField: 0
+  - <ID>k__BackingField: cd5a3b46-a6cd-4863-a5e5-217c38b4c136
+    <Name>k__BackingField: 7
+    <TextEN>k__BackingField: You fucking idiot
+    <TextES>k__BackingField: Dialogue text.
+    <TextCA>k__BackingField: Dialogue text.
+    <Choices>k__BackingField:
+    - <TextEN>k__BackingField: Next Dialogue
+      <TextES>k__BackingField: 
+      <TextCA>k__BackingField: 
+      <NodeID>k__BackingField: 4b5463a9-fc23-4c5c-ba3c-0355bd783892
+    <GroupID>k__BackingField: 
+    <DialogueType>k__BackingField: 0
+    <Position>k__BackingField: {x: 3059, y: 377}
+    <AudioClipEN>k__BackingField: {fileID: 8300000, guid: 8ab856b4d2996944688bd2cd13e40346, type: 3}
+    <AudioClipES>k__BackingField: {fileID: 8300000, guid: 57c3b9efb86e0154dbb1607482989901, type: 3}
+    <AudioClipCA>k__BackingField: {fileID: 0}
+    <EventID>k__BackingField: 0
+  - <ID>k__BackingField: be97aea7-333c-45e8-b5db-7b783a680966
+    <Name>k__BackingField: 8
+    <TextEN>k__BackingField: Yeahhh
+    <TextES>k__BackingField: Dialogue text.
+    <TextCA>k__BackingField: Dialogue text.
+    <Choices>k__BackingField:
+    - <TextEN>k__BackingField: Next Dialogue
+      <TextES>k__BackingField: 
+      <TextCA>k__BackingField: 
+      <NodeID>k__BackingField: 4b5463a9-fc23-4c5c-ba3c-0355bd783892
+    <GroupID>k__BackingField: 
+    <DialogueType>k__BackingField: 0
+    <Position>k__BackingField: {x: 3059, y: 886}
+    <AudioClipEN>k__BackingField: {fileID: 8300000, guid: 1a8460c3a231d494f979adc41e14b52e, type: 3}
+    <AudioClipES>k__BackingField: {fileID: 8300000, guid: a5e0d628e0158ab42b2858b3390304f4, type: 3}
+    <AudioClipCA>k__BackingField: {fileID: 0}
+    <EventID>k__BackingField: 0
+  - <ID>k__BackingField: 4b5463a9-fc23-4c5c-ba3c-0355bd783892
+    <Name>k__BackingField: 9
+    <TextEN>k__BackingField: How many herbs did I tell you to put in
+    <TextES>k__BackingField: Dialogue text.
+    <TextCA>k__BackingField: Dialogue text.
+    <Choices>k__BackingField:
+    - <TextEN>k__BackingField: One
+      <TextES>k__BackingField: Una/Uno
+      <TextCA>k__BackingField: Catalan
+      <NodeID>k__BackingField: 65bd57d5-0091-415d-8c2c-429c60a985d4
+    - <TextEN>k__BackingField: Two/True
+      <TextES>k__BackingField: Dos
+      <TextCA>k__BackingField: Catalan
+      <NodeID>k__BackingField: 65bd57d5-0091-415d-8c2c-429c60a985d4
+    - <TextEN>k__BackingField: Three
+      <TextES>k__BackingField: Tres
+      <TextCA>k__BackingField: Catalan
+      <NodeID>k__BackingField: e51a637e-7674-4e7b-bed0-cf3db1be8a1b
+    <GroupID>k__BackingField: 
+    <DialogueType>k__BackingField: 1
+    <Position>k__BackingField: {x: 3503, y: 353}
+    <AudioClipEN>k__BackingField: {fileID: 8300000, guid: 09cb43e39c79fa04ca3ffb53e487fafe, type: 3}
+    <AudioClipES>k__BackingField: {fileID: 8300000, guid: 957e576536d61c94888356f7976a7d24, type: 3}
+    <AudioClipCA>k__BackingField: {fileID: 0}
+    <EventID>k__BackingField: 0
+  - <ID>k__BackingField: 65bd57d5-0091-415d-8c2c-429c60a985d4
+    <Name>k__BackingField: 10
+    <TextEN>k__BackingField: No
+    <TextES>k__BackingField: Dialogue text.
+    <TextCA>k__BackingField: Dialogue text.
+    <Choices>k__BackingField:
+    - <TextEN>k__BackingField: Next Dialogue
+      <TextES>k__BackingField: 
+      <TextCA>k__BackingField: 
+      <NodeID>k__BackingField: e2a81bb4-8c69-4618-b0fd-2d41790e4f9d
+    <GroupID>k__BackingField: 
+    <DialogueType>k__BackingField: 0
+    <Position>k__BackingField: {x: 4223, y: 246}
+    <AudioClipEN>k__BackingField: {fileID: 8300000, guid: 8ab856b4d2996944688bd2cd13e40346, type: 3}
+    <AudioClipES>k__BackingField: {fileID: 8300000, guid: 57c3b9efb86e0154dbb1607482989901, type: 3}
+    <AudioClipCA>k__BackingField: {fileID: 0}
+    <EventID>k__BackingField: 0
+  - <ID>k__BackingField: e51a637e-7674-4e7b-bed0-cf3db1be8a1b
+    <Name>k__BackingField: 11
+    <TextEN>k__BackingField: Ye
+    <TextES>k__BackingField: Dialogue text.
+    <TextCA>k__BackingField: Dialogue text.
+    <Choices>k__BackingField:
+    - <TextEN>k__BackingField: Next Dialogue
+      <TextES>k__BackingField: 
+      <TextCA>k__BackingField: 
+      <NodeID>k__BackingField: e2a81bb4-8c69-4618-b0fd-2d41790e4f9d
+    <GroupID>k__BackingField: 
+    <DialogueType>k__BackingField: 0
+    <Position>k__BackingField: {x: 4223, y: 736}
+    <AudioClipEN>k__BackingField: {fileID: 8300000, guid: 30d82dbb36899d949a773fd1c33ac6c0, type: 3}
+    <AudioClipES>k__BackingField: {fileID: 8300000, guid: 11a4efd709d89f748a36153b73ce98ae, type: 3}
+    <AudioClipCA>k__BackingField: {fileID: 0}
+    <EventID>k__BackingField: 0
+  - <ID>k__BackingField: e2a81bb4-8c69-4618-b0fd-2d41790e4f9d
+    <Name>k__BackingField: 12
+    <TextEN>k__BackingField: Thats the end of the experiment! Thanks a lot for your
+      collaboration apprentice
+    <TextES>k__BackingField: Dialogue text.
+    <TextCA>k__BackingField: Dialogue text.
+    <Choices>k__BackingField:
+    - <TextEN>k__BackingField: Next Dialogue
+      <TextES>k__BackingField: 
+      <TextCA>k__BackingField: 
+      <NodeID>k__BackingField: 
+    <GroupID>k__BackingField: 
+    <DialogueType>k__BackingField: 0
+    <Position>k__BackingField: {x: 4670, y: 513}
+    <AudioClipEN>k__BackingField: {fileID: 8300000, guid: c2e898f09a381e444b582e157d53e4fa, type: 3}
+    <AudioClipES>k__BackingField: {fileID: 8300000, guid: 4d31114465dcce8469decc6b4d791a10, type: 3}
+    <AudioClipCA>k__BackingField: {fileID: 0}
+    <EventID>k__BackingField: 0
+  - <ID>k__BackingField: 84b94a90-e135-4731-be65-d07eaf513429
+    <Name>k__BackingField: 2
+    <TextEN>k__BackingField: Dialogue text.
+    <TextES>k__BackingField: Dialogue text.
+    <TextCA>k__BackingField: Dialogue text.
+    <Choices>k__BackingField:
+    - <TextEN>k__BackingField: Next Dialogue
+      <TextES>k__BackingField: 
+      <TextCA>k__BackingField: 
+      <NodeID>k__BackingField: 
+    <GroupID>k__BackingField: 
+    <DialogueType>k__BackingField: 0
+    <Position>k__BackingField: {x: 511, y: 446}
+    <AudioClipEN>k__BackingField: {fileID: 0}
+    <AudioClipES>k__BackingField: {fileID: 0}
+    <AudioClipCA>k__BackingField: {fileID: 0}
+    <EventID>k__BackingField: 0
+  - <ID>k__BackingField: 7999e6d4-6906-4257-91f6-80328a1163a4
+    <Name>k__BackingField: 1
+    <TextEN>k__BackingField: Are you ready
+    <TextES>k__BackingField: Dialogue text.
+    <TextCA>k__BackingField: Dialogue text.
+    <Choices>k__BackingField:
+    - <TextEN>k__BackingField: 
+      <TextES>k__BackingField: 
+      <TextCA>k__BackingField: 
+      <NodeID>k__BackingField: 84b94a90-e135-4731-be65-d07eaf513429
+    <GroupID>k__BackingField: 
+    <DialogueType>k__BackingField: 1
+    <Position>k__BackingField: {x: 86, y: 422}
+    <AudioClipEN>k__BackingField: {fileID: 8300000, guid: 050198f1d8c594d4395fb631be58e4ad, type: 3}
+    <AudioClipES>k__BackingField: {fileID: 8300000, guid: 29d1d930c7c006949a917f607088c5e4, type: 3}
+    <AudioClipCA>k__BackingField: {fileID: 0}
+    <EventID>k__BackingField: 1
+  <OldGroupNames>k__BackingField: []
+  <OldUngroupedNodeNames>k__BackingField:
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+  - 8
+  - 9
+  - 10
+  - 11
+  - 12
+  - 2
+  - 1
+  <OldGroupedNodeNames>k__BackingField:
+    list: []
