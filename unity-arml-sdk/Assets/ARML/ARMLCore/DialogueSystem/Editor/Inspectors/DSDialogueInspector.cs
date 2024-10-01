@@ -88,7 +88,10 @@ namespace DS.Inspectors
             if (GUILayout.Button("Open Dialogue in Dialogue Graph"))
             {
                 DSEditorWindow editorWindow = EditorWindow.GetWindow<DSEditorWindow>("Dialogue Graph");
-                editorWindow.LoadFromPath($"{currentDialogueContainer.name}Graph");
+                if (currentDialogueContainer != null)
+                    editorWindow.LoadFromPath($"{currentDialogueContainer.name}Graph");
+                else
+                    Debug.LogError("DialogueContainer did not exist. Opening empty Dialogue Graph so you can create one.");
             }
 
             if (currentDialogueContainer == null)

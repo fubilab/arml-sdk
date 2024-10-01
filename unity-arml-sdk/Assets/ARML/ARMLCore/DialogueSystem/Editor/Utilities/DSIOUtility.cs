@@ -11,6 +11,7 @@ namespace DS.Utilities
     using Data.Save;
     using Elements;
     using ScriptableObjects;
+    using System.IO;
     using Windows;
 
     public static class DSIOUtility
@@ -34,7 +35,7 @@ namespace DS.Utilities
             graphView = dsGraphView;
 
             graphFileName = graphName;
-            containerFolderPath = $"Assets/DialogueSystem/Dialogues/{graphName}";
+            containerFolderPath = $"Assets/ARML/ARMLCore/DialogueSystem/Dialogues/{graphName}";
 
             nodes = new List<DSNode>();
             groups = new List<DSGroup>();
@@ -52,7 +53,7 @@ namespace DS.Utilities
 
             GetElementsFromGraphView();
 
-            DSGraphSaveDataSO graphData = CreateAsset<DSGraphSaveDataSO>("Assets/DialogueSystem/Editor/Graphs", $"{graphFileName}Graph");
+            DSGraphSaveDataSO graphData = CreateAsset<DSGraphSaveDataSO>("Assets/ARML/ARMLCore/DialogueSystem/Editor/Graphs", $"{graphFileName}Graph");
 
             graphData.Initialize(graphFileName);
 
@@ -394,12 +395,12 @@ namespace DS.Utilities
 
         private static void CreateDefaultFolders()
         {
-            CreateFolder("Assets/Editor/DialogueSystem", "Graphs");
+            CreateFolder("Assets/ARML/ARMLCore/Editor/DialogueSystem", "Graphs");
 
-            CreateFolder("Assets", "DialogueSystem");
-            CreateFolder("Assets/DialogueSystem", "Dialogues");
+            CreateFolder("Assets/ARML/ARMLCore", "DialogueSystem");
+            CreateFolder("Assets/ARML/ARMLCore/DialogueSystem", "Dialogues");
 
-            CreateFolder("Assets/DialogueSystem/Dialogues", graphFileName);
+            CreateFolder("Assets/ARML/ARMLCore/DialogueSystem/Dialogues", graphFileName);
             CreateFolder(containerFolderPath, "Global");
             CreateFolder(containerFolderPath, "Groups");
             CreateFolder($"{containerFolderPath}/Global", "Dialogues");
@@ -454,6 +455,9 @@ namespace DS.Utilities
             if (asset == null)
             {
                 asset = ScriptableObject.CreateInstance<T>();
+
+                if (!Directory.Exists(path))
+                    AssetDatabase.CreateFolder(path, assetName);
 
                 AssetDatabase.CreateAsset(asset, fullPath);
             }
