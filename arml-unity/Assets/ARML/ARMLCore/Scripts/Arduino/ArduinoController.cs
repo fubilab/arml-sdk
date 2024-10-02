@@ -77,11 +77,10 @@ namespace ARML
         [SerializeField, Tooltip("A reference to the ArduinoAnimationSO ScriptableObject containing the animation settings.")]
         ArduinoAnimationSO animationSO;
 
-
         private List<string> messagesList = new List<string>();
         private int progressPixelIndex;
         private Coroutine sendMsgCoroutine;
-        SerialPort serialPort;
+        private SerialPort serialPort;
         private Thread readThread;
         private bool readThreadRunning;
         private string prevMsg;
@@ -141,15 +140,6 @@ namespace ARML
             }
         }
 
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.F))
-            {
-                SetArduinoAnimation(solidColor, progressColor, overallBrightness, animationTime,
-                    animationPixelLength, animationStartPixelIndex, animationEndPixelIndex);
-            }
-        }
-
         /// <summary>
         /// Sends the microphone loudness level to the Arduino.
         /// </summary>
@@ -192,7 +182,7 @@ namespace ARML
                 }
                 catch (Exception e)
                 {
-                    // Debug.LogError("Error reading serial data: " + e.Message);
+                    Debug.LogError("Error reading serial data: " + e.Message);
                 }
             }
         }
@@ -293,7 +283,7 @@ namespace ARML
             return $"R{(solidColor.r * 255):F0}" +
                    $"G{(solidColor.g * 255):F0}" +
                    $"B{(solidColor.b * 255):F0}" +
-                   $"W{whiteBrightness}" +
+                   $"W{whiteBrightness:F0}" +
                    $"A{overallBrightness:F0}" +
                    "E"; // E used to set end of command, used to prevent wrong colors by ignoring anything after this
         }
@@ -303,7 +293,7 @@ namespace ARML
         /// </summary>
         /// <param name="color">The color to set.</param>
         /// <param name="brightness">The brightness level.</param>
-        /// <param name="force">If true, forces the command to be sent immediately.</param>
+        /// <param name="force">If true, forces the command to be sent immediately, ignoring the queue.</param>
         public void SetArduinoColor(Color color, float brightness, bool force = false)
         {
             overallBrightness = brightness;
@@ -325,6 +315,7 @@ namespace ARML
         /// <param name="endPixelIndex">The ending pixel index.</param>
         public void SetArduinoAnimation(Color bgColor, Color aColor, float brightness = -1, float rate = -1, int length = -1, int startPixelIndex = -1, int endPixelIndex = -1)
         {
+            //Default value checks
             if (brightness == -1)
                 brightness = overallBrightness;
 

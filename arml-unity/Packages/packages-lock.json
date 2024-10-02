@@ -1,9 +1,9 @@
 {
   "dependencies": {
     "babilinski.vosk.unity": {
-      "version": "file:C:/FuBIntLab/repos/magic_lantern_unity/Packages/Vosk",
+      "version": "file:Vosk",
       "depth": 0,
-      "source": "local",
+      "source": "embedded",
       "dependencies": {}
     },
     "com.caseydecoder.doxygengenerator": {
