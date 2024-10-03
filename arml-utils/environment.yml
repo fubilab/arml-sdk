@@ -1,0 +1,11 @@
+name: spectacular
+channels:
+  - defaults
+dependencies:
+  - python=3.12
+  - conda==24.7.1
+  - setuptools
+  - pip
+  - pip:
+      - spectacularAI[full]==1.36.0
+prefix: /home/pzhine/miniconda3

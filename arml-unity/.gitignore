@@ -70,3 +70,7 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
+
+# Non-open source plugins 
+/[Aa]ssets/Plugins/
+/[Pp]ackages/com.kybernetik.ultevents/
