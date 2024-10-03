@@ -81,3 +81,4 @@ crashlytics-build.properties
 # Non-open source plugins 
 /unity-arml-sdk/[Aa]ssets/Plugins/
 /unity-arml-sdk/[Pp]ackages/com.kybernetik.ultevents/
+/arml-unity/_build
