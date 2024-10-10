@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using ARML.SceneManagement;
+using ARML.Language;
 
-namespace ARML
+namespace ARML.UI
 {
     /// <summary>
     /// Manages the UI representation of Task progress in a Level, updating the UI elements as Tasks progress.
@@ -16,7 +18,7 @@ namespace ARML
         private struct TaskNameLanguage
         {
             public string taskName;
-            public Language language;
+            public Languages language;
             public string overridenName;
         }
 

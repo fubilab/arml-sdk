@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace ARML
+namespace ARML.Interaction
 {
     /// <summary>
     /// Manages the interaction type within the game and broadcasts changes to listeners.

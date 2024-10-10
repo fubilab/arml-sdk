@@ -1,4 +1,4 @@
-namespace ARML
+namespace ARML.Network
 {
     public struct PostProcessingConfig
     {

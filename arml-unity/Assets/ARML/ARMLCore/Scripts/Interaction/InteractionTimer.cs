@@ -2,8 +2,9 @@ using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using ARML.Network;
 
-namespace ARML
+namespace ARML.Interaction
 {
     /// <summary>
     /// Manages a timer for interactions, updating a UI element to reflect the progress and triggering events upon completion or cancellation.
@@ -43,12 +44,12 @@ namespace ARML
         /// </summary>
         void Start()
         {
-            NetworkPlayer.OnPlayerLoaded += GetCamera;
+            ARMLNetworkPlayer.OnPlayerLoaded += GetCamera;
         }
 
         private void OnDisable()
         {
-            NetworkPlayer.OnPlayerLoaded -= GetCamera;
+            ARMLNetworkPlayer.OnPlayerLoaded -= GetCamera;
         }
 
         /// <summary>

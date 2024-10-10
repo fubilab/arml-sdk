@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-namespace ARML
+namespace ARML.Interaction
 {
     /// <summary>
     /// Controls the IK (Inverse Kinematics) for looking at a target in a generic rig.

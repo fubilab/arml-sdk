@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace ARML
+namespace ARML.DebugTools
 {
     /// <summary>
     /// Represents a point on a heat map, which changes color based on the number of hits it receives.

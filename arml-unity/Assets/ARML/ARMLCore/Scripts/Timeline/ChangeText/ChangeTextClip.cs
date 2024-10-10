@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Playables;
 
-namespace ARML
+namespace ARML.Timeline
 {
     /// <summary>
     /// A custom PlayableAsset used to create playable clips for changing text in Unity's Timeline.

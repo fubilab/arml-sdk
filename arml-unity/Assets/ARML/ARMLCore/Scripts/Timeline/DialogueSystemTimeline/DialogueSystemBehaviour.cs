@@ -3,7 +3,7 @@ using DS;
 using UnityEngine;
 using UnityEngine.Playables;
 
-namespace ARML
+namespace ARML.Timeline
 {
     /// <summary>
     /// A PlayableBehaviour for controlling the Dialogue System, can change between DialogueContainers for a DialogueSystem and initiate the dialogue

@@ -1,8 +1,9 @@
 using DS;
 using System.Collections.Generic;
 using UnityEngine;
+using ARML.DebugTools;
 
-namespace ARML
+namespace ARML.Interaction
 {
     /// <summary>
     /// Handles grabbing and releasing grabbable objects in a 3D space,

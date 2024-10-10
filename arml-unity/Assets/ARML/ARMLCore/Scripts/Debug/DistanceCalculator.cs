@@ -1,7 +1,7 @@
 using TMPro;
 using UnityEngine;
 
-namespace ARML
+namespace ARML.DebugTools
 {
     /// <summary>
     /// Calculates and displays the distance between two objects, with an optional offset, using TextMeshPro.

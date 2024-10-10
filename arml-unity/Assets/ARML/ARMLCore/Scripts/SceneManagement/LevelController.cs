@@ -4,8 +4,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UltEvents;
 using UnityEngine;
+using ARML.UI;
+using ARML.DebugTools;
 
-namespace ARML
+namespace ARML.SceneManagement
 {
     /// <summary>
     /// Controls and manages the Levels in the game, including their activation and progression.

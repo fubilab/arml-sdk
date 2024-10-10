@@ -3,8 +3,10 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
+using ARML.DebugTools;
+using ARML.Language;
 
-namespace ARML
+namespace ARML.Interaction
 {
     /// <summary>
     /// An abstract class representing an object that can be interacted with in various ways, such as grabbing and placing.

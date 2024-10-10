@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace ARML
+namespace ARML.Interaction
 {
     /// <summary>
     /// Manages interactions with a Rigidbody component, allowing forces to be applied relative to the camera's direction.

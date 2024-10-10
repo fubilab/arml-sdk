@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace ARML
+namespace ARML.Interaction
 {
     /// <summary>
     /// Controls whether the camera can interact with more than one CameraPointedObject at the same time

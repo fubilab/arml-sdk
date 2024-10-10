@@ -7,8 +7,9 @@ using System.Linq;
 using System.Threading;
 using UnityEditor;
 using UnityEngine;
+using ARML.Voice;
 
-namespace ARML
+namespace ARML.Arduino
 {
     /// <summary>
     /// The ArduinoController class is responsible for managing communication between Unity and an Arduino device. 

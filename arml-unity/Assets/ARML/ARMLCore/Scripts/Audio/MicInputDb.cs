@@ -1,7 +1,7 @@
 using TMPro;
 using UnityEngine;
 
-namespace ARML
+namespace ARML.Voice
 {
     /// <summary>
     /// The MicInput class handles microphone input in Unity, providing functionality to capture the microphone's loudness 

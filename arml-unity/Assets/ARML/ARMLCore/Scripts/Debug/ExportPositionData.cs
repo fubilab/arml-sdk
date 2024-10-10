@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-namespace ARML
+namespace ARML.DebugTools
 {
     /// <summary>
     /// Records and plays back position and rotation data for a GameObject. 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using NaughtyAttributes;
 
-namespace ARML
+namespace ARML.DebugTools
 {
     public class ParticipantCodeController : MonoBehaviour
     {

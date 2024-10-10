@@ -1,7 +1,7 @@
 using TMPro;
 using UnityEngine;
 
-namespace ARML
+namespace ARML.DebugTools
 {
     /// <summary>
     /// Displays the position or rotation vector of a target transform as text using TextMeshPro.

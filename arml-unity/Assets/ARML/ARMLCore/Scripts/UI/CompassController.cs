@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace ARML
+namespace ARML.UI
 {
     public class CompassController : MonoBehaviour
     {

@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
-namespace ARML
+namespace ARML.Network
 {
     /// <summary>
     /// Manages the post-processing effects in the scene, allowing dynamic changes to visual effects.

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace ARML
+namespace ARML.Animation
 {
     /// <summary>
     /// Provides utility functions for manipulating Animator parameters.

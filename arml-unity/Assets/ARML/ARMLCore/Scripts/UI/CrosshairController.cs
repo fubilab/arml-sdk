@@ -1,8 +1,10 @@
 using DS;
 using UnityEngine;
 using UnityEngine.UI;
+using ARML.Voice;
+using ARML.Interaction;
 
-namespace ARML
+namespace ARML.UI
 {
     /// <summary>
     /// Controls the crosshair's appearance and state based on different game interactions like grabbing or placing objects.

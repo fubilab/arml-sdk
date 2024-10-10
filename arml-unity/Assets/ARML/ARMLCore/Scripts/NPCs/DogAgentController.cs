@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace ARML
+namespace ARML.Interaction
 {
     /// <summary>
     /// Controls a dog agent using NavMesh navigation, animation, and interaction behaviors.

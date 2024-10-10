@@ -1,7 +1,8 @@
 using System;
 using UnityEngine;
+using ARML.UI;
 
-namespace ARML
+namespace ARML.Language
 {
     /// <summary>
     /// Manages the global language settings for dialogue and voice interactions.
@@ -11,7 +12,7 @@ namespace ARML
         /// <summary>
         /// The currently selected language for voice interactions.
         /// </summary>
-        public Language currentLanguage;
+        public Languages currentLanguage;
 
         /// <summary>
         /// Reference to the Vosk speech-to-text component for handling voice recognition.
@@ -36,15 +37,15 @@ namespace ARML
         {
             switch (currentLanguage)
             {
-                case Language.EN:
+                case Languages.EN:
                     voskSTT.ModelPath = voskSTT.ModelPathEN;
                     voskSTT.KeyPhrases = voskSTT.KeyPhrasesEN;
                     break;
-                case Language.ES:
+                case Languages.ES:
                     voskSTT.ModelPath = voskSTT.ModelPathES;
                     voskSTT.KeyPhrases = voskSTT.KeyPhrasesES;
                     break;
-                case Language.CA:
+                case Languages.CA:
                     voskSTT.ModelPath = voskSTT.ModelPathES; 
                     voskSTT.KeyPhrases = voskSTT.KeyPhrasesES; 
                     break;
@@ -81,11 +82,11 @@ namespace ARML
         public void SetLanguage(int language)
         {
             // Return if the selected language is already the current one.
-            if (currentLanguage == (Language)language)
+            if (currentLanguage == (Languages)language)
                 return;
 
             // Update the current language and restart Vosk model.
-            currentLanguage = (Language)language;
+            currentLanguage = (Languages)language;
             Debug.Log($"Changed Language to {currentLanguage}");
 
             SetVoskModelPath(); // Set the Vosk model path for the new language.
@@ -101,7 +102,7 @@ namespace ARML
     /// Enum representing the supported languages.
     /// </summary>
     [Serializable]
-    public enum Language
+    public enum Languages
     {
         EN, // English
         ES, // Spanish

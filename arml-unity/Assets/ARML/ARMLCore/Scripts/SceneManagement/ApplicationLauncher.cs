@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace ARML
+namespace ARML.SceneManagement
 {
     /// <summary>
     /// Manages the launch of external applications from within a Unity application. 

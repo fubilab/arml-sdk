@@ -4,8 +4,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using ARML.UI;
 
-namespace ARML
+namespace ARML.Voice
 {
     /// <summary>
     /// Controls the speech-to-text (STT) microphone functionality, managing voice command recognition and processing, as well as character conversation.
@@ -229,35 +230,6 @@ namespace ARML
             }
 
             OnVoiceCommandAction?.Invoke(result);
-
-            //TODO - WORK IN PROGRESS
-
-            List<int> possibleMatchesIndexes = new List<int>();
-
-            //Loop through all choice texts to find matches
-            //for (int i = 0; i < dialogue.Choices.Count; i++)
-            //{
-            //    //Remove accents!
-            //    if (RemoveDiacritics(result).Contains(RemoveDiacritics(dialogue.Choices[i].Text), StringComparison.InvariantCultureIgnoreCase))
-            //    {
-            //        //Success! Add to match list
-            //        possibleMatchesIndexes.Add(i);
-            //    }
-            //}
-
-            ////If more than one match, or none, ask again
-            //if (possibleMatchesIndexes.Count != 1 && !isDictation)
-            //{
-            //    //Ask again, say the answer was not clear
-            //    StartCoroutine(DisplayDefaultAnswer(1));
-            //    sttMicController.ResetDictationMode();
-            //    return;
-            //}
-            //else if (possibleMatchesIndexes.Count == 1) //If one match exactly, answer accepted, immediately even if dictation
-            //{
-            //    GoToNextDialogue(possibleMatchesIndexes[0]);
-            //    sttMicController.ForceRecordingOff();
-            //}
         }
 
         /// <summary>

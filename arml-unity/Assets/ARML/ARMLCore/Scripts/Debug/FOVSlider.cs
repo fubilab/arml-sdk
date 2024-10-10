@@ -1,7 +1,7 @@
 using TMPro;
 using UnityEngine;
 
-namespace ARML
+namespace ARML.DebugTools
 {
     /// <summary>
     /// Controls the field of view (FOV) of the main camera and updates the corresponding UI text element.

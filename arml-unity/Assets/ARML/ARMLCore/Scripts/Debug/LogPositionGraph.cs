@@ -4,7 +4,7 @@ using UnityEngine;
 using System.IO;
 using System;
 
-namespace ARML
+namespace ARML.DebugTools
 {
     /// <summary>
     /// Logs position and rotation data from CSV files, spawning heat map points based on raycast hits.

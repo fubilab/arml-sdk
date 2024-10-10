@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace ARML
+namespace ARML.Interaction
 {
     /// <summary>
     /// Component that makes an object's materials transparent when obstructing the camera view.

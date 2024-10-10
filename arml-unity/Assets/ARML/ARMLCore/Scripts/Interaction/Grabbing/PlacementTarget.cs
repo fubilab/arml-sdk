@@ -1,8 +1,9 @@
 using System;
 using UnityEngine;
 using UnityEngine.Events;
+using ARML.Language;
 
-namespace ARML
+namespace ARML.Interaction
 {
     /// <summary>
     /// Manages the placement of objects onto a target, with support for auto-placement, locking, and name filtering.

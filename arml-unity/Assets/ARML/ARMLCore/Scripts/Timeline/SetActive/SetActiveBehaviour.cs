@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Playables;
 
-namespace ARML
+namespace ARML.Timeline
 {
     /// <summary>
     /// A PlayableBehaviour that sets the active state of a GameObject.

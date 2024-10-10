@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Timeline;
 
-namespace ARML
+namespace ARML.Timeline
 {
     [TrackClipType(typeof(DOTweenTimelineClip))]
     [TrackBindingType(typeof(Transform))]

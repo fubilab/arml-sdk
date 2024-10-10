@@ -1,4 +1,4 @@
-namespace ARML
+namespace ARML.Saving
 {
     public interface IDataService
     {

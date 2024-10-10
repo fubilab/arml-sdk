@@ -1,8 +1,11 @@
 using System.Diagnostics;
 using System.IO;
 using UnityEngine;
+using ARML.DebugTools;
+using ARML.Saving;
+using ARML.Language;
 
-namespace ARML
+namespace ARML.SceneManagement
 {
     /// <summary>
     /// Handles game loading and global settings

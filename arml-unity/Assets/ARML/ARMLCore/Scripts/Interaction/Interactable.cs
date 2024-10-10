@@ -5,8 +5,12 @@ using UnityEngine;
 using NaughtyAttributes;
 using UltEvents;
 using FishNet.Object;
+using ARML.Language;
+using ARML.Voice;
+using ARML.Network;
+using ARML.Arduino;
 
-namespace ARML
+namespace ARML.Interaction
 {
     /// <summary>
     /// An abstract base class for creating interactable objects in a game.
@@ -33,7 +37,7 @@ namespace ARML
         [Serializable]
         public struct VoiceCommandKeyword
         {
-            public Language language;
+            public Languages language;
             public string keyword;
             public VoiceCommandAction action;
             public UltEvent FreeActionEvent;
@@ -103,15 +107,15 @@ namespace ARML
                 //Check if KeyPhrases already contains command keyword, if not, add it to list by language
                 switch (command.language)
                 {
-                    case Language.EN:
+                    case Languages.EN:
                         if (!voskSTT.KeyPhrasesEN.Contains(command.keyword))
                             voskSTT.KeyPhrasesEN.Add(command.keyword);
                         break;
-                    case Language.ES:
+                    case Languages.ES:
                         if (!voskSTT.KeyPhrasesES.Contains(command.keyword))
                             voskSTT.KeyPhrasesES.Add(command.keyword);
                         break;
-                    case Language.CA:
+                    case Languages.CA:
                         if (!voskSTT.KeyPhrasesES.Contains(command.keyword))
                             voskSTT.KeyPhrasesES.Add(command.keyword);
                         break;
@@ -154,7 +158,7 @@ namespace ARML
         /// </summary>
         protected virtual void OnEnable()
         {
-            NetworkPlayer.OnPlayerLoaded += OnPlayerLoaded;
+            ARMLNetworkPlayer.OnPlayerLoaded += OnPlayerLoaded;
         }
 
         /// <summary>
@@ -162,7 +166,7 @@ namespace ARML
         /// </summary>
         protected virtual void OnDisable()
         {
-            NetworkPlayer.OnPlayerLoaded -= OnPlayerLoaded;
+            ARMLNetworkPlayer.OnPlayerLoaded -= OnPlayerLoaded;
             if (InteractionTypeController.Instance)
                 InteractionTypeController.Instance.OnInteractionTypeChanged -= SwitchInteractionType;
         }

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace ARML
+namespace ARML.Interaction
 {
     /// <summary>
     /// Represents a grabbable object whose movement is constrained to a specific plane.

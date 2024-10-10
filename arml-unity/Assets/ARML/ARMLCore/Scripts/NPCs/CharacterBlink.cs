@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-namespace ARML
+namespace ARML.Interaction
 {
     /// <summary>
     /// Handles the frequency and weight of a character's blendshape blink.

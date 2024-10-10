@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Playables;
 
-namespace ARML
+namespace ARML.Timeline
 {
     /// <summary>
     /// A custom PlayableBehaviour to change the text of a TextMeshProUGUI component during a Timeline clip.

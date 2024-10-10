@@ -1,7 +1,7 @@
 using TMPro;
 using UnityEngine;
 
-namespace ARML
+namespace ARML.Interaction
 {
     /// <summary>
     /// Controls the movement and behavior of the camera parent object, including cursor visibility and frame rate setup.

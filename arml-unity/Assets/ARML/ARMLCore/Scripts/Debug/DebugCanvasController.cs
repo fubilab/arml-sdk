@@ -1,8 +1,9 @@
 using AClockworkBerry;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using ARML.Interaction;
 
-namespace ARML
+namespace ARML.DebugTools
 {
     /// <summary>
     /// Manages the visibility of debug elements on the canvas, allowing them to be toggled on and off.

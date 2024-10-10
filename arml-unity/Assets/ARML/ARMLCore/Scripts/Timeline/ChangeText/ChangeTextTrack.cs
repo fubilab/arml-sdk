@@ -1,7 +1,7 @@
 using TMPro;
 using UnityEngine.Timeline;
 
-namespace ARML
+namespace ARML.Timeline
 {
     [TrackClipType(typeof(ChangeTextClip))]
     [TrackBindingType(typeof(TextMeshProUGUI))]

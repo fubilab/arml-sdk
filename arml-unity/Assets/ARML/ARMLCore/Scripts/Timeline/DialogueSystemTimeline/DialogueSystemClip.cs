@@ -2,7 +2,7 @@ using DS.ScriptableObjects;
 using UnityEngine;
 using UnityEngine.Playables;
 
-namespace ARML
+namespace ARML.Timeline
 {
     /// <summary>
     /// A PlayableAsset Clip for controlling the Dialogue System.

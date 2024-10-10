@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 
 
-namespace ARML
+namespace ARML.UI
 {
     /// <summary>
     /// Represents a UI container for displaying the progress of a task.

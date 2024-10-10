@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UltEvents;
 using UnityEngine;
 
-namespace ARML
+namespace ARML.Interaction
 {
     /// <summary>
     /// Handles collision detection and triggers events based on specified conditions.

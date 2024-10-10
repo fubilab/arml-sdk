@@ -3,8 +3,9 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using ARML.Interaction;
 
-namespace ARML
+namespace ARML.SceneManagement
 {
     /// <summary>
     /// Manages scene transitions and operations, including loading scenes and applying fade effects.

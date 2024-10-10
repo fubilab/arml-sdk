@@ -2,12 +2,18 @@ using UnityEngine;
 using System;
 using UltEvents;
 using System.Collections.Generic;
+using ARML.UI;
+using ARML.SceneManagement;
+using ARML.DebugTools;
+using ARML.Language;
+using ARML.Arduino;
+using ARML.Voice;
 
 #if UNITY_EDITOR
 using TNRD.Utilities;
 #endif
 
-namespace ARML
+namespace ARML.Interaction
 {
     /// <summary>
     /// Defines an interactable object that can be triggered based on the camera's angle, distance, and voice commands.

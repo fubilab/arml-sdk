@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
 
-namespace ARML
+namespace ARML.Timeline
 {
     public class TransformLerpClip : PlayableAsset, IPropertyPreview
     {

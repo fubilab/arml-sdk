@@ -1,6 +1,7 @@
 using UnityEngine;
+using ARML.SceneManagement;
 
-namespace ARML
+namespace ARML.DebugTools
 {
     /// <summary>
     /// Manages the visibility of a MeshRenderer component. Mainly used for toggling a scanned map on/off.

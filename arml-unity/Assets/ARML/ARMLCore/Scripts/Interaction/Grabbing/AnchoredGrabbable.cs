@@ -2,7 +2,7 @@ using NaughtyAttributes;
 using UnityEngine;
 using DG.Tweening;
 
-namespace ARML
+namespace ARML.Interaction
 {
     /// <summary>
     /// Represents an object that can be grabbed and anchored in a virtual environment, allowing for

@@ -2,8 +2,10 @@ using AClockworkBerry;
 using FishNet.Object;
 using System;
 using UnityEngine;
+using ARML.Interaction;
+using ARML.SceneManagement;
 
-namespace ARML
+namespace ARML.Network
 {
     /// <summary>
     /// Controls the admin user interface for various settings and interactions.

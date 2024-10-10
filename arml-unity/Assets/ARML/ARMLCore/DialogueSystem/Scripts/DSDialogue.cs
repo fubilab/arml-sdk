@@ -6,7 +6,12 @@ using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
-using ARML;
+using ARML.Language;
+using ARML.Voice;
+using ARML.Interaction;
+using ARML.DebugTools;
+using ARML.SceneManagement;
+using ARML.UI;
 
 namespace DS
 {
@@ -287,19 +292,19 @@ namespace DS
             //Check if current dialogue has audio for current language
             switch (LanguageController.Instance.currentLanguage)
             {
-                case Language.EN:
+                case Languages.EN:
                     if (dialogue.AudioClipEN == null)
                         yield break;
                     else
                         audioSource.clip = dialogue.AudioClipEN;
                     break;
-                case Language.ES:
+                case Languages.ES:
                     if (dialogue.AudioClipES == null)
                         yield break;
                     else
                         audioSource.clip = dialogue.AudioClipES;
                     break;
-                case Language.CA:
+                case Languages.CA:
                     if (dialogue.AudioClipCA == null)
                         yield break;
                     else
@@ -366,7 +371,7 @@ namespace DS
             {
                 switch (LanguageController.Instance.currentLanguage)
                 {
-                    case Language.EN:
+                    case Languages.EN:
                         //Create array of formatted choices parsing commas
                         List<string> parsedChoicesEN = choice.TextEN.Split('/').ToList();
                         foreach (string choiceValue in parsedChoicesEN)
@@ -375,7 +380,7 @@ namespace DS
                                 voskSTT.KeyPhrasesEN.Add(choiceValue);
                         }
                         break;
-                    case Language.ES:
+                    case Languages.ES:
                         List<string> parsedChoicesES = choice.TextES.Split('/').ToList();
                         foreach (string choiceValue in parsedChoicesES)
                         {
@@ -383,7 +388,7 @@ namespace DS
                                 voskSTT.KeyPhrasesES.Add(choiceValue);
                         }
                         break;
-                    case Language.CA:
+                    case Languages.CA:
                         voskSTT.KeyPhrasesES.Add(choice.TextCA);
                         break;
                 }
@@ -392,13 +397,13 @@ namespace DS
             //Set current Keyphrases based on language
             switch (LanguageController.Instance.currentLanguage)
             {
-                case Language.EN:
+                case Languages.EN:
                     voskSTT.KeyPhrases = voskSTT.KeyPhrasesEN;
                     break;
-                case Language.ES:
+                case Languages.ES:
                     voskSTT.KeyPhrases = voskSTT.KeyPhrasesES;
                     break;
-                case Language.CA:
+                case Languages.CA:
                     voskSTT.KeyPhrases = voskSTT.KeyPhrasesES;
                     break;
             }
@@ -416,13 +421,13 @@ namespace DS
             {
                 switch (LanguageController.Instance.currentLanguage)
                 {
-                    case Language.EN:
+                    case Languages.EN:
                         dialogueDisplayText.text = dialogue.TextEN;
                         break;
-                    case Language.ES:
+                    case Languages.ES:
                         dialogueDisplayText.text = dialogue.TextES;
                         break;
-                    case Language.CA:
+                    case Languages.CA:
                         dialogueDisplayText.text = dialogue.TextCA;
                         break;
                 }
@@ -436,13 +441,13 @@ namespace DS
                     choiceDisplayTexts[i].gameObject.SetActive(true);
                     switch (LanguageController.Instance.currentLanguage)
                     {
-                        case Language.EN:
+                        case Languages.EN:
                             choiceDisplayTexts[i].text = dialogue.Choices[i].TextEN;
                             break;
-                        case Language.ES:
+                        case Languages.ES:
                             choiceDisplayTexts[i].text = dialogue.Choices[i].TextES;
                             break;
-                        case Language.CA:
+                        case Languages.CA:
                             choiceDisplayTexts[i].text = dialogue.Choices[i].TextCA;
                             break;
                     }
@@ -562,13 +567,13 @@ namespace DS
                 //Remove accents from choices!
                 switch (LanguageController.Instance.currentLanguage)
                 {
-                    case Language.EN:
+                    case Languages.EN:
                         formattedChoiceText = RemoveDiacritics(dialogue.Choices[i].TextEN);
                         break;
-                    case Language.ES:
+                    case Languages.ES:
                         formattedChoiceText = RemoveDiacritics(dialogue.Choices[i].TextES);
                         break;
-                    case Language.CA:
+                    case Languages.CA:
                         formattedChoiceText = RemoveDiacritics(dialogue.Choices[i].TextCA);
                         break;
                 }
@@ -644,15 +649,15 @@ namespace DS
             {
                 case 0:
                     //defaultAnswerClip = didNotHearClip;
-                    defaultAnswerClip = (LanguageController.Instance.currentLanguage == Language.EN) ? didNotHearClipEN : didNotHearClipES;
+                    defaultAnswerClip = (LanguageController.Instance.currentLanguage == Languages.EN) ? didNotHearClipEN : didNotHearClipES;
                     defaultAnswerText = "Perdona, no te he oído, ¿puedes volver a hablar?";
                     break;
                 case 1:
-                    defaultAnswerClip = (LanguageController.Instance.currentLanguage == Language.EN) ? didNotUnderstandClipEN : didNotUnderstandClipES;
+                    defaultAnswerClip = (LanguageController.Instance.currentLanguage == Languages.EN) ? didNotUnderstandClipEN : didNotUnderstandClipES;
                     defaultAnswerText = "Disculpa, no te he entendido, ¿puedes responder de nuevo?";
                     break;
                 default:
-                    defaultAnswerClip = (LanguageController.Instance.currentLanguage == Language.EN) ? didNotUnderstandClipEN : didNotUnderstandClipES;
+                    defaultAnswerClip = (LanguageController.Instance.currentLanguage == Languages.EN) ? didNotUnderstandClipEN : didNotUnderstandClipES;
                     defaultAnswerText = "Disculpa, no te he entendido, ¿puedes responder de nuevo?";
                     break;
             }
@@ -694,7 +699,7 @@ namespace DS
         /// </summary>
         /// <param name="audioClip">Audio to be played</param>
         /// <param name="audioText">Text to be displayed</param>
-        public void PlayAudioOutsideOfSystem(Language language, AudioClip audioClip, string audioText = "")
+        public void PlayAudioOutsideOfSystem(Languages language, AudioClip audioClip, string audioText = "")
         {
             if (LanguageController.Instance.currentLanguage == language)
             {
@@ -705,7 +710,7 @@ namespace DS
             }
         }
 
-        public void PlayAudioOutsideOfSystem(Language language, AudioClip audioClip, string audioText = "", bool chainedInteractionDialogue = false)
+        public void PlayAudioOutsideOfSystem(Languages language, AudioClip audioClip, string audioText = "", bool chainedInteractionDialogue = false)
         {
             if (LanguageController.Instance.currentLanguage == language)
             {
@@ -716,7 +721,7 @@ namespace DS
             }
         }
 
-        public void PlayAudioOutsideOfSystem(Language language, AudioClip audioClip, string audioText = "", bool chainedInteractionDialogue = false, bool autoAdvanceCurrentLevel = false)
+        public void PlayAudioOutsideOfSystem(Languages language, AudioClip audioClip, string audioText = "", bool chainedInteractionDialogue = false, bool autoAdvanceCurrentLevel = false)
         {
             if (LanguageController.Instance.currentLanguage == language)
             {
@@ -727,7 +732,7 @@ namespace DS
             }
         }
 
-        public void SetAudioForTalkingInteraction(Language language, AudioClip audioClip, string audioText = "", bool autoAdvanceCurrentLevel = false)
+        public void SetAudioForTalkingInteraction(Languages language, AudioClip audioClip, string audioText = "", bool autoAdvanceCurrentLevel = false)
         {
             if (LanguageController.Instance.currentLanguage == language)
             {

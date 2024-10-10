@@ -1,7 +1,7 @@
 using FishNet.Example;
 using UnityEngine;
 
-namespace ARML
+namespace ARML.Network
 {
     public class DisableNetworkCanvas : MonoBehaviour
     {

@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace ARML
+namespace ARML.SceneManagement
 {
     /// <summary>
     /// Represents a task within a game, keeping track of its name, progress, and completion status.

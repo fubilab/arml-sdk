@@ -5,7 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using UnityEngine;
 
-namespace ARML
+namespace ARML.Saving
 {
     public class JsonDataService : IDataService
     {

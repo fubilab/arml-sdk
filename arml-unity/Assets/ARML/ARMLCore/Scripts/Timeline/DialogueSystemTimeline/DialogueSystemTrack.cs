@@ -1,7 +1,7 @@
 using DS;
 using UnityEngine.Timeline;
 
-namespace ARML
+namespace ARML.Timeline
 {
     [TrackClipType(typeof(DialogueSystemClip))]
     [TrackBindingType(typeof(DSDialogue))]

@@ -5,13 +5,13 @@ using FishNet.Object.Synchronizing;
 using System;
 using UnityEngine;
 
-namespace ARML
+namespace ARML.Network
 {
     /// <summary>
     /// Represents a network player in the ARML application. This class handles different player types, their behaviors, 
     /// and interactions in a networked environment.
     /// </summary>
-    public class NetworkPlayer : NetworkBehaviour
+    public class ARMLNetworkPlayer : NetworkBehaviour
     {
         [SerializeField] SceneField logicScene;
 
@@ -28,7 +28,7 @@ namespace ARML
         PlayerType playerType;
         private readonly SyncVar<bool> isHost = new SyncVar<bool>();
 
-        public static NetworkPlayer Instance { get; private set; }
+        public static ARMLNetworkPlayer Instance { get; private set; }
 
         /// <summary>
         /// Initializes the singleton instance and performs setup operations.
@@ -121,7 +121,7 @@ namespace ARML
             {
                 foreach (NetworkObject nob in FindObjectsOfType<NetworkObject>())
                 {
-                    if (nob.GetComponent<NetworkPlayer>() == null)
+                    if (nob.GetComponent<ARMLNetworkPlayer>() == null)
                         RequestOwnership(LocalConnection, nob);
                 }
             }

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace ARML
+namespace ARML.Arduino
 {
     /// <summary>
     /// ScriptableObject representing an Arduino animation configuration.

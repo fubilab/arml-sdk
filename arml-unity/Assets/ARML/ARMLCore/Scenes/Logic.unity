@@ -635,9 +635,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bb442334999fb84487442a2b692a37f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  q: {x: 0, y: 0, z: 0, w: 0}
-  manual: 0
-  offset: {x: 0, y: 0, z: 0}
 --- !u!65 &548076146
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1495,6 +1492,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: VIO
       objectReference: {fileID: 0}
+    - target: {fileID: 3130052147172006343, guid: 924cf4db97b421f4daecbd835f0a5c9c,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1656,9 +1658,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bb442334999fb84487442a2b692a37f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  q: {x: 0, y: 0, z: 0, w: 0}
-  manual: 0
-  offset: {x: 0, y: 0, z: 0}
 --- !u!65 &1798480065
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2180,6 +2179,21 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6671237534119171511, guid: 79cecb298a5e3bf40a2048ff98890029,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 2464372682278860805}
+    - target: {fileID: 6671237534119171511, guid: 79cecb298a5e3bf40a2048ff98890029,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: LoadGame
+      objectReference: {fileID: 0}
+    - target: {fileID: 6671237534119171511, guid: 79cecb298a5e3bf40a2048ff98890029,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: ARML.SceneManagement.GameController, ARMLCore
+      objectReference: {fileID: 0}
     - target: {fileID: 6680929189398986839, guid: 79cecb298a5e3bf40a2048ff98890029,
         type: 3}
       propertyPath: m_fontColor.b
@@ -2357,8 +2371,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameSceneToLoad:
-    m_SceneAsset: {fileID: 0}
-    m_SceneName: 
+    m_SceneAsset: {fileID: 102900000, guid: b890eeeb8dc612648b8316ef0cbc885d, type: 3}
+    m_SceneName: WallGame
   loadOnStart: 0
   loadLauncherSettings: 0
   debugCanvasController: {fileID: 1521654317}
@@ -3108,7 +3122,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8444681710732414053
 Transform:
   m_ObjectHideFlags: 0

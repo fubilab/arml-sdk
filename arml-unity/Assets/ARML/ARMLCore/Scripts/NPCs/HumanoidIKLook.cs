@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace ARML
+namespace ARML.Interaction
 {
     /// <summary>
     /// Controls the IK (Inverse Kinematics) for a humanoid character to look at a specified target.

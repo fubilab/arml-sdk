@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-namespace ARML
+namespace ARML.Interaction
 {
     /// <summary>
     /// Provides audio and visual feedback for actions. This includes playing sound effects and particle systems.

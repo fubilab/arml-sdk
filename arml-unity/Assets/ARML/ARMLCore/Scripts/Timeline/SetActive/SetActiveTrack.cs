@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Timeline;
 
-namespace ARML
+namespace ARML.Timeline
 {
     [TrackClipType(typeof(SetActiveClip))]
     [TrackBindingType(typeof(GameObject))]
