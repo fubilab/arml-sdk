@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace DS.Utilities
+namespace ARML.DS.Utilities
 {
     public static class CollectionUtility
     {

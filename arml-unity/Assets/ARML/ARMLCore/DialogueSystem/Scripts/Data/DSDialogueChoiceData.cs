@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace DS.Data
+namespace ARML.DS.Data
 {
     using ScriptableObjects;
 

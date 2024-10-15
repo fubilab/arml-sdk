@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace DS.Data.Error
+namespace ARML.DS.Data.Error
 {
     using Elements;
 

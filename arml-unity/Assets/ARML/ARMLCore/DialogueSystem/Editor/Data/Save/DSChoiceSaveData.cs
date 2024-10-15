@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace DS.Data.Save
+namespace ARML.DS.Data.Save
 {
     [Serializable]
     public class DSChoiceSaveData

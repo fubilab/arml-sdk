@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace DS.ScriptableObjects
+namespace ARML.DS.ScriptableObjects
 {
     public class DSDialogueGroupSO : ScriptableObject
     {

@@ -2,7 +2,7 @@ using System;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
-namespace DS.Elements
+namespace ARML.DS.Elements
 {
     public class DSGroup : Group
     {

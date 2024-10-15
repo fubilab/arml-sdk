@@ -5,7 +5,7 @@ using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
-namespace DS.Utilities
+namespace ARML.DS.Utilities
 {
     using Data;
     using Data.Save;

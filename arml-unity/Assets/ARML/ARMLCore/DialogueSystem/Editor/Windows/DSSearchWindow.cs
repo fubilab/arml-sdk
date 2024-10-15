@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
-namespace DS.Windows
+namespace ARML.DS.Windows
 {
     using Elements;
     using Enumerations;

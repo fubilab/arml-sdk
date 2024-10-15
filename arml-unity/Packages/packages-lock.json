@@ -107,12 +107,6 @@
         "com.unity.render-pipelines.core": "14.0.10"
       }
     },
-    "com.unity.robotics.ros-tcp-connector": {
-      "version": "file:com.unity.robotics.ros-tcp-connector@c27f00c6cf",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
-    },
     "com.unity.searcher": {
       "version": "4.9.2",
       "depth": 2,

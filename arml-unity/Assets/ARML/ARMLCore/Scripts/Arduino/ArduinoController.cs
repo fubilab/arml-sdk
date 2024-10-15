@@ -364,6 +364,19 @@ namespace ARML.Arduino
 
 #if UNITY_EDITOR
         [Button]
+        private void TestSolidColor()
+        {
+            SetArduinoColor(solidColor, overallBrightness);
+        }
+
+        [Button]
+        private void TestAnimation()
+        {
+            SetArduinoAnimation(solidColor, progressColor, overallBrightness, animationTime,
+        animationPixelLength, animationStartPixelIndex, animationEndPixelIndex);
+        }
+
+        [Button]
         private void SaveAnimationSO()
         {
             ArduinoAnimationSO asset = ScriptableObject.CreateInstance<ArduinoAnimationSO>();

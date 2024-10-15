@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace DS.Data.Error
+namespace ARML.DS.Data.Error
 {
     public class DSErrorData
     {

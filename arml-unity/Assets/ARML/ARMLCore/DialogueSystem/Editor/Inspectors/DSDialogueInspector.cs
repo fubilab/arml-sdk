@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEditor;
 
-namespace DS.Inspectors
+namespace ARML.DS.Inspectors
 {
     using Utilities;
     using ScriptableObjects;

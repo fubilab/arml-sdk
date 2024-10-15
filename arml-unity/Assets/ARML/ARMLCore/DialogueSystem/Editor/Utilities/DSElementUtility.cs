@@ -3,7 +3,7 @@ using UnityEditor.Experimental.GraphView;
 using UnityEngine.UIElements;
 using UnityEditor.UIElements;
 
-namespace DS.Utilities
+namespace ARML.DS.Utilities
 {
     using Elements;
     using UnityEngine;

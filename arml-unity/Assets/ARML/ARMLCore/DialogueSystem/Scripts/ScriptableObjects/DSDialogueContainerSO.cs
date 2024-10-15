@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace DS.ScriptableObjects
+namespace ARML.DS.ScriptableObjects
 {
     public class DSDialogueContainerSO : ScriptableObject
     {

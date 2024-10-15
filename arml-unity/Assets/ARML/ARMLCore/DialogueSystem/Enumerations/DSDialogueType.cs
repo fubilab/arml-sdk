@@ -1,4 +1,4 @@
-namespace DS.Enumerations
+namespace ARML.DS.Enumerations
 {
     public enum DSDialogueType
     {

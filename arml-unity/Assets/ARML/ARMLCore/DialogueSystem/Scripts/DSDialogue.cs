@@ -13,7 +13,7 @@ using ARML.DebugTools;
 using ARML.SceneManagement;
 using ARML.UI;
 
-namespace DS
+namespace ARML.DS
 {
     using Enumerations;
     using ScriptableObjects;
@@ -159,7 +159,8 @@ namespace DS
             {
                 if (sttMicController.currentlyRecording)
                 {
-                    StopCoroutine(playAudioCurrentDialogue);
+                    if (playAudioCurrentDialogue != null)
+                        StopCoroutine(playAudioCurrentDialogue);
                     audioSource.Stop();
                 }
             }

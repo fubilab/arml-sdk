@@ -192,7 +192,7 @@ MonoBehaviour:
       _PersistentArguments:
       - _Type: 4
         _Int: 1
-        _String: DS.DSDialogue+DialogueInteractionType, ARMLCore, Version=0.0.0.0,
+        _String: ARML.DS.DSDialogue+DialogueInteractionType, ARMLCore, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null
         _X: 0
         _Y: 0
@@ -480,7 +480,8 @@ MonoBehaviour:
       _PersistentArguments:
       - _Type: 4
         _Int: 0
-        _String: ARML.Language, ARMLCore, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        _String: ARML.Language.Languages, ARMLCore, Version=0.0.0.0, Culture=neutral,
+          PublicKeyToken=null
         _X: 0
         _Y: 0
         _Z: 0
@@ -516,7 +517,8 @@ MonoBehaviour:
       _PersistentArguments:
       - _Type: 4
         _Int: 1
-        _String: ARML.Language, ARMLCore, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        _String: ARML.Language.Languages, ARMLCore, Version=0.0.0.0, Culture=neutral,
+          PublicKeyToken=null
         _X: 0
         _Y: 0
         _Z: 0
@@ -557,7 +559,8 @@ MonoBehaviour:
       _PersistentArguments:
       - _Type: 13
         _Int: 0
-        _String: ARML.Level, ARMLCore, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        _String: ARML.SceneManagement.Level, ARMLCore, Version=0.0.0.0, Culture=neutral,
+          PublicKeyToken=null
         _X: 0
         _Y: 0
         _Z: 0
@@ -2191,7 +2194,8 @@ MonoBehaviour:
       _PersistentArguments:
       - _Type: 4
         _Int: 0
-        _String: ARML.Language, ARMLCore, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        _String: ARML.Language.Languages, ARMLCore, Version=0.0.0.0, Culture=neutral,
+          PublicKeyToken=null
         _X: 0
         _Y: 0
         _Z: 0
@@ -2227,7 +2231,8 @@ MonoBehaviour:
       _PersistentArguments:
       - _Type: 4
         _Int: 1
-        _String: ARML.Language, ARMLCore, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        _String: ARML.Language.Languages, ARMLCore, Version=0.0.0.0, Culture=neutral,
+          PublicKeyToken=null
         _X: 0
         _Y: 0
         _Z: 0
@@ -2265,7 +2270,8 @@ MonoBehaviour:
       _PersistentArguments:
       - _Type: 13
         _Int: 0
-        _String: ARML.Level, ARMLCore, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        _String: ARML.SceneManagement.Level, ARMLCore, Version=0.0.0.0, Culture=neutral,
+          PublicKeyToken=null
         _X: 0
         _Y: 0
         _Z: 0
@@ -2281,7 +2287,8 @@ MonoBehaviour:
         _PersistentArguments:
         - _Type: 4
           _Int: 0
-          _String: ARML.Language, ARMLCore, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+          _String: ARML.Language.Languages, ARMLCore, Version=0.0.0.0, Culture=neutral,
+            PublicKeyToken=null
           _X: 0
           _Y: 0
           _Z: 0
@@ -2317,7 +2324,8 @@ MonoBehaviour:
         _PersistentArguments:
         - _Type: 4
           _Int: 1
-          _String: ARML.Language, ARMLCore, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+          _String: ARML.Language.Languages, ARMLCore, Version=0.0.0.0, Culture=neutral,
+            PublicKeyToken=null
           _X: 0
           _Y: 0
           _Z: 0
@@ -2358,7 +2366,8 @@ MonoBehaviour:
         _PersistentArguments:
         - _Type: 4
           _Int: 0
-          _String: ARML.Language, ARMLCore, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+          _String: ARML.Language.Languages, ARMLCore, Version=0.0.0.0, Culture=neutral,
+            PublicKeyToken=null
           _X: 0
           _Y: 0
           _Z: 0
@@ -2394,7 +2403,8 @@ MonoBehaviour:
         _PersistentArguments:
         - _Type: 4
           _Int: 1
-          _String: ARML.Language, ARMLCore, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+          _String: ARML.Language.Languages, ARMLCore, Version=0.0.0.0, Culture=neutral,
+            PublicKeyToken=null
           _X: 0
           _Y: 0
           _Z: 0
@@ -2436,7 +2446,8 @@ MonoBehaviour:
         _PersistentArguments:
         - _Type: 13
           _Int: 0
-          _String: ARML.Level, ARMLCore, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+          _String: ARML.SceneManagement.Level, ARMLCore, Version=0.0.0.0, Culture=neutral,
+            PublicKeyToken=null
           _X: 0
           _Y: 0
           _Z: 0
@@ -4496,12 +4507,12 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1685827530}
-        m_TargetAssemblyTypeName: ARML.LevelController, ARMLCore
+        m_TargetAssemblyTypeName: ARML.SceneManagement.LevelController, ARMLCore
         m_MethodName: PlayLevelByReference
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 1675550011}
-          m_ObjectArgumentAssemblyTypeName: ARML.Level, ARMLCore
+          m_ObjectArgumentAssemblyTypeName: ARML.SceneManagement.Level, ARMLCore
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -5094,7 +5105,7 @@ MonoBehaviour:
       _PersistentArguments:
       - _Type: 4
         _Int: 0
-        _String: DS.DSDialogue+DialogueInteractionType, ARMLCore, Version=0.0.0.0,
+        _String: ARML.DS.DSDialogue+DialogueInteractionType, ARMLCore, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null
         _X: 0
         _Y: 0
@@ -5117,7 +5128,8 @@ MonoBehaviour:
       _PersistentArguments:
       - _Type: 4
         _Int: 0
-        _String: ARML.Language, ARMLCore, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        _String: ARML.Language.Languages, ARMLCore, Version=0.0.0.0, Culture=neutral,
+          PublicKeyToken=null
         _X: 0
         _Y: 0
         _Z: 0
@@ -5153,7 +5165,8 @@ MonoBehaviour:
       _PersistentArguments:
       - _Type: 4
         _Int: 1
-        _String: ARML.Language, ARMLCore, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        _String: ARML.Language.Languages, ARMLCore, Version=0.0.0.0, Culture=neutral,
+          PublicKeyToken=null
         _X: 0
         _Y: 0
         _Z: 0
@@ -5710,7 +5723,8 @@ MonoBehaviour:
       _PersistentArguments:
       - _Type: 4
         _Int: 0
-        _String: ARML.Language, ARMLCore, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        _String: ARML.Language.Languages, ARMLCore, Version=0.0.0.0, Culture=neutral,
+          PublicKeyToken=null
         _X: 0
         _Y: 0
         _Z: 0
@@ -5746,7 +5760,8 @@ MonoBehaviour:
       _PersistentArguments:
       - _Type: 4
         _Int: 1
-        _String: ARML.Language, ARMLCore, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        _String: ARML.Language.Languages, ARMLCore, Version=0.0.0.0, Culture=neutral,
+          PublicKeyToken=null
         _X: 0
         _Y: 0
         _Z: 0
@@ -5760,7 +5775,7 @@ MonoBehaviour:
         _Y: 0
         _Z: 0
         _W: 0
-        _Object: {fileID: 8300000, guid: 2575c23bd412ca04c94af9ef5a9ddeeb, type: 3}
+        _Object: {fileID: 8300000, guid: a1bd65c614bbee342a7bef84f09cce65, type: 3}
       - _Type: 2
         _Int: 0
         _String: 
@@ -5818,7 +5833,8 @@ MonoBehaviour:
       _PersistentArguments:
       - _Type: 13
         _Int: 0
-        _String: ARML.Level, ARMLCore, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        _String: ARML.SceneManagement.Level, ARMLCore, Version=0.0.0.0, Culture=neutral,
+          PublicKeyToken=null
         _X: 0
         _Y: 0
         _Z: 0
@@ -6091,7 +6107,7 @@ MonoBehaviour:
   csvFolderPath: Logs/Anna/Quest/Headset
   timeScale: 1
   spawnHeatMap: 0
-  prefab: {fileID: 5501020134974141691, guid: 4691bc7b348743945aa2e57d30050c13, type: 3}
+  heatMapPointPrefab: {fileID: 0}
   layerMask:
     serializedVersion: 2
     m_Bits: 8192
@@ -9079,7 +9095,8 @@ MonoBehaviour:
       _PersistentArguments:
       - _Type: 4
         _Int: 0
-        _String: ARML.Language, ARMLCore, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        _String: ARML.Language.Languages, ARMLCore, Version=0.0.0.0, Culture=neutral,
+          PublicKeyToken=null
         _X: 0
         _Y: 0
         _Z: 0
@@ -9123,7 +9140,8 @@ MonoBehaviour:
       _PersistentArguments:
       - _Type: 4
         _Int: 1
-        _String: ARML.Language, ARMLCore, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        _String: ARML.Language.Languages, ARMLCore, Version=0.0.0.0, Culture=neutral,
+          PublicKeyToken=null
         _X: 0
         _Y: 0
         _Z: 0
@@ -9392,12 +9410,12 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1685827530}
-        m_TargetAssemblyTypeName: ARML.LevelController, ARMLCore
+        m_TargetAssemblyTypeName: ARML.SceneManagement.LevelController, ARMLCore
         m_MethodName: PlayLevelByReference
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 1397178562}
-          m_ObjectArgumentAssemblyTypeName: ARML.Level, ARMLCore
+          m_ObjectArgumentAssemblyTypeName: ARML.SceneManagement.Level, ARMLCore
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -9792,7 +9810,7 @@ MonoBehaviour:
       _PersistentArguments:
       - _Type: 4
         _Int: 1
-        _String: DS.DSDialogue+DialogueInteractionType, ARMLCore, Version=0.0.0.0,
+        _String: ARML.DS.DSDialogue+DialogueInteractionType, ARMLCore, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null
         _X: 0
         _Y: 0
@@ -10009,7 +10027,8 @@ MonoBehaviour:
       _PersistentArguments:
       - _Type: 4
         _Int: 0
-        _String: ARML.Language, ARMLCore, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        _String: ARML.Language.Languages, ARMLCore, Version=0.0.0.0, Culture=neutral,
+          PublicKeyToken=null
         _X: 0
         _Y: 0
         _Z: 0
@@ -10045,7 +10064,8 @@ MonoBehaviour:
       _PersistentArguments:
       - _Type: 4
         _Int: 1
-        _String: ARML.Language, ARMLCore, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        _String: ARML.Language.Languages, ARMLCore, Version=0.0.0.0, Culture=neutral,
+          PublicKeyToken=null
         _X: 0
         _Y: 0
         _Z: 0
@@ -10106,7 +10126,8 @@ MonoBehaviour:
       _PersistentArguments:
       - _Type: 13
         _Int: 0
-        _String: ARML.Level, ARMLCore, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        _String: ARML.SceneManagement.Level, ARMLCore, Version=0.0.0.0, Culture=neutral,
+          PublicKeyToken=null
         _X: 0
         _Y: 0
         _Z: 0
@@ -10292,7 +10313,8 @@ MonoBehaviour:
       _PersistentArguments:
       - _Type: 4
         _Int: 0
-        _String: ARML.Language, ARMLCore, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        _String: ARML.Language.Languages, ARMLCore, Version=0.0.0.0, Culture=neutral,
+          PublicKeyToken=null
         _X: 0
         _Y: 0
         _Z: 0
@@ -10319,8 +10341,9 @@ MonoBehaviour:
       _MethodName: PlayAudioOutsideOfSystem
       _PersistentArguments:
       - _Type: 4
-        _Int: 0
-        _String: ARML.Language, ARMLCore, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        _Int: 1
+        _String: ARML.Language.Languages, ARMLCore, Version=0.0.0.0, Culture=neutral,
+          PublicKeyToken=null
         _X: 0
         _Y: 0
         _Z: 0
@@ -15976,7 +15999,8 @@ MonoBehaviour:
       _PersistentArguments:
       - _Type: 4
         _Int: 0
-        _String: ARML.Language, ARMLCore, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        _String: ARML.Language.Languages, ARMLCore, Version=0.0.0.0, Culture=neutral,
+          PublicKeyToken=null
         _X: 0
         _Y: 0
         _Z: 0
@@ -16004,7 +16028,8 @@ MonoBehaviour:
       _PersistentArguments:
       - _Type: 4
         _Int: 0
-        _String: ARML.Language, ARMLCore, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        _String: ARML.Language.Languages, ARMLCore, Version=0.0.0.0, Culture=neutral,
+          PublicKeyToken=null
         _X: 0
         _Y: 0
         _Z: 0
@@ -16040,7 +16065,8 @@ MonoBehaviour:
       _PersistentArguments:
       - _Type: 4
         _Int: 1
-        _String: ARML.Language, ARMLCore, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        _String: ARML.Language.Languages, ARMLCore, Version=0.0.0.0, Culture=neutral,
+          PublicKeyToken=null
         _X: 0
         _Y: 0
         _Z: 0
@@ -16068,7 +16094,8 @@ MonoBehaviour:
       _PersistentArguments:
       - _Type: 4
         _Int: 1
-        _String: ARML.Language, ARMLCore, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        _String: ARML.Language.Languages, ARMLCore, Version=0.0.0.0, Culture=neutral,
+          PublicKeyToken=null
         _X: 0
         _Y: 0
         _Z: 0
@@ -16123,7 +16150,8 @@ MonoBehaviour:
       _PersistentArguments:
       - _Type: 4
         _Int: 0
-        _String: ARML.Language, ARMLCore, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        _String: ARML.Language.Languages, ARMLCore, Version=0.0.0.0, Culture=neutral,
+          PublicKeyToken=null
         _X: 0
         _Y: 0
         _Z: 0
@@ -16151,7 +16179,8 @@ MonoBehaviour:
       _PersistentArguments:
       - _Type: 4
         _Int: 1
-        _String: ARML.Language, ARMLCore, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        _String: ARML.Language.Languages, ARMLCore, Version=0.0.0.0, Culture=neutral,
+          PublicKeyToken=null
         _X: 0
         _Y: 0
         _Z: 0
@@ -16990,7 +17019,8 @@ MonoBehaviour:
       _PersistentArguments:
       - _Type: 4
         _Int: 0
-        _String: ARML.Language, ARMLCore, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        _String: ARML.Language.Languages, ARMLCore, Version=0.0.0.0, Culture=neutral,
+          PublicKeyToken=null
         _X: 0
         _Y: 0
         _Z: 0
@@ -17026,7 +17056,8 @@ MonoBehaviour:
       _PersistentArguments:
       - _Type: 4
         _Int: 1
-        _String: ARML.Language, ARMLCore, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        _String: ARML.Language.Languages, ARMLCore, Version=0.0.0.0, Culture=neutral,
+          PublicKeyToken=null
         _X: 0
         _Y: 0
         _Z: 0
@@ -17301,7 +17332,7 @@ MonoBehaviour:
       _PersistentArguments:
       - _Type: 4
         _Int: 0
-        _String: DS.DSDialogue+DialogueInteractionType, ARMLCore, Version=0.0.0.0,
+        _String: ARML.DS.DSDialogue+DialogueInteractionType, ARMLCore, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null
         _X: 0
         _Y: 0
@@ -17324,7 +17355,8 @@ MonoBehaviour:
       _PersistentArguments:
       - _Type: 4
         _Int: 0
-        _String: ARML.Language, ARMLCore, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        _String: ARML.Language.Languages, ARMLCore, Version=0.0.0.0, Culture=neutral,
+          PublicKeyToken=null
         _X: 0
         _Y: 0
         _Z: 0
@@ -17368,7 +17400,8 @@ MonoBehaviour:
       _PersistentArguments:
       - _Type: 4
         _Int: 1
-        _String: ARML.Language, ARMLCore, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        _String: ARML.Language.Languages, ARMLCore, Version=0.0.0.0, Culture=neutral,
+          PublicKeyToken=null
         _X: 0
         _Y: 0
         _Z: 0
@@ -23598,12 +23631,12 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1685827530}
-        m_TargetAssemblyTypeName: ARML.LevelController, ARMLCore
+        m_TargetAssemblyTypeName: ARML.SceneManagement.LevelController, ARMLCore
         m_MethodName: PlayLevelByReference
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 734928852}
-          m_ObjectArgumentAssemblyTypeName: ARML.Level, ARMLCore
+          m_ObjectArgumentAssemblyTypeName: ARML.SceneManagement.Level, ARMLCore
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -27785,12 +27818,12 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1685827530}
-        m_TargetAssemblyTypeName: ARML.LevelController, ARMLCore
+        m_TargetAssemblyTypeName: ARML.SceneManagement.LevelController, ARMLCore
         m_MethodName: PlayLevelByReference
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 55987988}
-          m_ObjectArgumentAssemblyTypeName: ARML.Level, ARMLCore
+          m_ObjectArgumentAssemblyTypeName: ARML.SceneManagement.Level, ARMLCore
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 

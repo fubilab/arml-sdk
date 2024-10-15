@@ -4,7 +4,7 @@ using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace DS.Windows
+namespace ARML.DS.Windows
 {
     using Data.Error;
     using Data.Save;
@@ -155,7 +155,7 @@ namespace DS.Windows
 
         public DSNode CreateNode(string nodeName, DSDialogueType dialogueType, Vector2 position, bool shouldDraw = true)
         {
-            Type nodeType = Type.GetType($"DS.Elements.DS{dialogueType}Node");
+            Type nodeType = Type.GetType($"ARML.DS.Elements.DS{dialogueType}Node");
 
             DSNode node = (DSNode) Activator.CreateInstance(nodeType);
 

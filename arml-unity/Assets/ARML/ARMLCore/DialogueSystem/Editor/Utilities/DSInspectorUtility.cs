@@ -1,7 +1,7 @@
 using System;
 using UnityEditor;
 
-namespace DS.Utilities
+namespace ARML.DS.Utilities
 {
     public static class DSInspectorUtility
     {
