@@ -3,13 +3,10 @@
     "rootNamespace": "",
     "references": [
         "Unity.TextMeshPro",
-        "Unity.Robotics.ROSTCPConnector",
         "babilinski.vosk.unity",
         "babilinski.vosk.samples",
-        "Unity.Robotics.ROSTCPConnector.Messages",
         "NaughtyAttributes.Core",
         "FishNet.Runtime",
-        "Unity.Robotics.ROSTCPConnector.MessageGeneration",
         "UltEvents",
         "TNRD.IconManager.Editor",
         "Unity.RenderPipelines.Universal.Runtime",
