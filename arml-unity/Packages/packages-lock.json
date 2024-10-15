@@ -6,13 +6,6 @@
       "source": "embedded",
       "dependencies": {}
     },
-    "com.caseydecoder.doxygengenerator": {
-      "version": "https://github.com/CaseyHofland/DoxygenGenerator.git",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "0bac2f62fcb0acd970bcfc04515fdc1519b6d54f"
-    },
     "com.unity.burst": {
       "version": "1.8.17",
       "depth": 1,
