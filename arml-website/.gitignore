@@ -1,2 +1,6 @@
 _site/
 _exported_templates/
+
+# generated API docs
+/api/*.yml
+/api/.manifest
