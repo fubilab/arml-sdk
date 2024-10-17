@@ -1,0 +1,49 @@
+{
+  "metadata": [
+    {
+      "src": [
+        {
+          "src": "../arml-unity",
+          "files": [
+            "**/ARMLCore.csproj"
+          ]
+        }
+      ],
+      "filter": "filterConfig.yml",
+      "dest": "api",
+      "namespaceLayout": "nested",
+      "categoryLayout": "nested"
+    }
+  ],
+  "build": {
+    "content": [
+      {
+        "files": [
+          "**/*.{md,yml}"
+        ],
+        "exclude": [
+          "_site/**"
+        ]
+      }
+    ],
+    "resource": [
+      {
+        "files": [
+          "images/**"
+        ]
+      }
+    ],
+    "output": "_site",
+    "template": [
+      "default",
+      "modern",
+      "template"
+    ],
+    "globalMetadata": {
+      "_appName": "ARML SDK",
+      "_appTitle": "ARML SDK",
+      "_enableSearch": true,
+      "pdf": false
+    }
+  }
+}
