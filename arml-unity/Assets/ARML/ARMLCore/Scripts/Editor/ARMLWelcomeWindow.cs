@@ -1,3 +1,4 @@
+using FishNet.Editing;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -6,15 +7,45 @@ using UnityEngine.SceneManagement;
 public class ARMLWelcomeWindow : EditorWindow
 {
     private Texture2D logo;
+    private static bool subscribed;
 
     private void Awake()
     {
         //logo = (Texture2D)AssetDatabase.LoadAssetAtPath("Assets/ARML/ARMLCore/Textures/arml_logo_text.png", typeof(Texture2D));
         logo = (Texture2D)AssetDatabase.LoadAssetAtPath("Assets/ARML/ARMLCore/Textures/arml_logo.png", typeof(Texture2D));
-        ShowWindow();
     }
 
-    [MenuItem("ARML/Welcome Window")]
+    [InitializeOnLoadMethod]
+    private static void Initialize()
+    {
+        SubscribeToUpdate();
+    }
+
+    private static void SubscribeToUpdate()
+    {
+        if (Application.isBatchMode)
+            return;
+
+        if (!subscribed && !EditorApplication.isPlayingOrWillChangePlaymode)
+        {
+            subscribed = true;
+            EditorApplication.update += ShowWindowAtStart;
+        }
+    }
+
+    private static void ShowWindowAtStart()
+    {
+        EditorApplication.update -= ShowWindowAtStart;
+
+        bool shown = EditorPrefs.GetBool("WelcomeWindowOpened", false);
+        if (!shown)
+        {
+            EditorPrefs.SetBool("WelcomeWindowOpened", true);
+            ShowWindow();
+        }
+    }
+
+    [MenuItem("ARML/Welcome Window")]//
     public static void ShowWindow()
     {
         GetWindow<ARMLWelcomeWindow>("ARML Welcome");

@@ -82,7 +82,7 @@ namespace FishNet.Editing
             {
                 EditorPrefs.SetBool(SHOWED_GETTING_STARTED, true);
                 ReviewReminderEditor.ResetDateTimeReminded();
-                GettingStartedMenu();
+                //GettingStartedMenu();
             }
             //If was already shown then check review reminder instead.
             else
