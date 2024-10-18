@@ -22,6 +22,7 @@
           "**/*.{md,yml}"
         ],
         "exclude": [
+          "node_modules/**",
           "_site/**"
         ]
       }
@@ -29,7 +30,7 @@
     "resource": [
       {
         "files": [
-          "images/**"
+          "**/images/**"
         ]
       }
     ],
@@ -43,6 +44,7 @@
       "_appName": "ARML SDK",
       "_appTitle": "ARML SDK",
       "_enableSearch": true,
+      "_enableNewTab": true,
       "pdf": false
     }
   }

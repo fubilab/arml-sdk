@@ -4,3 +4,6 @@ _exported_templates/
 # generated API docs
 /api/*.yml
 /api/.manifest
+
+# npm
+node_modules/

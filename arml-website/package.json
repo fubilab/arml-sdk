@@ -1,0 +1,27 @@
+{
+  "name": "arml-website",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "docfx": "concurrently --kill-others-on-fail \"chokidar --initial \\\"docs/**/*\\\" -c \\\"docfx build\\\"\" \"docfx serve _site\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/fubilab/arml-sdk.git"
+  },
+  "author": "fubilab",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fubilab/arml-sdk/issues"
+  },
+  "homepage": "https://github.com/fubilab/arml-sdk#readme",
+  "dependencies": {
+    "chokidar-cli": "^3.0.0",
+    "concurrently": "^9.0.1",
+    "nodemon": "^3.1.7"
+  }
+}
