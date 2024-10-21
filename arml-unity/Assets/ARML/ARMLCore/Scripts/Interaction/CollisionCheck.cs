@@ -174,7 +174,7 @@ namespace ARML.Interaction
 
             GameObject rigidbodyHolder = isParentVelocity ? colliderObject.transform.parent.gameObject : colliderObject;
 
-            Vector3 velocity = isKinematicVelocity ? rigidbodyHolder.GetComponent<RigidbodyInteraction>().GetKinematicVelocity() : rigidbodyHolder.GetComponent<Rigidbody>().velocity;
+            Vector3 velocity = isKinematicVelocity ? rigidbodyHolder.GetComponent<RigidbodyInteraction>().GetKinematicVelocity() : rigidbodyHolder.GetComponent<Rigidbody>().linearVelocity;
             velocity = rigidbodyHolder.GetComponent<RigidbodyInteraction>().GetKinematicVelocity();
 
             return rigidbodyHolder != null && Vector3.Dot(velocity, requiredVelocityVector.normalized) > 0; ;

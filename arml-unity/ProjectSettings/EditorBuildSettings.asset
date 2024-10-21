@@ -9,6 +9,7 @@ EditorBuildSettings:
     path: Assets/ARML/ARMLCore/Scenes/Logic.unity
     guid: dfacc51e72fdf104dbac5b5ecffd54ce
   - enabled: 1
-    path: Assets/ARML/Examples/WallGame/Scenes/WallGame.unity
-    guid: b890eeeb8dc612648b8316ef0cbc885d
+    path: Assets/ARML/Examples/GarumGame/Scenes/GarumGame.unity
+    guid: 92bed5a92ef03504cb920320131fc8e3
   m_configObjects: {}
+  m_UseUCBPForAssetBundles: 0

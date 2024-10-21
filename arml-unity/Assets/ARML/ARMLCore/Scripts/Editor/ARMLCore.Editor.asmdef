@@ -1,0 +1,23 @@
+{
+    "name": "ARMLCore.Editor",
+    "rootNamespace": "ARMLCore.Editor",
+    "references": [
+        "ARMLCore"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [
+        "DOTween.dll",
+        "FishNet.CodeAnalysis.dll",
+        "Ionic.Zip.Unity.dll",
+        "Newtonsoft.Json.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

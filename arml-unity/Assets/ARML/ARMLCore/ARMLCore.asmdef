@@ -18,7 +18,7 @@
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
-    "overrideReferences": true,
+    "overrideReferences": false,
     "precompiledReferences": [
         "DOTween.dll",
         "FishNet.CodeAnalysis.dll",
