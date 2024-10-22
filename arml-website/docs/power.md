@@ -6,6 +6,8 @@ The ARML can be powered by a lithium ion battery pack (see [specifications](#bat
 
 When an appropirate USB-C PD power supply is connected to the back of the lantern, it will not provide power to the projector. Therefore, a common use case for powering it this way is when there is also a monitor, keyboard and mouse attached to the device, by way of a USB hub (see [Building and Running](workflow.md#4-copy-application-files-to-arml-device)).
 
+The power supply should be rated to deliver at least 45W of power, but the recommended rating is 60W or higher. Adapters designed for laptops that support a USB-C power supply will probably work. [Example on Amazon](https://www.amazon.es/USB-65W-Ordenador-Universal-Adaptador/dp/B0D48H3TR4)
+
 ## Battery specifications
 
 The battery used in the AR Magic lantern is a custom fabrication that includes a built in BMS (Battery Management System) to prevent over-charging and over-discharging, as well as simple fuel gauge mounted to the front of the pack.
