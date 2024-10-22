@@ -1,12 +1,19 @@
 # ARML Wiring Reference
 
+## Wiring diagrams
+
 ![](images/ARML-wiring-diagram.jpg)
 *Diagram showing components of the AR Magic Lantern and the wiring between them. The labels on each connection correspond to labels in the image of the component enpoints and in the component list. The labels on each component refer to the [Component Reference](components.md) page.*
 
 ![](images/ARML-wiring-component-endpoints.jpg)
 *Figure showing the mainboard, audio amplifier circuit and audio jack, labelled to show the endpoints of the wires that correspond to labels on the above wiring diagram figure*
 
-| #(s) | Type | Length (mm) | Color(s) | Description |
+## Wiring components
+
+L = length (mm),
+C = color(s)
+
+| | Type | L | C | Description |
 | --- | --- | --- | --- | --- |
 | ac1, ac3 | 30AWG | 120 | ![](images/color-black.jpg)![](images/color-red.jpg)  | Positive and negative leads coming out of TangBand speakers (see Components a2,a3) |
 | ac2 | Plug |     |     | TRRS Male Plug 4 Pole 3.5mm <br>[Amazon](https://www.amazon.es/gp/product/B078HQBNY1) |

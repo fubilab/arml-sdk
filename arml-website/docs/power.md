@@ -4,9 +4,16 @@ The ARML can be powered by a lithium ion battery pack (see [specifications](#bat
 
 ## Using USB-C power
 
-When an appropirate USB-C PD power supply is connected to the back of the lantern, it will not provide power to the projector. Therefore, a common use case for powering it this way is when there is also a monitor, keyboard and mouse attached to the device, by way of a USB hub (see [Building and Running](workflow.md#4-copy-application-files-to-arml-device)).
+When an appropirate USB-C PD power supply is connected to the back of the lantern, it will provide power all components of the system except the projector. Therefore, a common use case for powering it this way is when there is also a monitor, keyboard and mouse attached to the device, by way of a USB hub (see [Building and Running](workflow.md#4-copy-application-files-to-arml-device)).
 
 The power supply should be rated to deliver at least 45W of power, but the recommended rating is 60W or higher. Adapters designed for laptops that support a USB-C power supply will probably work. [Example on Amazon](https://www.amazon.es/USB-65W-Ordenador-Universal-Adaptador/dp/B0D48H3TR4)
+
+## Using a 12V power supply
+
+You can power the ARML system, including the projector, by substituting the battery for an appropriate 12V power supply. The power supply should support at least 5A of current. You will need to adapt the plug of the power supply (the standard is 5.5mm barrel jack) to the Mini Molex connector in the battery compartment of the ARML.
+
+![](images/ARML-external-power.jpg)
+*Photo showing an external power supply connected to the ARML using an adaptor from 5.5mm barrel jack to Mini Molex connector*
 
 ## Battery specifications
 

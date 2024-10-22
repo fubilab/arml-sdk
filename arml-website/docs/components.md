@@ -1,5 +1,7 @@
 # ARML Component Reference
 
+## Component layout
+
 ![](images/ARML-hardware-system-diagram.jpg)
 *Diagram showing components of the AR Magic Lantern and how they are connected. The labels on each component correspond to labels in the images of the physical hardware and in the component list.*
 
@@ -32,9 +34,9 @@
 | p3, p4 | LM2587 boost converters with breakout boards. Input is unregulated DC 12V from main battery or external power supply. Output is regulated DC 12V to (p3) mainboard and (p4) projector. | [Amazon](https://www.amazon.es/TECNOIOT-lm2587-Converter-Supply-m%C3%B3dulos/dp/B07RKDB2VP) |
 | p5  | KCD1 External power switch mounted on top part of body, under the handle. Interrupts all battery and external power supply current. | [Amazon](https://www.amazon.es/gp/product/B0BM9DXTMR) |
 | p6  | Molex Mini-Fit Jr, 2-pin power connector. | [Amazon](https://www.amazon.es/gp/product/B07XJYLW1D) |
-| p7  | BLR-1210 Main battery pack: 12V, 10Ah (120W) | []
+| p7  | BLR-1210 Main battery pack: 12V, 10Ah (120W). See [Power Reference](power.md) | [BaLiRe](https://bateriadelitiorecargable.com/) |
 | p8 | Charger for 12V DC battery pack, 2A(1) or 5A(2) | [AliExpress(1)](https://www.aliexpress.com/item/1005006233034942.html)<br />[AliExpress(2)](https://www.aliexpress.com/item/1005001608750083.html) |
-| p9  | External 12V DC power supply, minimum current 5A | [BaLiRe](https://bateriadelitiorecargable.com/) |
+| p9  | External 12V DC power supply, minimum current 5A. See [Power Reference](power.md) | [Amazon](https://www.amazon.es/dp/B07XDSR4DK) |
 | x1  | Remote control with typical AndroidTV button layout. | [Amazon](https://www.amazon.es/gp/product/B015SO37SY) |
 | x2  | Receiver for x1 remote control. Connected to USB A port of mainboard. |
 | x3  | USB peripherals such as a memory stick, hub, etc. |
