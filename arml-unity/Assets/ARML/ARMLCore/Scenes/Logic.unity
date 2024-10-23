@@ -1034,6 +1034,7 @@ MonoBehaviour:
   RecordingFolder: 
   AprilTagPath: 
   InternalParameters: []
+  readLauncherSettings: 1
 --- !u!224 &390329388331230288
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1212,6 +1213,11 @@ PrefabInstance:
     - target: {fileID: 785556237223779609, guid: 79cecb298a5e3bf40a2048ff98890029,
         type: 3}
       propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1442390380228251115, guid: 79cecb298a5e3bf40a2048ff98890029,
+        type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1808814255432048715, guid: 79cecb298a5e3bf40a2048ff98890029,
@@ -1590,6 +1596,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: --LANTERN--
       objectReference: {fileID: 0}
+    - target: {fileID: 8112453042089415242, guid: 79cecb298a5e3bf40a2048ff98890029,
+        type: 3}
+      propertyPath: ResetKey
+      value: 32
+      objectReference: {fileID: 0}
+    - target: {fileID: 8112453042089415242, guid: 79cecb298a5e3bf40a2048ff98890029,
+        type: 3}
+      propertyPath: ResetOnStart
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8815075550835003603, guid: 79cecb298a5e3bf40a2048ff98890029,
         type: 3}
       propertyPath: m_fontColor.b
@@ -1704,7 +1720,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &3345330881654442244
 Transform:
   m_ObjectHideFlags: 0

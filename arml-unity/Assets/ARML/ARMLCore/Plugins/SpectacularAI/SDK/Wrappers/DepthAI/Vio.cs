@@ -1,5 +1,9 @@
+using ARML.SceneManagement;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
+using ARML.Saving;
+using ARML.SceneManagement;
 
 namespace SpectacularAI.DepthAI
 {
@@ -63,8 +67,13 @@ namespace SpectacularAI.DepthAI
         [Tooltip("Internal algorithm parameters")]
         public List<VioParameter> InternalParameters;
 
+        [Tooltip("Read Launcher Settings to check for internal paramaters")]
+        public bool readLauncherSettings;
+
         private Pipeline _pipeline;
         private Session _session;
+        private SettingsConfiguration launcherSettings;
+        private IDataService DataService = new JsonDataService();
 
         /// <summary>
         /// The current vio output.
@@ -85,12 +94,32 @@ namespace SpectacularAI.DepthAI
             config.RecordingFolder = RecordingFolder;
             config.AprilTagPath = AprilTagPath;
 
+            if (readLauncherSettings)
+            {
+                string path = $"{Application.persistentDataPath}/launcherSettings.json";
+                launcherSettings = DataService.LoadData<SettingsConfiguration>(path, false);
+
+                foreach (var internalParameter in launcherSettings.vioInternalParameters)
+                {
+                    InternalParameters.Add(new VioParameter(
+                        internalParameter[0],
+                        internalParameter[1]
+                        ));
+                }
+            }
+
+#if UNITY_EDITOR
+            return;
+#endif
             _pipeline = new Pipeline(configuration: config, enableMappingAPI: MappingAPI, internalParameters: InternalParameters.ToArray());
             _session = _pipeline.StartSession();
         }
-        
+
         public void OnDisable()
         {
+#if UNITY_EDITOR
+            return;
+#endif
             _session.Dispose();
             _pipeline.Dispose();
             _session = null;
@@ -99,6 +128,10 @@ namespace SpectacularAI.DepthAI
 
         private void Update()
         {
+#if UNITY_EDITOR
+            return;
+#endif
+
             // Dispose previous vio output
             if (Output != null)
             {

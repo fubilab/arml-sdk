@@ -1,3 +1,5 @@
+using ARML.Saving;
+using DG.Tweening.Plugins;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -21,6 +23,7 @@ namespace ARML.SceneManagement
         [SerializeField] GameObject settingsPanel;
 
         private SettingsConfiguration settings;
+        private IDataService DataService = new JsonDataService();
 
         private List<string> applicationPathList = new List<string>();
         private string applicationsDirectory = "";
@@ -33,6 +36,8 @@ namespace ARML.SceneManagement
         /// </summary>
         void Awake()
         {
+            LoadLauncherSettings();
+
             eventSystem = EventSystem.current;
 
 #if UNITY_EDITOR
@@ -132,6 +137,15 @@ namespace ARML.SceneManagement
             Application.Quit();
         }
 
+        private void LoadLauncherSettings()
+        {
+            string path = $"{Application.persistentDataPath}/launcherSettings.json";
+
+            if (!File.Exists(path)) return;
+
+            settings = DataService.LoadData<SettingsConfiguration>(path, false);
+        }
+
         public void ToggleSettingsPanel()
         {
             scrollView.SetActive(!scrollView.activeInHierarchy);
@@ -141,16 +155,27 @@ namespace ARML.SceneManagement
         public void SetLanguageSettings(int languageIndex)
         {
             settings.languageIndex = languageIndex;
+            SaveSettings();
         }
 
         public void SetLogSettings(bool state)
         {
             settings.displayLog = state;
+            SaveSettings();
         }
 
         public void SetScanSettings(bool state)
         {
             settings.displayScan = state;
+            SaveSettings();
+        }
+
+        private void SaveSettings()
+        {
+            if (DataService.SaveData(Application.persistentDataPath + "/launcherSettings.json", settings, false))
+            {
+                print("Successfully saved settings data");
+            }
         }
     }
 
@@ -159,5 +184,6 @@ namespace ARML.SceneManagement
         public bool displayLog;
         public bool displayScan;
         public int languageIndex;
+        public string[][] vioInternalParameters;
     }
 }
