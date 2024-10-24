@@ -1,0 +1,31 @@
+.navbar-brand img {
+    height: 50px;
+    margin-right: 8px;
+  }
+
+.navbar #navbar .external-links {
+  order: 40;
+  display: flex;
+  flex-grow: 1;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.navbar #navbar .external-links a,
+.navbar #navbar .external-links a:visited,
+.navbar #navbar .external-links a:active {
+  color: var(--bs-nav-link-color);
+  border-right: 1px solid var(--bs-border-color);
+  padding-right: 9px;
+}
+
+.navbar-divider {
+  border-right: 1px solid var(--bs-border-color);
+  margin-right: 8px;
+  height: 30px;
+}
+
+
+.navbar #navbar form.icons {
+  order: 45;
+}

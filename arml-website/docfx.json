@@ -30,7 +30,7 @@
     "resource": [
       {
         "files": [
-          "**/images/**"
+          "docs/images/**"
         ]
       }
     ],
@@ -45,6 +45,7 @@
       "_appTitle": "ARML SDK",
       "_enableSearch": true,
       "_enableNewTab": true,
+      "_appLogoPath": "public/ARML-logo-circular.png",
       "pdf": false
     }
   }

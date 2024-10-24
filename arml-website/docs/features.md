@@ -1,5 +1,7 @@
 # Features
 
+This page describes the major features provided by the ARML SDK. Most of these features are implemented and described in either the [Wall Game](wallgame.md) or [Garum Game](garumgame.md) example applications.
+
 ## Camera and Rendering
 
 The SDK contains several features that provide rendering configuration and optimization for the ARML device runtime. They are built on the URP (Universal Render Pipeline) for Unity, so the user must choose that rendering pipeline when configuring their Unity project. If the user started their ARML application by copying the template in the SDK (recommended), this rendering pipeline has already been chosen and configured. 
