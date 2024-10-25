@@ -31,6 +31,8 @@ namespace ARML.SceneManagement
         private EventSystem eventSystem;
         private GameObject previouslySelected;
 
+        private GameObject firstContainer;
+
         /// <summary>
         /// Initializes the Application Launcher, setting up directories and populating UI with application launch options.
         /// </summary>
@@ -81,7 +83,8 @@ namespace ARML.SceneManagement
                 //Set first one as selected
                 if (applicationPathList.Count == 1)
                 {
-                    eventSystem.firstSelectedGameObject = container;
+                    firstContainer = container;
+                    eventSystem.firstSelectedGameObject = firstContainer;
                 }
             }
 
@@ -105,7 +108,7 @@ namespace ARML.SceneManagement
 
         private void Start()
         {
-            Cursor.lockState = CursorLockMode.Locked;
+            //Cursor.lockState = CursorLockMode.Locked;
         }
 
         /// <summary>
@@ -130,6 +133,11 @@ namespace ARML.SceneManagement
             //{
             //    Application.Quit();
             //}
+
+            if (Input.GetKeyDown(KeyCode.Q))
+            {
+                eventSystem.firstSelectedGameObject = firstContainer;
+            }
         }
 
         public void QuitLauncher()
