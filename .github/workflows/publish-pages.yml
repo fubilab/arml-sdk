@@ -38,7 +38,6 @@ jobs:
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
       with:
         projectPath: arml-unity
-        buildMethod: Packages.Rider.Editor.RiderScriptEditor.SyncSolution
 
     - run: dotnet tool update -g docfx
     - run: docfx metadata --logLevel verbose arml-website/docfx.json

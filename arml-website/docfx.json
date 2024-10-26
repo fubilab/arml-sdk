@@ -3,9 +3,9 @@
     {
       "src": [
         {
-          "src": "../arml-unity",
+          "src": "../arml-unity/Library/ScriptAssemblies",
           "files": [
-            "**/ARMLCore.csproj"
+            "ARMLCore.dll"
           ]
         }
       ],
