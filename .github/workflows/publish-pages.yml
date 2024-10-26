@@ -41,7 +41,7 @@ jobs:
         buildMethod: Packages.Rider.Editor.RiderScriptEditor.SyncSolution
 
     - run: dotnet tool update -g docfx
-    - run: docfx metadata arml-website/docfx.json
+    - run: docfx metadata --logLevel verbose arml-website/docfx.json
     - run: docfx build arml-website/docfx.json
 
     - name: Upload artifact
