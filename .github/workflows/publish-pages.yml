@@ -38,6 +38,11 @@ jobs:
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
       with:
         projectPath: arml-unity
+        buildMethod: Packages.Rider.Editor.RiderScriptEditor.SyncSolution
+    - uses: actions/upload-artifact@v4
+      with:
+        name: ARMLCore_csproj
+        path: arml-unity/ARMLCore.csproj
 
     - run: dotnet tool update -g docfx
     - run: docfx metadata --logLevel verbose arml-website/docfx.json
