@@ -30,9 +30,14 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 8.x
+    - name: Unity - Builder
+      uses: game-ci/unity-builder@v4.3.0
+      with:
+        buildMethod: Packages.Rider.Editor.RiderScriptEditor.SyncSolution
 
     - run: dotnet tool update -g docfx
-    - run: docfx arml-website/docfx.json
+    - run: docfx metadata arml-website/docfx.json
+    - run: docfx build arml-website/docfx.json
 
     - name: Upload artifact
       uses: actions/upload-pages-artifact@v3
