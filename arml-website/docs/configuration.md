@@ -1,7 +1,4 @@
----
-title: SDK Configuration 
-sidebar_position: 7
----
+# Configuration
 
 The SDK has a some global parameters that you can change to configure the application runtime. 
 

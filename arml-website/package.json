@@ -1,59 +1,27 @@
 {
-  "name": "elysium-docs",
-  "version": "0.0.0",
-  "private": true,
+  "name": "arml-website",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
   "scripts": {
-    "docusaurus": "docusaurus",
-    "start": "docusaurus start --port 3030",
-    "build": "docusaurus build",
-    "swizzle": "docusaurus swizzle",
-    "deploy": "docusaurus deploy",
-    "clear": "docusaurus clear",
-    "serve": "docusaurus serve",
-    "write-translations": "docusaurus write-translations",
-    "write-heading-ids": "docusaurus write-heading-ids",
-    "typecheck": "tsc"
+    "docfx": "concurrently --kill-others-on-fail \"chokidar --initial \\\"docs/**/*\\\" -c \\\"docfx build\\\"\" \"docfx serve _site\""
   },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/fubilab/arml-sdk.git"
+  },
+  "author": "fubilab",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fubilab/arml-sdk/issues"
+  },
+  "homepage": "https://github.com/fubilab/arml-sdk#readme",
   "dependencies": {
-    "@docusaurus/core": "3.1.1",
-    "@docusaurus/preset-classic": "3.1.1",
-    "@mdx-js/react": "^3.0.0",
-    "autoprefixer": "^10.4.7",
-    "browserify-fs": "^1.0.0",
-    "clsx": "^1.1.1",
-    "dotenv": "^16.0.1",
-    "immer": "1.7.3",
-    "markdown-to-jsx": "^7.1.7",
-    "postcss": "^8.4.14",
-    "prettier-plugin-tailwindcss": "^0.5.6",
-    "prism-react-renderer": "^2.1.0",
-    "raw-loader": "^4.0.2",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-markdown": "^9.0.1",
-    "tailwindcss": "^3.4.1",
-    "use-immer": "0.5.1"
-  },
-  "devDependencies": {
-    "@docusaurus/module-type-aliases": "3.1.1",
-    "@docusaurus/types": "3.1.1",
-    "typescript": "^4.6.4"
-  },
-  "browserslist": {
-    "production": [
-      ">0.5%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
-  "browser": {
-    "fs": false,
-    "path": false,
-    "os": false
+    "chokidar-cli": "^3.0.0",
+    "concurrently": "^9.0.1",
+    "nodemon": "^3.1.7"
   }
 }

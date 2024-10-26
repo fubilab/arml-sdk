@@ -1,0 +1,37 @@
+- name: Getting Started
+  expanded: true
+  items:
+  - name: Introduction
+    href: index.md
+  - name: Who can use the SDK?
+    href: who.md
+  - name: Installation
+    href: installation.md
+  - name: Building and Running
+    href: workflow.md
+- name: Reference
+  expanded: true
+  items:
+  - name: SDK Features
+    href: features.md
+  - name: Launcher app
+    href: launcher.md
+  - name: Configuration
+    href: configuration.md
+- name: ARML Hardware
+  href: hardware.md
+  expanded: true
+  items:
+  - name: Component Reference
+    href: components.md
+  - name: Wiring Reference
+    href: wiring.md
+  - name: Power Reference
+    href: power.md
+- name: Examples
+  expanded: true
+  items:
+  - name: Wall Game
+    href: wallgame.md
+  - name: Garum Game
+    href: garumgame.md

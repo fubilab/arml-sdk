@@ -1,20 +1,9 @@
----
-title: Building and Running
-sidebar_position: 5
----
-
 # Building and running applications
 The following steps describe in broad terms the workflow of developing an application and deploying it on the ARML device.
 
 ## 1. Initialize Unity project:
 The SDK includes a Unity project that contains all the components and libraries needed to build and run applications for the ARML.  
 - Use this project as a template by duplicating it and using the copy as the starting point for your application.
-- Open the project. You will see some errors because some plugins could not be included in the SDK due to licensing restrictions. Ignore these errors and then, once the project is loaded, download and install these free plugins using the standard method of installing assets from the Unity Asset Store. 
-  - [ScreenLogger](https://assetstore.unity.com/packages/a/49114)
-  - [DOTween](https://assetstore.unity.com/packages/a/27676)
-  - [NaughtyAttributes](https://assetstore.unity.com/packages/a/129996)
-  - [UltEvents](https://assetstore.unity.com/packages/a/111307)
-  - [Mobile Tree Package](https://assetstore.unity.com/packages/a/18866)
 
 ## 2. Edit Unity project: 
 1. Open the project and navigate to the Scenes -> Examples folder (in project Assets) and open one of the example scenes (Wall Game or Garum Game).
@@ -23,7 +12,7 @@ The SDK includes a Unity project that contains all the components and libraries 
 
 
 ## 3. Build the application
-![](./assets/unity-build-settings.png)  
+![](images/unity-build-settings.png)  
 *Screenshot of the Build Settings window configured for building the Garum Game example scene to the ARML.*
 
 When ready to build the application for the ARML, follow these configuration steps in the Build Settings window:
@@ -31,7 +20,7 @@ When ready to build the application for the ARML, follow these configuration ste
 2. Choose platform “Windows, Mac, Linux” and choose Linux as the “Target Platform.” Use the “Build” button to build the application to a local directory. Choose a name for the “Save as” value that clearly identifies your application, because this is the name that will show in the ARML launcher.
 
 ## 4. Copy application files to ARML device
-![](./assets/arml-dev-mode.png)  
+![](images/arml-dev-mode.png)  
 *Photo of ARML in developer mode, with mouse, keyboard, monitor, power and USB drive attached through a USB-C hub.*
 
 1. Copy the build directory to a USB drive. 
