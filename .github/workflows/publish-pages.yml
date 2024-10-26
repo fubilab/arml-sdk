@@ -33,6 +33,7 @@ jobs:
     - name: Unity - Builder
       uses: game-ci/unity-builder@v4.3.0
       with:
+        projectPath: arml-unity
         buildMethod: Packages.Rider.Editor.RiderScriptEditor.SyncSolution
 
     - run: dotnet tool update -g docfx
