@@ -3,14 +3,15 @@
     {
       "src": [
         {
-          "src": "../arml-unity/Library/ScriptAssemblies",
+          "src": "../arml-unity/Assets/ARML/ARMLCore",
           "files": [
-            "ARMLCore.dll"
+            "**/*.cs"
           ]
         }
       ],
       "filter": "filterConfig.yml",
       "dest": "api",
+      "allowCompilationErrors": true,
       "namespaceLayout": "nested",
       "categoryLayout": "nested"
     }

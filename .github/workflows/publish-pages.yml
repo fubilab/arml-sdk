@@ -30,22 +30,9 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 8.x
-    - name: Unity - Builder
-      uses: game-ci/unity-builder@v4.3.0
-      env:
-          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
-          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
-      with:
-        projectPath: arml-unity
-        buildMethod: Packages.Rider.Editor.RiderScriptEditor.SyncSolution
-    - uses: actions/upload-artifact@v4
-      with:
-        name: ARMLCore_csproj
-        path: arml-unity/ARMLCore.csproj
-
+    
     - run: dotnet tool update -g docfx
-    - run: docfx metadata --logLevel verbose arml-website/docfx.json
+    - run: docfx metadata arml-website/docfx.json
     - run: docfx build arml-website/docfx.json
 
     - name: Upload artifact
