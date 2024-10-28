@@ -2,7 +2,7 @@
 
 In order to create and edit applications for the ARML using the SDK, you will need:
 -	A computer that can run the Unity game engine (Windows, Mac or Linux)
--	An installation of the Unity game engine version 2022.3.30 or higher
+-	An installation of the Unity game engine version 6000.0.23 or higher
 
 In order to run the applications on the AR Magic Lantern, you will need:
 -	The ARML hardware developer kit

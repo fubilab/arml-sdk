@@ -30,13 +30,13 @@ This SDK is intended for use by a wide range of users, including educators, rese
 
 In order to create and edit applications for the ARML using the SDK, you will need:
 -	A computer that can run Unity (Windows, Mac or Linux)
--	An installation of Unity version 2022.3.41 or higher
+-	An installation of Unity version 6000.0.23 or higher
 
 In order to run and test applications, you will need to obtain an ARML-1 hardware developer kit. Please contact us on our [Discord](https://discord.gg/zWZT3yKf4q) for more information about ARML hardware.
 
 ### Installation
 
-The SDK is released as a 2022.3.41 Unity project that can be used as a template for other projects. To get started, download the [Unity project](https://github.com/fubilab/arml-sdk/releases/download/pre-release/unity-arml-sdk-v0.1.0.zip) from the latest release and open it in Unity. Then it is recommended to follow the walkthroughs for the [WallGame](https://fubilab.github.io/arml-sdk/WallGame) and [GarumGame](https://fubilab.github.io/arml-sdk/GarumGame) sample scenes in the [SDK Docs](https://fubilab.github.io/arml-sdk/).
+The SDK is released as a 6000.0.23 Unity project that can be used as a template for other projects. To get started, download the [Unity project](https://github.com/fubilab/arml-sdk/releases/download/pre-release/unity-arml-sdk-v0.1.0.zip) from the latest release and open it in Unity. Then it is recommended to follow the walkthroughs for the [WallGame](https://fubilab.github.io/arml-sdk/WallGame) and [GarumGame](https://fubilab.github.io/arml-sdk/GarumGame) sample scenes in the [SDK Docs](https://fubilab.github.io/arml-sdk/).
 
 <hr size="1">
 <p align="center">
