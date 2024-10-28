@@ -14,6 +14,7 @@ namespace ARML.DebugTools
         [SerializeField] GameObject trackingText;
         [SerializeField] GameObject micInputText;
         [SerializeField] CameraParentController camParentController;
+        [SerializeField] GameObject fpsText;
 
         private ToggleMapRenderer mapRenderer;
         private EventSystem eventSystem;
@@ -58,6 +59,7 @@ namespace ARML.DebugTools
             debugPanel.SetActive(!debugPanel.gameObject.activeInHierarchy);
             trackingText.SetActive(!trackingText.gameObject.activeInHierarchy);
             micInputText.SetActive(!micInputText.activeInHierarchy);
+            fpsText.SetActive(!fpsText.activeInHierarchy);
 
             if (debugPanel.gameObject.activeInHierarchy)
             {

@@ -58,10 +58,6 @@ namespace ARML.Network
         {
             base.OnStartClient();
 
-#if !UNITY_EDITOR
-        FindAnyObjectByType<NetworkHudCanvases>().enabled = false;
-#endif
-
             isHost.Value = base.Owner.IsHost; //Need to use SyncVar so non-host client also gets this information about the host
 
             if (isHost.Value)

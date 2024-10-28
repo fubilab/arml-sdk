@@ -100,8 +100,7 @@ namespace ARML.SceneManagement
 
         private void LoadLauncherSettings()
         {
-            string path = Directory.GetParent(Application.persistentDataPath).FullName;
-            path = Directory.GetParent(path).FullName + "/UPF/ARMLLauncher/settings.json";
+            string path = $"{Application.persistentDataPath}/launcherSettings.json";
 
             settings = DataService.LoadData<SettingsConfiguration>(path, false);
 

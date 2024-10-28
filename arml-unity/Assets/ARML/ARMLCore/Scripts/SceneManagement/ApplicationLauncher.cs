@@ -1,3 +1,4 @@
+using ARML.Saving;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -21,6 +22,7 @@ namespace ARML.SceneManagement
         [SerializeField] GameObject settingsPanel;
 
         private SettingsConfiguration settings;
+        private IDataService DataService = new JsonDataService();
 
         private List<string> applicationPathList = new List<string>();
         private string applicationsDirectory = "";
@@ -28,11 +30,15 @@ namespace ARML.SceneManagement
         private EventSystem eventSystem;
         private GameObject previouslySelected;
 
+        private GameObject firstContainer;
+
         /// <summary>
         /// Initializes the Application Launcher, setting up directories and populating UI with application launch options.
         /// </summary>
         void Awake()
         {
+            LoadLauncherSettings();
+
             eventSystem = EventSystem.current;
 
 #if UNITY_EDITOR
@@ -76,7 +82,8 @@ namespace ARML.SceneManagement
                 //Set first one as selected
                 if (applicationPathList.Count == 1)
                 {
-                    eventSystem.firstSelectedGameObject = container;
+                    firstContainer = container;
+                    eventSystem.firstSelectedGameObject = firstContainer;
                 }
             }
 
@@ -98,11 +105,6 @@ namespace ARML.SceneManagement
 #endif
         }
 
-        private void Start()
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-        }
-
         /// <summary>
         /// Launches an external application given its file path.
         /// </summary>
@@ -113,23 +115,20 @@ namespace ARML.SceneManagement
             {
                 Process.Start(filePath);
             }
-            //Application.Quit();
-        }
-
-        /// <summary>
-        /// Checks for user input (e.g., escape key) to perform actions like quitting the application.
-        /// </summary>
-        private void Update()
-        {
-            //if (Input.GetKeyDown(KeyCode.Escape))
-            //{
-            //    Application.Quit();
-            //}
         }
 
         public void QuitLauncher()
         {
             Application.Quit();
+        }
+
+        private void LoadLauncherSettings()
+        {
+            string path = $"{Application.persistentDataPath}/launcherSettings.json";
+
+            if (!File.Exists(path)) return;
+
+            settings = DataService.LoadData<SettingsConfiguration>(path, false);
         }
 
         public void ToggleSettingsPanel()
@@ -141,16 +140,27 @@ namespace ARML.SceneManagement
         public void SetLanguageSettings(int languageIndex)
         {
             settings.languageIndex = languageIndex;
+            SaveSettings();
         }
 
         public void SetLogSettings(bool state)
         {
             settings.displayLog = state;
+            SaveSettings();
         }
 
         public void SetScanSettings(bool state)
         {
             settings.displayScan = state;
+            SaveSettings();
+        }
+
+        private void SaveSettings()
+        {
+            if (DataService.SaveData(Application.persistentDataPath + "/launcherSettings.json", settings, false))
+            {
+                print("Successfully saved settings data");
+            }
         }
     }
 
@@ -159,5 +169,6 @@ namespace ARML.SceneManagement
         public bool displayLog;
         public bool displayScan;
         public int languageIndex;
+        public string[][] vioInternalParameters;
     }
 }

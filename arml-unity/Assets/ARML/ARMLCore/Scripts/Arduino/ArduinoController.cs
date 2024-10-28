@@ -21,62 +21,63 @@ namespace ARML.Arduino
     {
         [Header("Arduino Settings")]
         [SerializeField, Tooltip("The port name to which the Arduino is connected, e.g., COM7.")]
-        string portName = "COM7";
+        private string portName = "COM7";
 
         [SerializeField, Tooltip("The baud rate for communication with the Arduino.")]
-        int baudRate = 115200;
+        private int baudRate = 115200;
 
         [SerializeField, Tooltip("The timeout period (in milliseconds) for reading data from the Arduino.")]
-        int readTimeOut = 500;
+        private int readTimeOut = 500;
 
         [SerializeField, Tooltip("Time in seconds between messages sent to Arduino.")]
-        float writeInterval = 0.2f;
+        private float writeInterval = 0.2f;
 
         [SerializeField, Tooltip("If true, all received messages will be printed in the console.")]
-        bool printAllMessages;
+        private bool printAllMessages;
 
-        [Header("Color Settings")]
-        [SerializeField, Tooltip("The solid color used for the Arduino display.")]
-        Color solidColor;
+        [Header("Color Settings")] [SerializeField, Tooltip("The solid color used for the Arduino display.")]
+        private Color solidColor;
 
         [SerializeField, Tooltip("The progress color used during animations.")]
-        Color progressColor;
+        private Color progressColor;
 
         [Range(0, 254), SerializeField, Tooltip("Brightness level of the white channel.")]
-        float whiteBrightness;
+        private float whiteBrightness;
 
         [Range(0, 254), SerializeField, Tooltip("Overall brightness of the colors.")]
-        float overallBrightness;
+        private float overallBrightness;
 
-        [Header("Animation Settings")]
-        [SerializeField, Tooltip("Enables or disables snake-style animation.")]
-        bool isSnakeAnimation = false;
+        [SerializeField] private float fadeLength = 2f;
+
+        [Header("Animation Settings")] [SerializeField, Tooltip("Enables or disables snake-style animation.")]
+        private bool isSnakeAnimation = false;
 
         [SerializeField, Tooltip("The direction of the animation, either forwards or backwards.")]
-        AnimationDirection animationDirection;
+        private AnimationDirection animationDirection;
 
         [SerializeField, Tooltip("The total number of pixels in the LED strip.")]
-        int totalPixelsInStrip;
+        private int totalPixelsInStrip;
 
         [SerializeField, Tooltip("Time in seconds it takes for the entire animation to loop.")]
-        float animationTime = 1f;
+        private float animationTime = 1f;
 
         [SerializeField, Tooltip("The length of the animation in pixels.")]
-        int animationPixelLength = 1;
+        private int animationPixelLength = 1;
 
         [SerializeField, Tooltip("The starting pixel index for the animation.")]
-        int animationStartPixelIndex = 0;
+        private int animationStartPixelIndex = 0;
 
         [SerializeField, Tooltip("The ending pixel index for the animation.")]
-        int animationEndPixelIndex = 72;
+        private int animationEndPixelIndex = 72;
 
         [SerializeField, Tooltip("Turns off pixels outside the defined animation range.")]
-        bool clearPixelsOutsideRange = false;
+        private bool clearPixelsOutsideRange = false;
 
         [Space(10)]
         [Header("Scriptable Object Saving")]
-        [SerializeField, Tooltip("A reference to the ArduinoAnimationSO ScriptableObject containing the animation settings.")]
-        ArduinoAnimationSO animationSO;
+        [SerializeField,
+         Tooltip("A reference to the ArduinoAnimationSO ScriptableObject containing the animation settings.")]
+        private ArduinoAnimationSO animationSO;
 
         private List<string> messagesList = new List<string>();
         private int progressPixelIndex;
@@ -88,6 +89,7 @@ namespace ARML.Arduino
         private bool readyToSend;
 
         #region Singleton
+
         public static ArduinoController Instance;
 
         /// <summary>
@@ -105,6 +107,7 @@ namespace ARML.Arduino
                 DontDestroyOnLoad(gameObject); // Optionally make it persistent
             }
         }
+
         #endregion
 
         private void Awake()
@@ -183,7 +186,7 @@ namespace ARML.Arduino
                 }
                 catch (Exception e)
                 {
-                    Debug.LogError("Error reading serial data: " + e.Message);
+                    //Debug.LogError("Error reading serial data: " + e.Message);
                 }
             }
         }
@@ -305,6 +308,25 @@ namespace ARML.Arduino
         }
 
         /// <summary>
+        /// Animates a fade from a color to another over a given duration.
+        /// </summary>
+        /// <param name="from">Color to fade from.</param>
+        /// <param name="to">Color to fade to.</param>
+        /// <param name="duration">Duration of the fade in seconds.</param>
+        public void SetArduinoFade(Color from, Color to, float duration)
+        {
+            SetArduinoColor(from, overallBrightness);
+            int fadeSteps = Mathf.RoundToInt(duration * 10f - 2f);
+            for (int i = 0; i < fadeSteps; i++)
+            {
+                float lerpValue = (1f / fadeSteps * (i + 1f));
+                Color lerpColor = Color.Lerp(from, to, lerpValue);
+                SetArduinoColor(lerpColor, overallBrightness);
+            }
+            SetArduinoColor(to, overallBrightness);
+        }
+
+        /// <summary>
         /// Sets the Arduino animation with specified parameters.
         /// </summary>
         /// <param name="bgColor">The background color.</param>
@@ -314,7 +336,8 @@ namespace ARML.Arduino
         /// <param name="length">The length of the animation.</param>
         /// <param name="startPixelIndex">The starting pixel index.</param>
         /// <param name="endPixelIndex">The ending pixel index.</param>
-        public void SetArduinoAnimation(Color bgColor, Color aColor, float brightness = -1, float rate = -1, int length = -1, int startPixelIndex = -1, int endPixelIndex = -1)
+        public void SetArduinoAnimation(Color bgColor, Color aColor, float brightness = -1, float rate = -1,
+            int length = -1, int startPixelIndex = -1, int endPixelIndex = -1)
         {
             //Default value checks
             if (brightness == -1)
@@ -370,10 +393,16 @@ namespace ARML.Arduino
         }
 
         [Button]
+        private void TestFade()
+        {
+            SetArduinoFade(solidColor, progressColor, fadeLength);
+        }
+
+        [Button]
         private void TestAnimation()
         {
             SetArduinoAnimation(solidColor, progressColor, overallBrightness, animationTime,
-        animationPixelLength, animationStartPixelIndex, animationEndPixelIndex);
+                animationPixelLength, animationStartPixelIndex, animationEndPixelIndex);
         }
 
         [Button]
