@@ -1,5 +1,4 @@
 using ARML.Saving;
-using DG.Tweening.Plugins;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -106,11 +105,6 @@ namespace ARML.SceneManagement
 #endif
         }
 
-        private void Start()
-        {
-            //Cursor.lockState = CursorLockMode.Locked;
-        }
-
         /// <summary>
         /// Launches an external application given its file path.
         /// </summary>
@@ -120,23 +114,6 @@ namespace ARML.SceneManagement
             if (File.Exists(filePath))
             {
                 Process.Start(filePath);
-            }
-            //Application.Quit();
-        }
-
-        /// <summary>
-        /// Checks for user input (e.g., escape key) to perform actions like quitting the application.
-        /// </summary>
-        private void Update()
-        {
-            //if (Input.GetKeyDown(KeyCode.Escape))
-            //{
-            //    Application.Quit();
-            //}
-
-            if (Input.GetKeyDown(KeyCode.Q))
-            {
-                eventSystem.firstSelectedGameObject = firstContainer;
             }
         }
 

@@ -1923,8 +1923,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameSceneToLoad:
-    m_SceneAsset: {fileID: 102900000, guid: cef75f7513624e7479f5aaa0c941f251, type: 3}
-    m_SceneName: GarumGameLab
+    m_SceneAsset: {fileID: 102900000, guid: 92bed5a92ef03504cb920320131fc8e3, type: 3}
+    m_SceneName: GarumGame
   loadOnStart: 0
   loadLauncherSettings: 0
   debugCanvasController: {fileID: 1521654317}
@@ -2621,7 +2621,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3974967119435825975}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4890a319729d2104db791f541b681a8f, type: 3}
   m_Name: 
@@ -2634,10 +2634,11 @@ MonoBehaviour:
   solidColor: {r: 0.8886285, g: 0, b: 1, a: 0.09019608}
   progressColor: {r: 0.101122975, g: 1, b: 0, a: 0.09803922}
   whiteBrightness: 0
-  overallBrightness: 25
+  overallBrightness: 60
+  fadeLength: 2
   isSnakeAnimation: 0
   animationDirection: 0
-  totalPixelsInStrip: 145
+  totalPixelsInStrip: 63
   animationTime: 4
   animationPixelLength: 1
   animationStartPixelIndex: 59
