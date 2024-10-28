@@ -2,6 +2,7 @@ using FishNet.Object;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using ARML.Arduino;
 using UltEvents;
 using UnityEngine;
 using ARML.UI;
@@ -15,6 +16,7 @@ namespace ARML.SceneManagement
     public class LevelController : MonoBehaviour
     {
         #region Singleton
+
         public static LevelController Instance { get; private set; }
 
         private void Singleton()
@@ -29,6 +31,7 @@ namespace ARML.SceneManagement
                 //DontDestroyOnLoad(gameObject); // Optionally make it persistent
             }
         }
+
         #endregion
 
         [SerializeField] private List<Level> levels = new List<Level>();
@@ -157,7 +160,6 @@ namespace ARML.SceneManagement
             {
                 PlayNextLevel();
             }
-
         }
 
         public void SetCompassTarget(Transform target)
@@ -189,6 +191,16 @@ namespace ARML.SceneManagement
             }
 
             return allTasks;
+        }
+
+        public void SetArduinoColor(Color color, float brightness, bool force = false)
+        {
+            ArduinoController.Instance.SetArduinoColor(color, brightness, force);
+        }
+
+        public void SetArduinoFade(Color from, Color to, float duration)
+        {
+            ArduinoController.Instance.SetArduinoFade(from, to, duration);
         }
     }
 

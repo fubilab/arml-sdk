@@ -61,6 +61,8 @@ namespace ARML.Interaction
         [SerializeField] protected Material outlineMaterial;
         //[SerializeField] [Tooltip("The material slot in which the outline will be based")] protected int outlineMaterialIndex;
         [SerializeField] protected float outlineThickness = 1.5f;
+        [SerializeField, Tooltip("You need to check this if you are going to call events from this object that affect the Arduino lights")] 
+        protected bool objectOverridesArduino = false;
 
         protected Material[] originalMaterials;
         protected Renderer renderer;

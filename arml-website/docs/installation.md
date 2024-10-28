@@ -13,4 +13,4 @@ To obtain an ARML hardware developer kit, please contact us on our [Discord](htt
 
 ## Unity Project
 
-The SDK is released as a 2022.3.30 Unity project that can be used as a template for other projects. To get started, download the [Unity project](https://github.com/fubilab/arml-sdk/releases/download/pre-release/unity-arml-sdk-v0.3.0.zip) from the latest release on the [ARML SDK GitHub](https://github.com/fubilab/arml-sdk) and open it in Unity. 
+The SDK is released as a 6000.0.23 Unity project that can be used as a template for other projects. To get started, download the [Unity project](https://github.com/fubilab/arml-sdk/releases/download/pre-release/unity-arml-sdk-v0.3.0.zip) from the latest release on the [ARML SDK GitHub](https://github.com/fubilab/arml-sdk) and open it in Unity. 

@@ -150,7 +150,7 @@ namespace ARML.Interaction
             if (canRetrigger)
                 alreadyTriggered = false;
 
-            if (interactionType == InteractionType.DWELL)
+            if (interactionType == InteractionType.DWELL && !objectOverridesArduino)
                 ArduinoController.Instance?.SetArduinoColor(Color.clear, 0f);
 
             //Log to CSV Export
