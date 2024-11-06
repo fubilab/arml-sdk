@@ -2,10 +2,12 @@ using ARML.Saving;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using SpectacularAI;
 
 namespace ARML.SceneManagement
 {
@@ -20,8 +22,8 @@ namespace ARML.SceneManagement
         [SerializeField] string fileFormatExtension;
         [SerializeField] GameObject scrollView;
         [SerializeField] GameObject settingsPanel;
+        [SerializeField] SettingsConfiguration settings;
 
-        private SettingsConfiguration settings;
         private IDataService DataService = new JsonDataService();
 
         private List<string> applicationPathList = new List<string>();
@@ -41,18 +43,15 @@ namespace ARML.SceneManagement
 
             eventSystem = EventSystem.current;
 
-#if UNITY_EDITOR
+#if UNITY_EDITOR_WIN
             applicationsDirectory = $"{System.IO.Directory.GetCurrentDirectory()}/_build/";
+            fileFormatExtension = ".exe";
 #else
-#if UNITY_STANDALONE_WIN
-        fileFormatExtension = ".exe";
+            applicationsDirectory = "/home/fubintlab/Desktop/unitybuilds/";
+            fileFormatExtension = ".x86_64";
 #endif
 
-#if UNITY_STANDALONE_LINUX
-        applicationsDirectory = "/home/fubintlab/Desktop/unitybuilds/";
-        fileFormatExtension = ".x86_64";
-#endif
-#endif
+        
 
             if (!Directory.Exists(applicationsDirectory))
                 return;
@@ -106,6 +105,23 @@ namespace ARML.SceneManagement
         }
 
         /// <summary>
+        /// Makes a file at the specified path executable.
+        /// </summary>
+        /// <param name="filePath">The file path of the application to launch.</param>
+        void MakeExecutable(string filePath)
+        {
+            ProcessStartInfo startInfo = new ProcessStartInfo()
+            {
+                FileName = "/bin/bash",
+                Arguments = "-c \" chmod +x " + filePath + "\"",
+                CreateNoWindow = true
+            };
+            Process proc = new Process() { StartInfo = startInfo };
+            proc.Start();
+            proc.WaitForExit();
+        }
+
+        /// <summary>
         /// Launches an external application given its file path.
         /// </summary>
         /// <param name="filePath">The file path of the application to launch.</param>
@@ -113,6 +129,7 @@ namespace ARML.SceneManagement
         {
             if (File.Exists(filePath))
             {
+                MakeExecutable(filePath);
                 Process.Start(filePath);
             }
         }
@@ -164,11 +181,12 @@ namespace ARML.SceneManagement
         }
     }
 
-    struct SettingsConfiguration
+    [System.Serializable]
+    class SettingsConfiguration
     {
         public bool displayLog;
         public bool displayScan;
         public int languageIndex;
-        public string[][] vioInternalParameters;
+        public List<VioParameter> vioInternalParameters;
     }
 }

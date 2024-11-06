@@ -101,10 +101,7 @@ namespace SpectacularAI.DepthAI
 
                 foreach (var internalParameter in launcherSettings.vioInternalParameters)
                 {
-                    InternalParameters.Add(new VioParameter(
-                        internalParameter[0],
-                        internalParameter[1]
-                        ));
+                    InternalParameters.Add(internalParameter);
                 }
             }
 
