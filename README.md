@@ -2,9 +2,9 @@
 
 # AR Magic Lantern SDK
 **[GitHub](https://github.com/fubilab/arml-sdk) ·
-  [Documentation]("https://fubilab.github.io/arml-sdk/") ·
-  [Project Home](https://emil-xr.eu/lighthouse-projects/upf-ar-magic-lantern/") ·
-  [Discord](https://discord.gg/zWZT3yKf4q")**
+  [Documentation](https://fubilab.github.io/arml-sdk/) ·
+  [Project Home](https://emil-xr.eu/lighthouse-projects/upf-ar-magic-lantern/) ·
+  [Discord](https://discord.gg/zWZT3yKf4q)**
 <hr size="1" />
 
 This repository contains a Software Development Kit (SDK) for creating augmented reality (AR) experiences for the AR Magic Lantern (ARML), an ongoing research project led by the [Full-Body Interaction Lab](https://www.upf.edu/web/fubintlab) at [Universitat Pompeu Fabra](https://www.upf.edu/). 
