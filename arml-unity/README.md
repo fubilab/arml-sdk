@@ -1,8 +1,8 @@
 # ARML SDK: Unity Template Project
 **[GitHub](https://github.com/fubilab/arml-sdk) ·
-  [Documentation]("https://fubilab.github.io/arml-sdk/") ·
-  [Project Home](https://emil-xr.eu/lighthouse-projects/upf-ar-magic-lantern/") ·
-  [Discord](https://discord.gg/zWZT3yKf4q")**
+  [Documentation](https://fubilab.github.io/arml-sdk/) ·
+  [Project Home](https://emil-xr.eu/lighthouse-projects/upf-ar-magic-lantern/) ·
+  [Discord](https://discord.gg/zWZT3yKf4q)**
 <hr size="1" />
 
 This Unity project that can be used as a template for other projects. To get started, clone the repo or [download the Unity project](https://github.com/fubilab/arml-sdk/releases/download/pre-release/unity-arml-sdk-v0.1.0.zip) and open it in Unity. Then, it is recommended to follow the walkthroughs for the [WallGame](https://fubilab.github.io/arml-sdk/docs/wallgame.html) and [GarumGame](https://fubilab.github.io/arml-sdk/docs/garumgame.html) sample scenes in the [SDK Docs](https://fubilab.github.io/arml-sdk/).

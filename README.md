@@ -33,5 +33,5 @@ Learn how to build or obtain the AR Magic Lantern hardware.
 &nbsp;&nbsp;
 <a href="https://upf.edu">
 <img src="./arml-website/docs/images/UPF.png" height="50"/></a>
-&nbsp;&nbsp;
+<hr size="1">
 <img src="./arml-website/docs/images/funded-by-the-eu.png" height="50" />
