@@ -21,6 +21,7 @@
       {
         "files": [
           "toc.yml",
+          "index.md",
           "api/**/*.{md,yml}",
           "docs/**/*.{md,yml}"
         ]
