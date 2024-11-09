@@ -20,11 +20,9 @@
     "content": [
       {
         "files": [
-          "**/*.{md,yml}"
-        ],
-        "exclude": [
-          "node_modules/**",
-          "_site/**"
+          "toc.yml",
+          "api/**/*.{md,yml}",
+          "docs/**/*.{md,yml}"
         ]
       }
     ],
