@@ -78,3 +78,6 @@ crashlytics-build.properties
 
 # crash dumps
 *.blob
+
+# idea editor
+.idea
