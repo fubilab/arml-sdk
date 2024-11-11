@@ -31,10 +31,13 @@ To start building software for the ARML:
    - Open the `Player` section
    - Under `Other Settings > Configuration`, find `Api Compatibility Level`
    - Change the value to: `.NET Framework`
-3. Download the [ARML SDK Unity Package](https://github.com/fubilab/arml-sdk/releases/latest/download/arml-sdk.unitypackage)
-4. Drag the downloaded `arml-sdk.unitypackage` file into the Unity project.
-5. Leave all items selected and click `Import`
-6. Once the package has loaded, a window should pop up with instructions and tutorial content. 
+3. Import TextMeshPro Essentials
+   - Go to `Window -> TextMeshPro -> Import TMP Essential Resources`
+   - In the Import window that opens, click `Import`
+4. Download the [ARML SDK Unity Package](https://github.com/fubilab/arml-sdk/releases/latest/download/arml-sdk.unitypackage)
+5. Double-click the downloaded `arml-sdk.unitypackage` file to open it in the Unity project.
+6. In the Import window that opens, leave all items selected and click `Import`
+7. Once the package has loaded, a window should pop up with instructions and tutorial content. 
 
 If you encounter any problems, please get in touch with us on the [ARML Discord](https://discord.gg/zWZT3yKf4q).
 

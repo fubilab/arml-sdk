@@ -12,14 +12,17 @@ The easiest way to get started is to install the ARML SDK Unity Package:
    - Version 6000.0.23 or later
    - Use the "Universal 3D" template
 2. Change the .NET API settings
-   - Go to `Edit > Project Settings...`
-   - Go to `Player` section
-   - Under `Other Settings`, find `Configuration > Api Compatibility Level`
-   - Change the value to `.NET Framework`
-3. Download the [ARML SDK Unity Package](https://github.com/fubilab/arml-sdk/releases/latest/download/arml-sdk.unitypackage)
-4. Double-click the downloaded `arml-sdk.unitypackage` file to open it in the Unity project.
-5. Leave all items selected and click `Import`
-6. Once the package has loaded, a window should pop up with instructions and tutorial content. 
+   - Go to `Edit -> Project Settings...`
+   - Open the `Player` section
+   - Under `Other Settings > Configuration`, find `Api Compatibility Level`
+   - Change the value to: `.NET Framework`
+3. Import TextMeshPro Essentials
+   - Go to `Window -> TextMeshPro -> Import TMP Essential Resources`
+   - In the Import window that opens, click `Import`
+4. Download the [ARML SDK Unity Package](https://github.com/fubilab/arml-sdk/releases/latest/download/arml-sdk.unitypackage)
+5. Double-click the downloaded `arml-sdk.unitypackage` file to open it in the Unity project.
+6. In the Import window that opens, leave all items selected and click `Import`
+7. Once the package has loaded, a window should pop up with instructions and tutorial content. 
 
 If you encounter any problems, please get in touch with us on the [ARML Discord](https://discord.gg/zWZT3yKf4q).
 
