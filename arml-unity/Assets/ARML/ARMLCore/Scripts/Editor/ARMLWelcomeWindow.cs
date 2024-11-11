@@ -72,13 +72,13 @@ public class ARMLWelcomeWindow : EditorWindow
         }
 
         GUILayout.Label("Example Scenes", EditorStyles.boldLabel);
-        if (GUILayout.Button("Add WallGame Scene"))
+        if (GUILayout.Button("Open WallGame Scene"))
         {
             EditorSceneManager.OpenScene("Assets/ARML/ARMLCore/Scenes/Logic.unity");
             LoadExampleScene("Assets/ARML/Examples/WallGame/Scenes/WallGame.unity");
         }
 
-        if (GUILayout.Button("Add GarumGame Scene"))
+        if (GUILayout.Button("Open GarumGame Scene"))
         {
             EditorSceneManager.OpenScene("Assets/ARML/ARMLCore/Scenes/Logic.unity");
             LoadExampleScene("Assets/ARML/Examples/GarumGame/Scenes/GarumGame.unity");
