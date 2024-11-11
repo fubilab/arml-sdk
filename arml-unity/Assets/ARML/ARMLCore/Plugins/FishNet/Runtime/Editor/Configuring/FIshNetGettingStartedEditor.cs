@@ -22,7 +22,7 @@ namespace FishNet.Editing
             window.position = new(0, 0, 320, 355);
             Rect mainPos;
             mainPos = EditorGUIUtility.GetMainWindowPosition();
-            var pos = window.position;  
+            var pos = window.position;
             float w = (mainPos.width - pos.width) * 0.5f;
             float h = (mainPos.height - pos.height) * 0.5f;
             pos.x = mainPos.x + w;
@@ -32,7 +32,7 @@ namespace FishNet.Editing
             window._fishnetLogo = (Texture2D)AssetDatabase.LoadAssetAtPath("Assets/FishNet/Runtime/Editor/Textures/UI/Logo_With_Text.png", typeof(Texture));
             window._labelStyle = new("label");
             window._labelStyle.fontSize = 24;
-            window._labelStyle.wordWrap = true;   
+            window._labelStyle.wordWrap = true;
             //window.labelStyle.alignment = TextAnchor.MiddleCenter;
             window._labelStyle.normal.textColor = new Color32(74, 195, 255, 255);
 
@@ -75,6 +75,7 @@ namespace FishNet.Editing
 
         private static void ShowGettingStarted()
         {
+            return;
             EditorApplication.update -= ShowGettingStarted;
 
             bool shown = EditorPrefs.GetBool(SHOWED_GETTING_STARTED, false);
