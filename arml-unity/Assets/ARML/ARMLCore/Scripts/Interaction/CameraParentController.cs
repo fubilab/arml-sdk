@@ -55,7 +55,7 @@ namespace ARML.Interaction
         {
 #if UNITY_EDITOR || UNITY_STANDALONE_WIN
             if (allowMove)
-                MoveCamera();
+                KeyboardControl();
 #endif
 
             HandleAppExit();
@@ -67,20 +67,60 @@ namespace ARML.Interaction
         }
 
         /// <summary>
-        /// Handles the movement and rotation of the camera based on input.
+        /// Handles the movement and rotation of the camera based on keyboard input.
         /// </summary>
-        private void MoveCamera()
+        private void KeyboardControl()
         {
-            float xAxisValue = isMouse ? Input.GetAxis("Mouse X") : Input.GetAxis("Debug Horizontal");
-            float zAxisValue = isMouse ? Input.GetAxis("Mouse Y") : Input.GetAxis("Debug Vertical");
+            float moveSpeed = speed / 20;
+            float rotateSpeed = speed / 2;
+            
+            Vector3 direction = Vector3.zero;
 
-            transform.Rotate(-zAxisValue * speed * Time.deltaTime, xAxisValue * speed * Time.deltaTime, 0);
+            // Move camera based on arrow key inputs
+            if (Input.GetKey(KeyCode.A))
+            {
+                direction += Vector3.left;
+            }
+            if (Input.GetKey(KeyCode.D))
+            {
+                direction += Vector3.right;
+            }
+            if (Input.GetKey(KeyCode.W))
+            {
+                direction += Vector3.forward;
+            }
+            if (Input.GetKey(KeyCode.S))
+            {
+                direction += Vector3.back;
+            }
+            // Apply movement
+            transform.Translate(direction * moveSpeed * Time.deltaTime, Space.World);
+            
+            float rotationX = 0f;
+            float rotationY = 0f;
+
+            // Rotate camera based on arrow key inputs
+            if (Input.GetKey(KeyCode.UpArrow))
+            {
+                rotationX = -1f;  // Rotate up
+            }
+            if (Input.GetKey(KeyCode.DownArrow))
+            {
+                rotationX = 1f;   // Rotate down
+            }
+            if (Input.GetKey(KeyCode.LeftArrow))
+            {
+                rotationY = -1f;  // Rotate left
+            }
+            if (Input.GetKey(KeyCode.RightArrow))
+            {
+                rotationY = 1f;   // Rotate right
+            }
+
+            // Apply rotation
+            transform.Rotate(rotationX * rotateSpeed * Time.deltaTime, rotationY * rotateSpeed * Time.deltaTime, 0);
             Vector3 currentRotation = transform.rotation.eulerAngles;
             transform.rotation = Quaternion.Euler(currentRotation.x, currentRotation.y, 0);
-
-            Vector3 movementVector = (transform.forward * Input.GetAxis("Vertical") * 10) +
-                                     (transform.right * Input.GetAxis("Horizontal") * 10);
-            transform.localPosition += new Vector3(movementVector.x, 0, movementVector.z) * Time.deltaTime;
         }
 
         /// <summary>
