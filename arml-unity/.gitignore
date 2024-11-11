@@ -81,3 +81,6 @@ crashlytics-build.properties
 
 # idea editor
 .idea
+
+# arml welcome prefs
+.welcomeShown

@@ -11,23 +11,39 @@
 
 This repository contains a Software Development Kit (SDK) for creating augmented reality (AR) experiences for the AR Magic Lantern (ARML), an ongoing research project led by the [Full-Body Interaction Lab](https://www.upf.edu/web/fubintlab) at [Universitat Pompeu Fabra](https://www.upf.edu/). 
 
-
-
 - [Project Home](https://emil-xr.eu/lighthouse-projects/upf-ar-magic-lantern/)  
 Background information about the project and its history.
 
 - [SDK Documentation ](https://fubilab.github.io/arml-sdk/)  
 Start here if you want to develop with the SDK.
 
-- [Unity template project](./arml-unity/)  
-Start building games and experiences for the ARML in Unity.
-
 - [ARML Hardware](https://fubilab.github.io/arml-sdk/docs/hardware.html)  
 Learn how to build or obtain the AR Magic Lantern hardware.
+
+## Quick start
+
+To start building software for the ARML:
+1. Create a new Unity project from Unity Hub
+   - Version 6000.0.23 or later
+   - Use the "Universal 3D" template
+2. Change the .NET API settings
+   - Go to `Edit -> Project Settings...`
+   - Open the `Player` section
+   - Under `Other Settings > Configuration`, find `Api Compatibility Level`
+   - Change the value to: `.NET Framework`
+3. Download the [ARML SDK Unity Package](https://github.com/fubilab/arml-sdk/releases/latest/download/arml-sdk.unitypackage)
+4. Drag the downloaded `arml-sdk.unitypackage` file into the Unity project.
+5. Leave all items selected and click `Import`
+6. Once the package has loaded, a window should pop up with instructions and tutorial content. 
+
+If you encounter any problems, please get in touch with us on the [ARML Discord](https://discord.gg/zWZT3yKf4q).
 
 ## Under the hood
 
 Not necessary for building experiences with the SDK, but useful if you want to go deeper and contribute to the project or experiment with its internals.
+
+- [Unity template project](./arml-unity/)  
+Modify the ARML Unity project and export a package that can be used in other projects.
 
 - [Generate Documentation](./arml-website/)  
 Learn how to edit and build the SDK documentation website.

@@ -2,14 +2,27 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.IO;
 
 /// <summary>
 /// Editor window that displays a welcome screen for the ARML SDK, offering quick access to key scenes and documentation.
 /// </summary>
+/// 
+[InitializeOnLoad]
 public class ARMLWelcomeWindow : EditorWindow
 {
     private Texture2D logo;
-    private static bool subscribed;
+
+    private const string ShowOnLoadFilePath = "Assets/ARML/.welcomeShown";
+
+    static ARMLWelcomeWindow()
+    {
+        // Check if the file exists; if not, show the window
+        if (!File.Exists(ShowOnLoadFilePath))
+        {
+            EditorApplication.update += ShowWindowAtStart;
+        }
+    }
 
     /// <summary>
     /// Loads the ARML logo asset when the window is initialized.
@@ -20,42 +33,13 @@ public class ARMLWelcomeWindow : EditorWindow
     }
 
     /// <summary>
-    /// Initializes the window when the editor loads and subscribes to the update event.
-    /// </summary>
-    [InitializeOnLoadMethod]
-    private static void Initialize()
-    {
-        SubscribeToUpdate();
-    }
-
-    /// <summary>
-    /// Subscribes the window display function to the EditorApplication update event.
-    /// </summary>
-    private static void SubscribeToUpdate()
-    {
-        if (Application.isBatchMode)
-            return;
-
-        if (!subscribed && !EditorApplication.isPlayingOrWillChangePlaymode)
-        {
-            subscribed = true;
-            EditorApplication.update += ShowWindowAtStart;
-        }
-    }
-
-    /// <summary>
     /// Displays the welcome window on startup if it hasn't been shown yet.
     /// </summary>
     private static void ShowWindowAtStart()
     {
         EditorApplication.update -= ShowWindowAtStart;
-
-        bool shown = EditorPrefs.GetBool("ARMLWelcomeWindowOpened", false);
-        if (!shown)
-        {
-            EditorPrefs.SetBool("ARMLWelcomeWindowOpened", true);
-            ShowWindow();
-        }
+        File.WriteAllText(ShowOnLoadFilePath, "TRUE");
+        ShowWindow();
     }
 
     /// <summary>
@@ -80,20 +64,23 @@ public class ARMLWelcomeWindow : EditorWindow
 
         GUILayout.Label("Welcome to the ARML SDK!", EditorStyles.boldLabel);
 
-        GUILayout.Label("Get started by opening the Logic Scene");
-        if (GUILayout.Button("Open Logic Scene"))
+        GUILayout.Label("Get started by opening the HelloWorld scene.");
+        if (GUILayout.Button("Open HelloWorld scene"))
         {
             EditorSceneManager.OpenScene("Assets/ARML/ARMLCore/Scenes/Logic.unity");
+            LoadExampleScene("Assets/ARML/ARMLCore/Scenes/HelloWorld.unity");
         }
 
         GUILayout.Label("Example Scenes", EditorStyles.boldLabel);
-        if (GUILayout.Button("Add WallGame Scene"))
+        if (GUILayout.Button("Open WallGame Scene"))
         {
+            EditorSceneManager.OpenScene("Assets/ARML/ARMLCore/Scenes/Logic.unity");
             LoadExampleScene("Assets/ARML/Examples/WallGame/Scenes/WallGame.unity");
         }
 
-        if (GUILayout.Button("Add GarumGame Scene"))
+        if (GUILayout.Button("Open GarumGame Scene"))
         {
+            EditorSceneManager.OpenScene("Assets/ARML/ARMLCore/Scenes/Logic.unity");
             LoadExampleScene("Assets/ARML/Examples/GarumGame/Scenes/GarumGame.unity");
         }
 

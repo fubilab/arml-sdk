@@ -22,6 +22,7 @@ namespace FishNet.Editing
 
         internal static void CheckRemindToReview()
         {
+            return;
             bool reminderEnabled = EditorPrefs.GetBool(IS_ENABLED, true);
             if (!reminderEnabled)
                 return;
@@ -69,7 +70,7 @@ namespace FishNet.Editing
         {
             InitializeWindow();
         }
-      
+
         static void InitializeWindow()
         {
             if (_window != null)

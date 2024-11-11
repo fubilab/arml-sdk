@@ -1,10 +1,15 @@
-# ARML Hardware Reference
+# ARML Hardware Reference Design
 
 The AR Magic Lantern prototype described here is an open-source reference design that can be built from components available to the general public.
 
-[Component Reference](components.md) | 
-[Wiring Reference](wiring.md) |
-[Power Reference](power.md) 
+If you are interested in obtaining an ARML hardware developer kit, please contact us on our [Discord](https://discord.gg/zWZT3yKf4q).
+
+### Contents
+- [Component Reference](components.md)
+- [Wiring Reference](wiring.md)
+- [Power Reference](power.md) 
+
+### Hardware Summary
 
 ![](images/ARML-hardware.jpg)
 *Photo of AR Magic Lantern with system powered on*
