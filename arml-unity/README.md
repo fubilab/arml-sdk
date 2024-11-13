@@ -17,7 +17,10 @@ In order to create and edit applications for the ARML using the SDK, you will ne
 
 To use the project as a template for other ARML projects, you can export it as a package.
 
-1. In the Unity project browser, select the `Assets/ARML` and `Assets/StreamingAssets` folders.
+1. In the Unity project browser, select the following folders: 
+  - `Assets/ARML`
+  - `Assets/StreamingAssets`
+  - `Assets/TextMesh Pro`
 2. Go to `Assets -> Export Package...`
 3. Leave the default settings and click `Export...`
 

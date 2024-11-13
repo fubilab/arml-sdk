@@ -3,7 +3,6 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.IO;
-using UnityEngine.Rendering;
 
 /// <summary>
 /// Editor window that displays a welcome screen for the ARML SDK, offering quick access to key scenes and documentation.
@@ -36,11 +35,13 @@ public class ARMLWelcomeWindow : EditorWindow
     /// <summary>
     /// Displays the welcome window on startup if it hasn't been shown yet.
     /// </summary>
-    private static void OnInitialLoad()
+    private static async void OnInitialLoad()
     {
         EditorApplication.update -= OnInitialLoad;
-        File.WriteAllText(ShowOnLoadFilePath, "TRUE");
-        SetRenderPipeline();
+        await File.WriteAllTextAsync(ShowOnLoadFilePath, "TRUE");
+        await SetupTools.SetupPackages();
+        SetupTools.SetupRenderPipeline();
+        SetupTools.SetupLayers();
         ShowWindow();
     }
 
@@ -51,17 +52,6 @@ public class ARMLWelcomeWindow : EditorWindow
     public static void ShowWindow()
     {
         GetWindow<ARMLWelcomeWindow>("ARML SDK Welcome");
-    }
-
-    /// <summary>
-    /// Sets default render pipeline.
-    /// </summary>
-    public static void SetRenderPipeline()
-    {
-        RenderPipelineAsset armlRenderPipeline = AssetDatabase.LoadAssetAtPath<RenderPipelineAsset>(
-            "Assets/ARML/ARMLCore/Rendering/ARML_URP_RenderPipelineAsset.asset");
-        GraphicsSettings.defaultRenderPipeline = armlRenderPipeline;
-        QualitySettings.renderPipeline = armlRenderPipeline;
     }
 
     /// <summary>
