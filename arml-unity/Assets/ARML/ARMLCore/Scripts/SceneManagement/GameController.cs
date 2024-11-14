@@ -87,6 +87,15 @@ namespace ARML.SceneManagement
             {
                 LoadGame();
             }
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                Application.Quit();
+            }
+        }
+
+        public void QuitGame()
+        {
+            Application.Quit();
         }
 
         public void LoadGame()

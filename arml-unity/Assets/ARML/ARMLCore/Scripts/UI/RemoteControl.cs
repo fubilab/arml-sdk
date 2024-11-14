@@ -1,7 +1,8 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
-public class RemoteControl : MonoBehavior {
+public class RemoteControl : MonoBehaviour {
     public static RemoteControl Instance;
 
     public Action OnMenuPress;
@@ -38,6 +39,9 @@ public class RemoteControl : MonoBehavior {
                 StopCoroutine(_MenuButtonPressCoroutine);
                 _MenuButtonPressCoroutine = null;
                 print("Up: Menu");
+                if (OnMenuPress != null) {
+                    OnMenuPress.Invoke();
+                }
             }
         }
     }

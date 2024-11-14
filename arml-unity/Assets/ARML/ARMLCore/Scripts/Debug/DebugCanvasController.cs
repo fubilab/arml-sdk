@@ -2,6 +2,7 @@ using AClockworkBerry;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using ARML.Interaction;
+using UnityEngine.UI;
 
 namespace ARML.DebugTools
 {
@@ -24,6 +25,10 @@ namespace ARML.DebugTools
         /// </summary>
         private void Start()
         {
+            // bind remote control menu button to debug canvas
+            RemoteControl.Instance.OnMenuPress = ToggleAllDebug;
+
+            // focus debug canvas initially
             eventSystem = FindObjectOfType<EventSystem>();
 
             if (debugPanel.gameObject.activeInHierarchy)
@@ -45,14 +50,14 @@ namespace ARML.DebugTools
         /// <summary>
         /// Called once per frame. Checks for input to toggle the visibility of debug elements.
         /// </summary>
-        void Update()
-        {
-            // Toggle Debug Panel
-            if (Input.GetKeyDown(KeyCode.Q))
-            {
-                ToggleAllDebug();
-            }
-        }
+        // void Update()
+        // {
+        //     // Toggle Debug Panel
+        //     if (Input.GetKeyDown(KeyCode.Q))
+        //     {
+        //         ToggleAllDebug();
+        //     }
+        // }
 
         public void ToggleAllDebug()
         {
