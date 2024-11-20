@@ -6485,7 +6485,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Origin: {fileID: 0}
-  ResetKey: 32
   ResetOnStart: 1
   PosePredictDt: 0
   PoseSmoothAlpha: 1
@@ -7179,6 +7178,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e07dc017d3bcb5c11afa7499434cb17d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  LongPressTime: 1
+  MenuKey: 319
 --- !u!224 &8102770034209180602
 RectTransform:
   m_ObjectHideFlags: 0
