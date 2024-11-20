@@ -2829,7 +2829,7 @@ MonoBehaviour:
     m_SceneAsset: {fileID: 102900000, guid: 9d03a484e38978d44b17b320d7b0aea2, type: 3}
     m_SceneName: HelloWorld
   loadOnStart: 0
-  loadLauncherSettings: 0
+  loadLauncherSettings: 1
   debugCanvasController: {fileID: 5862089174721539878}
   displayScanAtStart: 0
 --- !u!114 &2659631073221638412
