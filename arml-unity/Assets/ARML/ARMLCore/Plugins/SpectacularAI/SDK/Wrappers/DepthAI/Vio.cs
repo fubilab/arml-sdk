@@ -105,7 +105,7 @@ namespace SpectacularAI.DepthAI
                 }
             }
 
-#if UNITY_EDITOR
+#if UNITY_EDITOR_WIN || UNITY_EDITOR_OSX
             return;
 #endif
             _pipeline = new Pipeline(configuration: config, enableMappingAPI: MappingAPI, internalParameters: InternalParameters.ToArray());
@@ -114,7 +114,7 @@ namespace SpectacularAI.DepthAI
 
         public void OnDisable()
         {
-#if UNITY_EDITOR
+#if UNITY_EDITOR_WIN || UNITY_EDITOR_OSX
             return;
 #endif
             _session.Dispose();
@@ -125,7 +125,7 @@ namespace SpectacularAI.DepthAI
 
         private void Update()
         {
-#if UNITY_EDITOR
+#if UNITY_EDITOR_WIN || UNITY_EDITOR_OSX
             return;
 #endif
 
