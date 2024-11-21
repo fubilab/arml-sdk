@@ -9,6 +9,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using SpectacularAI;
 using System;
+using System.Linq;
 using System.Threading;
 
 namespace ARML.SceneManagement
@@ -42,23 +43,22 @@ namespace ARML.SceneManagement
         void Awake()
         {
             LoadLauncherSettings();
+            
+            DirectoryInfo d = new DirectoryInfo(System.IO.Directory.GetCurrentDirectory());
 
             eventSystem = EventSystem.current;
+            applicationsDirectory = d.Parent.FullName;
+            fileFormatExtension = ".x86_64";
 
 #if UNITY_EDITOR_WIN
-            applicationsDirectory = $"{System.IO.Directory.GetCurrentDirectory()}/_build/";
+            applicationsDirectory = $"{System.IO.Directory.GetCurrentDirectory()}\\_build\\";
             fileFormatExtension = ".exe";
-#else
-            applicationsDirectory = "/home/fubintlab/Desktop/unitybuilds/";
-            fileFormatExtension = ".x86_64";
 #endif
-
-        
 
             if (!Directory.Exists(applicationsDirectory))
                 return;
 
-            DirectoryInfo d = new DirectoryInfo(applicationsDirectory);
+            d = new DirectoryInfo(applicationsDirectory);
 
 
             FileInfo[] files = d.GetFiles($"*{fileFormatExtension}", SearchOption.AllDirectories);
@@ -66,10 +66,24 @@ namespace ARML.SceneManagement
             foreach (var file in d.GetFiles($"*{fileFormatExtension}", SearchOption.AllDirectories))
             {
                 //Log file names
-                print(file);
+                //print(file.Directory?.Name);
+                
+                // skip if relative path starts with _
+                string[] pathSplit = file.Directory.FullName
+                    .Replace(applicationsDirectory, "")
+                    .Split(Path.DirectorySeparatorChar);
+                if (pathSplit.Any(dirname => dirname.StartsWith("_")))
+                {
+                    continue;
+                }
 
+                // skip if already in list
+                if (applicationPathList.Contains(file.Directory.Name))
+                {
+                    continue;
+                }
                 //Add to list
-                applicationPathList.Add(file.Name);
+                applicationPathList.Add(file.Directory.Name);
 
                 //Remove format in string and display in container
                 GameObject container = Instantiate(appLaunchContainerPrefab, content.transform);
