@@ -44,10 +44,10 @@ namespace ARML.SceneManagement
         {
             LoadLauncherSettings();
             
-            DirectoryInfo d = new DirectoryInfo(System.IO.Directory.GetCurrentDirectory());
+            DirectoryInfo d = new DirectoryInfo(Application.dataPath);
 
             eventSystem = EventSystem.current;
-            applicationsDirectory = d.Parent.FullName;
+            applicationsDirectory = d.Parent.Parent.FullName;
             fileFormatExtension = ".x86_64";
 
 #if UNITY_EDITOR_WIN
