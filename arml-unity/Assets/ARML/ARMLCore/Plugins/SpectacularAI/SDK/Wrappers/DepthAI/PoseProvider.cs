@@ -1,4 +1,5 @@
 using System.Drawing.Drawing2D;
+using ARML.Arduino;
 using UnityEngine;
 
 namespace SpectacularAI.DepthAI
@@ -13,6 +14,12 @@ namespace SpectacularAI.DepthAI
     /// </summary>
     public class PoseProvider : MonoBehaviour
     {
+        [Tooltip("If enabled, use output from VIO to control pose.")]
+        public bool UseVIO;
+
+        [Tooltip("If enabled, use output from BNO IMU sensor to control orientation. Overrides VIO orientation.")]
+        public bool UseOrientationFromBNO;
+        
         [Tooltip("Position and yaw are set to match this transformation, identity if None")]
         public Transform Origin;
 
@@ -40,10 +47,31 @@ namespace SpectacularAI.DepthAI
         private void Start()
         {
             RemoteControl.Instance.OnMenuLongPress = ResetPositionAndYaw;
+
+            if (UseOrientationFromBNO) 
+            {
+                ArduinoController.Instance.ActivateBNO();
+            }
         }
 
         private void Update()
         {
+            if (UseVIO)
+            {
+                UpdateVIO();
+            }            
+            if (UseOrientationFromBNO)
+            {
+                UpdateBNO();
+            }
+        }
+
+        private void UpdateBNO()
+        {
+            transform.localEulerAngles = ArduinoController.Instance.bnoEulerAngles;
+        }
+
+        private void UpdateVIO() {
             VioOutput output = Vio.Output;
             
             // Cannot update pose if no output, or not tracking
@@ -78,7 +106,10 @@ namespace SpectacularAI.DepthAI
 
             // Pose w.r.t to Origin (after last reset)
             transform.localPosition = _origin.rotation * _prevSmoothedPosition + _origin.GetPosition();
-            transform.localRotation = _origin.rotation * _prevSmoothedOrientation * UnityEngine.Quaternion.Euler(rotationOffset);
+
+            if (!UseOrientationFromBNO)
+                transform.localRotation = 
+                    _origin.rotation * _prevSmoothedOrientation * UnityEngine.Quaternion.Euler(rotationOffset);
         }
 
         private Matrix4x4 GetPositionAndYaw(Matrix4x4 pose)
@@ -91,10 +122,17 @@ namespace SpectacularAI.DepthAI
 
         private void ResetPositionAndYaw()
         {
-            Matrix4x4 localToWorld = _currentPose.AsMatrix();
-            Matrix4x4 worldToLocalYaw = GetPositionAndYaw(localToWorld.inverse);
-            Matrix4x4 originToWorldYaw = Origin ? GetPositionAndYaw(Origin.localToWorldMatrix) : Matrix4x4.identity;
-            _origin = originToWorldYaw * worldToLocalYaw;
+            if (UseVIO)
+            {
+                Matrix4x4 localToWorld = _currentPose.AsMatrix();
+                Matrix4x4 worldToLocalYaw = GetPositionAndYaw(localToWorld.inverse);
+                Matrix4x4 originToWorldYaw = Origin ? GetPositionAndYaw(Origin.localToWorldMatrix) : Matrix4x4.identity;
+                _origin = originToWorldYaw * worldToLocalYaw;
+            }
+            if (UseOrientationFromBNO)
+            {
+                ArduinoController.Instance.ResetOrientation();
+            }
         }
     }
 }

@@ -158,10 +158,30 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1745311603}
     m_Modifications:
+    - target: {fileID: 2690539824780290085, guid: 3a7e3f9fb32ebbd499513924e8b12749,
+        type: 3}
+      propertyPath: hideTimerUI
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3068141566755850248, guid: 3a7e3f9fb32ebbd499513924e8b12749,
         type: 3}
       propertyPath: m_Name
       value: Interaction Timer
+      objectReference: {fileID: 0}
+    - target: {fileID: 8293747226860492670, guid: 3a7e3f9fb32ebbd499513924e8b12749,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8293747226860492670, guid: 3a7e3f9fb32ebbd499513924e8b12749,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8293747226860492670, guid: 3a7e3f9fb32ebbd499513924e8b12749,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 8293747226860492670, guid: 3a7e3f9fb32ebbd499513924e8b12749,
         type: 3}
@@ -211,6 +231,11 @@ PrefabInstance:
     - target: {fileID: 8293747226860492670, guid: 3a7e3f9fb32ebbd499513924e8b12749,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8293747226860492670, guid: 3a7e3f9fb32ebbd499513924e8b12749,
+        type: 3}
+      propertyPath: m_ConstrainProportionsScale
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -621,7 +646,7 @@ MonoBehaviour:
   interactingText: Interacting...
   outlineMaterial: {fileID: 2100000, guid: f41185843d05ccd46a6c88fe521721ef, type: 2}
   outlineThickness: 1.5
-  objectOverridesArduino: 1
+  objectOverridesArduino: 0
   actionFeedback: {fileID: 0}
   networkObject: {fileID: 0}
   targetAngle: 5
@@ -637,34 +662,7 @@ MonoBehaviour:
   overrideCrosshair: 0
   overridenCrosshair: 0
   OnObjectInteractedEvent:
-    _PersistentCalls:
-    - _Target: {fileID: 880187778}
-      _MethodName: SetArduinoColor
-      _PersistentArguments:
-      - _Type: 10
-        _Int: 0
-        _String: 
-        _X: 0.0025007725
-        _Y: 1
-        _Z: 0
-        _W: 1
-        _Object: {fileID: 0}
-      - _Type: 5
-        _Int: 0
-        _String: 
-        _X: 20
-        _Y: 0
-        _Z: 0
-        _W: 0
-        _Object: {fileID: 0}
-      - _Type: 1
-        _Int: 0
-        _String: 
-        _X: 0
-        _Y: 0
-        _Z: 0
-        _W: 0
-        _Object: {fileID: 0}
+    _PersistentCalls: []
   levelFilterEvents: []
   triggerEntered: 0
   angleToCamera: 0

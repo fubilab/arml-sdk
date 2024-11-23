@@ -151,7 +151,7 @@ namespace ARML.Interaction
                 alreadyTriggered = false;
 
             if (interactionType == InteractionType.DWELL && !objectOverridesArduino)
-                ArduinoController.Instance?.SetArduinoColor(Color.clear, 0f);
+                ArduinoController.Instance?.SetArduinoDefault();
 
             //Log to CSV Export
             MonitoredAction monitoredAction = new MonitoredAction()
@@ -261,35 +261,32 @@ namespace ARML.Interaction
             {
                 previousFrameWasSuccess = true;
 
-                if (cameraController.canOnlySelectOneObject)
-                {
-                    cameraController.AddObjectToCurrentlySelected(this);
-                    if (!cameraController.IsClosestObject(this))
-                    {
-                        CheckFail();
-                        return;
-                    }
-
-                    //Log to CSV Export
-                    MonitoredAction monitoredAction = new MonitoredAction()
-                    {
-                        ActionType = MonitoredAction.ActionTypeEnum.HOVER,
-                        TimeStamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
-                        ActionObject = this.gameObject.name
-                    };
-
-                    CSVExport.Instance?.monitoredActions.Add(monitoredAction);
+                if (cameraController.canOnlySelectOneObject && cameraController.currentlySelectedObjects.Count > 0) {
+                    return;
                 }
+                cameraController.AddObjectToCurrentlySelected(this);
+                if (!cameraController.IsClosestObject(this))
+                {
+                    CheckFail();
+                    return;
+                }
+
+                if (interactionType == InteractionType.DWELL)
+                    ArduinoController.Instance?.SetArduinoAnimation(
+                        Color.magenta, Color.yellow, requiredInteractionTime - 0.5f, 1);
+
+                //Log to CSV Export
+                MonitoredAction monitoredAction = new MonitoredAction()
+                {
+                    ActionType = MonitoredAction.ActionTypeEnum.HOVER,
+                    TimeStamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+                    ActionObject = this.gameObject.name
+                };
+
+                CSVExport.Instance?.monitoredActions.Add(monitoredAction);
 
                 if (overrideCrosshair)
                     OnCheckSuccesfulAction?.Invoke(overridenCrosshair);
-            }
-
-            //Send arduino colour message only if closest object
-            if (cameraController.IsClosestObject(this))
-            {
-                if (interactionType == InteractionType.DWELL)
-                    ArduinoController.Instance?.SetArduinoAnimation(Color.magenta, Color.yellow, 80, requiredInteractionTime, 1, -1, 0);
             }
 
             switch (interactionType)
@@ -338,7 +335,7 @@ namespace ARML.Interaction
                 if (cameraController.IsClosestObject(this))
                 {
                     if (interactionType == InteractionType.DWELL)
-                        ArduinoController.Instance?.SetArduinoColor(Color.clear, 0f);
+                        ArduinoController.Instance?.SetArduinoDefault();
                 }
 
                 if (overrideCrosshair)

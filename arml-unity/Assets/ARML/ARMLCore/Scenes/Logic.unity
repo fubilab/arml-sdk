@@ -1466,18 +1466,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8989829634158744047}
   m_CullTransparentMesh: 1
---- !u!114 &244278044540204307
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8394235774777720487}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3629b1a5dd8b49e41818145ed0583972, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &248228919561689559
 Transform:
   m_ObjectHideFlags: 0
@@ -2742,7 +2730,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentlySelectedObjects: []
-  canOnlySelectOneObject: 0
+  canOnlySelectOneObject: 1
 --- !u!114 &2243222983979392266
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6484,6 +6472,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c131ea77e9f39d34a80be94e4967afbe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UseVIO: 0
+  UseOrientationFromBNO: 0
   Origin: {fileID: 0}
   ResetOnStart: 1
   PosePredictDt: 0
@@ -7147,25 +7137,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4890a319729d2104db791f541b681a8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  portName: COM7
+  portName: /dev/ttyACM0
   baudRate: 115200
   readTimeOut: 500
   writeInterval: 0.016
-  printAllMessages: 1
-  solidColor: {r: 0.8886285, g: 0, b: 1, a: 0.09019608}
+  printAllMessages: 0
+  solidColor: {r: 0.8886285, g: 0, b: 1, a: 1}
   progressColor: {r: 0.101122975, g: 1, b: 0, a: 0.09803922}
-  whiteBrightness: 0
-  overallBrightness: 60
+  whiteBrightness: 128
+  overallBrightness: 200
   fadeLength: 2
+  solidColorOnButtonClick: 1
+  previewSolidColor: 0
   isSnakeAnimation: 0
   animationDirection: 0
   totalPixelsInStrip: 63
   animationTime: 4
   animationPixelLength: 1
-  animationStartPixelIndex: 59
-  animationEndPixelIndex: 69
+  animationStartPixelIndex: 0
+  animationEndPixelIndex: 54
   clearPixelsOutsideRange: 0
   animationSO: {fileID: 11400000, guid: f95fd46a2116de7428ac522e09a0e97f, type: 2}
+  animationName: NewArduinoAnimation
+  animationFilePath: Assets/ARML/ARMLCore/Scripts/Arduino/Animations/
+  remappedImuRotation: {x: 0, y: 0, z: 0, w: 0}
+  bnoEulerAngles: {x: 0, y: 0, z: 0}
 --- !u!114 &8095580418421002482
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7412,7 +7408,6 @@ GameObject:
   - component: {fileID: 4625230407359404857}
   - component: {fileID: 1096435712057699615}
   - component: {fileID: 2151333737270149118}
-  - component: {fileID: 244278044540204307}
   - component: {fileID: 7490197502349159090}
   m_Layer: 0
   m_Name: Main Camera

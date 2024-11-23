@@ -193,9 +193,9 @@ namespace ARML.SceneManagement
             return allTasks;
         }
 
-        public void SetArduinoColor(Color color, float brightness, bool force = false)
+        public void SetArduinoColor(Color color, bool force = false)
         {
-            ArduinoController.Instance.SetArduinoColor(color, brightness, force);
+            ArduinoController.Instance.SetArduinoColor(color, force);
         }
 
         public void SetArduinoFade(Color from, Color to, float duration)

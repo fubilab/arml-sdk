@@ -15,6 +15,9 @@
 // How many NeoPixels are attached to the Arduino?
 #define LED_COUNT 63
 
+// How many pixels are assigned to the logo window
+#define LOGO_COUNT 9
+
 // NeoPixel brightness, 0 (min) to 255 (max)
 #define BRIGHTNESS 200  // max = 255
 
@@ -23,6 +26,13 @@ Adafruit_NeoPixel strip(LED_COUNT, LED_PIN, NEO_GRBW + NEO_KHZ800);
 
 // Declare BNO IMU object 
 Adafruit_BNO055 bno = Adafruit_BNO055(55);
+
+// loading <-> ready transition
+bool armlLoading = true;
+bool armlReady = false;
+
+// BNO state
+bool bnoActive = false;
 
 //Unity command stuff
 String inputString = "";
@@ -40,6 +50,7 @@ int buttonInterval = 10;
 int receiveCmdInterval = 10;
 
 //Colors
+int brightness = BRIGHTNESS;
 int progressColor[] = { 0, 255, 0, 0, 5 };
 int solidColor[] = { 255, 0, 0, 0, 5 };
 float animationRate;
@@ -57,44 +68,23 @@ byte clearPixelsOutsideRange = LOW;
 void setup(void) {
   Serial.begin(115200);
 
-  /* Initialise the sensor */
-  if (!bno.begin())
-  {
-    /* There was a problem detecting the BNO055 ... check your connections */
-    Serial.print("Ooops, no BNO055 detected ... Check your wiring or I2C ADDR!");
-    while (1);
-  }
-
-  delay(100);
-   
-  bno.setExtCrystalUse(true);
-  
   //configure pin 4 as an input and enable the internal pull-up resistor
   pinMode(4, INPUT_PULLUP);
   pinMode(13, OUTPUT);
 
   //neopixel init
   strip.begin();  // INITIALIZE NeoPixel strip object (REQUIRED)
-  strip.setBrightness(BRIGHTNESS);
 
-  //show default patterns
-  strip.fill(strip.Color(0, strip.gamma8(128), strip.gamma8(128), strip.gamma8(255)));
-  uint32_t goblinStartHue = 36000L;
-  for(int i=strip.numPixels() - 9, j = 0; i<strip.numPixels(); i++, j++) {
-    uint32_t pixelHue = goblinStartHue - j * 4000L;
-    strip.setPixelColor(i, strip.gamma32(strip.ColorHSV(pixelHue, 255 * 0.5,
-    128)));
-  }
-  strip.show();
+  showDefault();
 }
 
 void loop(void) {
   currentMillis = millis();
 
   readButton();
+  readBno();
   receiveCmdLoop();
-
-  //rainbowLoop();
+  updateLoadingReady();
   updateColorProgress();
 
   if (Serial.available()) {
@@ -109,6 +99,110 @@ void loop(void) {
   delay(5);
 }
 
+void activateBNO() {
+  /* Initialise the BNO sensor */
+  if (bno.begin()) {
+    bnoActive = true;
+    delay(100);
+    bno.setExtCrystalUse(true);
+  } else {
+    /* There was a problem detecting the BNO055 ... check your connections */
+    Serial.print("Ooops, no BNO055 detected ... Check your wiring or I2C ADDR!");
+  }
+}
+
+// color loop stuff
+int fadeVal=100, fadeMax=100;
+int fadeStep = 4;
+uint32_t firstPixelHue = 0;
+int numRainbowLoops = 20;
+int rainbowLoopCount = 0;
+
+void showDefault() {
+  strip.setBrightness(brightness);
+  
+  float GB = 128 * fadeVal / fadeMax;
+  float W = 255 * fadeVal / fadeMax;
+  //show default patterns
+  strip.fill(strip.Color(0, strip.gamma8(GB), strip.gamma8(GB), strip.gamma8(W)));
+  uint32_t goblinStartHue = 36000L;
+  for(int i=strip.numPixels() - LOGO_COUNT, j = 0; i<strip.numPixels(); i++, j++) {
+    uint32_t pixelHue = goblinStartHue - j * 4000L;
+    strip.setPixelColor(i, strip.gamma32(strip.ColorHSV(pixelHue, 255 * 0.5,
+    GB)));
+  }
+  strip.show();
+  solidColorState = HIGH; // stop animations
+}
+
+void updateLoadingReady() {
+  if (armlReady && armlLoading) {
+    // transition: loading -> ready
+    fadeVal -= fadeStep;
+    if(fadeVal <= 0) { 
+      armlLoading = false;
+    }
+  }
+  if (!armlReady && !armlLoading) {
+    //transition: ready -> loading
+    fadeVal -= fadeStep;
+    if(fadeVal <= 0) { 
+      armlLoading = true;
+    }
+  }
+  if (armlLoading && !armlReady && fadeVal < fadeMax) {
+    fadeVal += fadeStep; 
+  }
+  if (armlReady && !armlLoading && fadeVal < fadeMax) {
+    fadeVal += fadeStep;
+  }
+  if (armlLoading) {
+    showLoadingLoop();
+  } else if(fadeVal < fadeMax) {
+    showDefault();
+  }
+  if (fadeVal > fadeMax) {
+    fadeVal = fadeMax;
+  }
+}
+
+
+void showLoadingLoop() {
+  //int loopPixels = strip.numPixels() - LOGO_COUNT;
+  int loopPixels = strip.numPixels();
+  for(int i=0; i<loopPixels; i++) { // For each pixel in strip...
+    // Offset pixel hue by an amount to make one full revolution of the
+    // color wheel (range of 65536) along the length of the strip
+    uint32_t pixelHue = firstPixelHue + (i * 65536L / loopPixels);
+
+    // strip.ColorHSV() can take 1 or 3 arguments: a hue (0 to 65535) or
+    // optionally add saturation and value (brightness) (each 0 to 255).
+    // Here we're using just the three-argument variant, though the
+    // second value (saturation) is a constant 255.
+    strip.setPixelColor(i, strip.gamma32(strip.ColorHSV(pixelHue, 255,
+      255 * fadeVal / fadeMax)));
+  }
+  strip.show();
+  firstPixelHue += 256;
+}
+
+void readBno() {
+  if (!bnoActive) {
+    return;
+  }
+  /* Get a new sensor event */
+  imu::Quaternion quat = bno.getQuat();
+
+  Serial.print(quat.x(), 4);
+  Serial.print(",");
+  Serial.print(quat.y(), 4);
+  Serial.print(",");
+  Serial.print(quat.z(), 4);
+  Serial.print(",");
+  Serial.print(quat.w(), 4);
+  Serial.println("");
+}
+
 void receiveCmdLoop() {
   if (millis() - previousReceiveCmdMillis < receiveCmdInterval)
     return;
@@ -121,6 +215,16 @@ void receiveCmdLoop() {
       //processSetProgressColorCmd(inputString);
     } else if (inputString.indexOf("Anim") >= 0) {
       processAnimationColorCmd(inputString);
+    } else if (inputString.indexOf("ARML_READY") == 0) {
+      armlReady = true;
+    } else if (inputString.indexOf("ARML_LOADING") == 0) {
+      armlReady = false;
+    } else if (inputString.indexOf("ARML_DEFAULT") == 0) {
+      showDefault();
+    } else if (inputString.indexOf("ARML_B") == 0) {
+      processBrightnessCmd(inputString);
+    } else if (inputString.indexOf("ARML_ENABLE_BNO") == 0) {
+      activateBNO();
     } else {
       processSetSolidColorCmd(inputString);
     }
@@ -131,8 +235,14 @@ void receiveCmdLoop() {
   previousReceiveCmdMillis += receiveCmdInterval;
 }
 
+void processBrightnessCmd(String cmd) {
+  brightness = cmd.substring(cmd.indexOf("B") + 1).toInt();
+  strip.setBrightness(brightness);
+  strip.show();
+}
+
 void processSetSolidColorCmd(String cmd) {
-  Serial.println("Set Solid Color mode");
+  //Serial.println("Set Solid Color: " + cmd);
   solidColorState = HIGH;
 
   //Safe checks to ignore non-valid commands
@@ -148,15 +258,21 @@ void processSetSolidColorCmd(String cmd) {
   solidColor[3] = safeCmd.substring(cmd.indexOf("W") + 1, cmd.indexOf("A")).toInt();
   solidColor[4] = safeCmd.substring(cmd.indexOf("A") + 1).toInt();
 
-  strip.setBrightness(solidColor[4]);
-
+  applyAlphaValue(solidColor);
   strip.fill(strip.Color(solidColor[0], solidColor[1], solidColor[2], solidColor[3]));
-
   strip.show();
 }
 
+// apply alpha value in RGBWA color[4] to RGB
+void applyAlphaValue(int color[]) {
+  float v = (float)color[4] / (float)255;
+  color[0] = round(color[0] * v);
+  color[1] = round(color[1] * v);
+  color[2] = round(color[2] * v);
+}
+
 void processAnimationColorCmd(String cmd) {
-  Serial.println("Set Animation Color mode");
+  Serial.println("processAnimationColorCmd: " + cmd);
 
   //Get first color
   String firstColorCmd = cmd.substring(cmd.indexOf("S") + 2, cmd.indexOf("X") - 1);
@@ -166,6 +282,7 @@ void processAnimationColorCmd(String cmd) {
   solidColor[2] = firstColorCmd.substring(firstColorCmd.indexOf("B") + 1, firstColorCmd.indexOf("W")).toInt();
   solidColor[3] = firstColorCmd.substring(firstColorCmd.indexOf("W") + 1, firstColorCmd.indexOf("A")).toInt();
   solidColor[4] = firstColorCmd.substring(firstColorCmd.indexOf("A") + 1).toInt();
+  applyAlphaValue(solidColor);
 
   //Get second color
   String secondColorCmd = cmd.substring(cmd.indexOf("X") + 2, cmd.indexOf("H") - 1);
@@ -175,6 +292,7 @@ void processAnimationColorCmd(String cmd) {
   progressColor[2] = secondColorCmd.substring(secondColorCmd.indexOf("B") + 1, secondColorCmd.indexOf("W")).toInt();
   progressColor[3] = secondColorCmd.substring(secondColorCmd.indexOf("W") + 1, secondColorCmd.indexOf("A")).toInt();
   progressColor[4] = secondColorCmd.substring(secondColorCmd.indexOf("A") + 1).toInt();
+  applyAlphaValue(progressColor);
 
   //Get Animation pixel length
   animationPixelLength = cmd.substring(cmd.indexOf("L") + 1).toInt();
@@ -186,17 +304,15 @@ void processAnimationColorCmd(String cmd) {
   currentPixelIndex = startPixelIndex;
 
   //Get Snake or or regular animation state
+  snakeAnimation = LOW;
   if (cmd.indexOf("Anim2") >= 0) {
     snakeAnimation = HIGH;
     Serial.println("isSnake");
-  } else {
-    snakeAnimation = LOW;
-    Serial.println("noSnake");
   }
 
+  backwardsMode = LOW;
   if (cmd.indexOf("Ba") >= 0) {
     backwardsMode = HIGH;
-    currentPixelIndex = endPixelIndex;
     Serial.println("isBack");
   }
 
@@ -214,14 +330,11 @@ void processAnimationColorCmd(String cmd) {
   //Get Animation rate (comes as seconds from Unity)
   animationRate = cmd.substring(cmd.indexOf("H") + 1).toFloat() * 1000;
 
-  if (snakeAnimation == LOW) {
-    animationRate = animationRate * animationPixelLength;  //Multiply by animation length oterwhise it will progress faster than intended if length is more than 1 (unless its snake)
-  }
   animationRate = animationRate / (endPixelIndex - startPixelIndex);  //Divide by length of animation in pixels so takes same amount regardless of length
-
+  
+  
   //Set Solid Color
   if (clearPixelsOutsideRange == LOW) {
-    strip.setBrightness(solidColor[4]);  //This line decides whether the strip fills up with background colour when animation starts, or if it becomes a trail (the first cycle)
     strip.fill(strip.Color(solidColor[0], solidColor[1], solidColor[2], solidColor[3]));
   } else {
     strip.fill(strip.Color(solidColor[0], solidColor[1], solidColor[2], solidColor[3]), startPixelIndex, endPixelIndex);
@@ -242,70 +355,45 @@ void updateColorProgress() {
   if (millis() - previousLedPixelChangeMillis < animationRate)
     return;
 
-  //REACHED END
-  if (backwardsMode == LOW) {
-    if (currentPixelIndex > endPixelIndex + animationPixelLength + 1) {
-      currentPixelIndex = startPixelIndex;
-    }
-  } else {
-    if (currentPixelIndex < startPixelIndex - animationPixelLength - 1) {
-      currentPixelIndex = endPixelIndex;
-    }
+  int drawAtIndex = currentPixelIndex % endPixelIndex;
+  //WRAP
+  if (backwardsMode == HIGH) {
+    drawAtIndex = endPixelIndex - drawAtIndex - 1;
   }
+
+//  Serial.println(String(currentPixelIndex) + ":" + String(drawAtIndex));
 
   //REGULAR ANIMATION
   if (snakeAnimation == LOW) {
-    for (int i = 0; i < animationPixelLength; i++) {
-      strip.setPixelColor(currentPixelIndex, strip.Color(progressColor[0], progressColor[1], progressColor[2], progressColor[3]));
-
-      if (backwardsMode == LOW) {
-        currentPixelIndex++;
-        if (currentPixelIndex > endPixelIndex) {
-          currentPixelIndex = startPixelIndex;
-          if (clearPixelsOutsideRange == LOW) {
-            strip.fill(strip.Color(solidColor[0], solidColor[1], solidColor[2], solidColor[3]));
-          } else {
-            strip.fill(strip.Color(solidColor[0], solidColor[1], solidColor[2], solidColor[3]), startPixelIndex, 10);
-          }
-        } else {
-          currentPixelIndex--;
-          if (currentPixelIndex < startPixelIndex - 1) {
-            currentPixelIndex = endPixelIndex;
-            if (clearPixelsOutsideRange == LOW) {
-              strip.fill(strip.Color(solidColor[0], solidColor[1], solidColor[2], solidColor[3]));
-            } else {
-              strip.fill(strip.Color(solidColor[0], solidColor[1], solidColor[2], solidColor[3]), startPixelIndex, 10);
-            }
-          }
-        }
-      }
+    //REACHED END?
+    if (currentPixelIndex > 0 && (currentPixelIndex % endPixelIndex == 0)) {
+      // stop anim
+      solidColorState = HIGH;
+      return;
     }
   }
-
   //SNAKE ANIMATION
-  if (snakeAnimation == HIGH) {
-    strip.setPixelColor(currentPixelIndex, strip.Color(progressColor[0], progressColor[1], progressColor[2], progressColor[3]));
-
+  else {
+    int removeAtIndex;
     if (backwardsMode == LOW) {
-      currentPixelIndex++;
-      //Remove trail (snake)
-      for (int i = 0; i < animationPixelLength; i++) {
-        strip.setPixelColor(currentPixelIndex - animationPixelLength - i, strip.Color(solidColor[0], solidColor[1], solidColor[2], solidColor[3]));
-      }
+      removeAtIndex = (currentPixelIndex - animationPixelLength) % endPixelIndex;
     } else {
-      currentPixelIndex--;
-      //Remove trail (snake)
-      for (int i = 0; i < animationPixelLength; i++) {
-        strip.setPixelColor(currentPixelIndex + animationPixelLength + 1 + i, strip.Color(solidColor[0], solidColor[1], solidColor[2], solidColor[3]));
-      }
+      removeAtIndex = (drawAtIndex + animationPixelLength) % endPixelIndex;
     }
+    //Remove trail (snake)
+    strip.setPixelColor(removeAtIndex, strip.Color(solidColor[0], solidColor[1], solidColor[2], solidColor[3]));
   }
 
+  strip.setPixelColor(drawAtIndex, strip.Color(progressColor[0], progressColor[1], progressColor[2], progressColor[3]));
+  
   previousLedPixelChangeMillis += animationRate;
+  
+  currentPixelIndex++;
 
   strip.show();
 }
 
+bool buttonDown = false;
 void readButton() {
   if (millis() - previousButtonMillis < buttonInterval)
     return;
@@ -318,11 +406,26 @@ void readButton() {
   // button's pressed, and off when it's not:
   if (sensorVal == HIGH) {
     digitalWrite(13, LOW);
+    Mouse.release(MOUSE_LEFT);
+    if (buttonDown) {
+      // do onButtonUp actions
+//      if (solidColorState == HIGH) {
+//        armlLoading = false;
+//        armlReady = true;
+//        showDefault();
+//        processAnimationColorCmd("Anim2Ba_S_R227G0B255W128A255E_X_R26G255B0W128A25E_H2_L20_PS0_PE54");
+//      } else {
+//        showDefault();
+//      }
+    }
+    buttonDown = false;
   } else {
     digitalWrite(13, HIGH);
-    Serial.println("Button being pressed");
+    Mouse.press(MOUSE_LEFT);
+    buttonDown = true;
+    //Serial.println("Button being pressed");
+
   }
 
   previousButtonMillis += buttonInterval;
 }
-

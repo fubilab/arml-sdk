@@ -5,6 +5,22 @@ using UnityEngine;
 public class RemoteControl : MonoBehaviour {
     public static RemoteControl Instance;
 
+    /// <summary>
+    /// Ensures only one instance of RemoteControl exists.
+    /// </summary>
+    private void Singleton()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject); // Destroy the GameObject if an instance already exists
+        }
+        else
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject); // Optionally make it persistent
+        }
+    }
+
     [Tooltip("Time in seconds for long press to activate")]
     public float LongPressTime = 3;
 
@@ -25,9 +41,7 @@ public class RemoteControl : MonoBehaviour {
     }
 
     void Awake() {
-        if (Instance == null) {
-            Instance = this;
-        }
+        Singleton();
     }
 
 

@@ -17,10 +17,10 @@ namespace ARML.Arduino
         public Color progressColor;
 
         [Tooltip("Controls the white brightness level, ranging from 0 to 255.")]
-        [Range(0, 254)] public float whiteBrightness;
+        [Range(0, 254)] public int whiteBrightness;
 
         [Tooltip("Controls the overall brightness of the colors, ranging from 0 to 255.")]
-        [Range(0, 254)] public float overallBrightness;
+        [Range(0, 254)] public int overallBrightness;
 
         [Header("Animation Settings")]
         [Tooltip("Enables or disables snake animation mode.")]

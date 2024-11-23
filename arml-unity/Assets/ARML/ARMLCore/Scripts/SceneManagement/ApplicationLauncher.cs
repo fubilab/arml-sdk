@@ -120,6 +120,11 @@ namespace ARML.SceneManagement
 #endif
         }
 
+        void Start()
+        {
+            Arduino.ArduinoController.Instance.SetArduinoReady(true, true);
+        }
+
         /// <summary>
         /// Makes a file at the specified path executable.
         /// </summary>
