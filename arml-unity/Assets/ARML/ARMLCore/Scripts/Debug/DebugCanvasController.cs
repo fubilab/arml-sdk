@@ -107,7 +107,7 @@ namespace ARML.DebugTools
             if (mapRenderer == null)
                 mapRenderer = FindObjectOfType<ToggleMapRenderer>();
 
-            mapRenderer.SetRenderer(state);
+            mapRenderer?.SetRenderer(state);
         }
     }
 }
