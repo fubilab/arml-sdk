@@ -26,6 +26,8 @@ public class RemoteControl : MonoBehaviour {
 
     [Tooltip("Menu key assignment")]
     public KeyCode MenuKey = KeyCode.Menu;
+    [Tooltip("Reset pose key assignment (for systems that do not support long press).")]
+    public KeyCode ResetKey = KeyCode.Backspace;
 
     public Action OnMenuPress;
     public Action OnMenuLongPress;
@@ -61,6 +63,11 @@ public class RemoteControl : MonoBehaviour {
                 // print("Up: Menu");
                 OnMenuPress?.Invoke();
             }
+        }
+
+        if (Input.GetKeyDown(ResetKey))
+        {
+            OnMenuLongPress?.Invoke();
         }
     }
 }
