@@ -43,7 +43,7 @@ namespace ARML.SceneManagement
         void Awake()
         {
             LoadLauncherSettings();
-            
+
             DirectoryInfo d = new DirectoryInfo(Application.dataPath);
 
             eventSystem = EventSystem.current;
@@ -67,7 +67,7 @@ namespace ARML.SceneManagement
             {
                 //Log file names
                 //print(file.Directory?.Name);
-                
+
                 // skip if relative path starts with _
                 string[] pathSplit = file.Directory.FullName
                     .Replace(applicationsDirectory, "")
@@ -82,6 +82,7 @@ namespace ARML.SceneManagement
                 {
                     continue;
                 }
+
                 //Add to list
                 applicationPathList.Add(file.Directory.Name);
 
@@ -120,9 +121,9 @@ namespace ARML.SceneManagement
 #endif
         }
 
-        void Start()
+        void OnApplicationFocus(bool focus)
         {
-            Arduino.ArduinoController.Instance.SetArduinoReady(true, true);
+            Arduino.ArduinoController.Instance.enabled = focus;
         }
 
         /// <summary>
@@ -148,6 +149,7 @@ namespace ARML.SceneManagement
         /// <param name="filePath">The file path of the application to launch.</param>
         void LoadApplication(string filePath)
         {
+            Arduino.ArduinoController.Instance.SetArduinoReady(false);
             if (File.Exists(filePath))
             {
                 MakeExecutable(filePath);
@@ -169,10 +171,18 @@ namespace ARML.SceneManagement
             settings = DataService.LoadData<SettingsConfiguration>(path, false);
         }
 
-        public void ToggleSettingsPanel()
+        private void UpdateSettingsUI()
+        {
+            TMP_Text zOffsetText = GameObject.Find("Z Offset/Value")?.GetComponent<TMP_Text>();
+            zOffsetText.text = settings.zOffset.ToString();
+        }
+
+    public void ToggleSettingsPanel()
         {
             scrollView.SetActive(!scrollView.activeInHierarchy);
             settingsPanel.SetActive(!settingsPanel.activeInHierarchy);
+            if (settingsPanel.activeInHierarchy)
+                UpdateSettingsUI();
         }
 
         public void SetLanguageSettings(int languageIndex)
@@ -192,6 +202,18 @@ namespace ARML.SceneManagement
             settings.displayScan = state;
             SaveSettings();
         }
+        
+        public void IncreaseZOffset()
+        {
+            settings.zOffset += 0.5f;
+            SaveSettings();
+        }
+        
+        public void DecreaseZOffset()
+        {
+            settings.zOffset -= 0.5f;
+            SaveSettings();
+        }
 
         private void SaveSettings()
         {
@@ -199,6 +221,7 @@ namespace ARML.SceneManagement
             {
                 print("Successfully saved settings data");
             }
+            UpdateSettingsUI();
         }
     }
 
@@ -209,5 +232,6 @@ namespace ARML.SceneManagement
         public bool displayScan;
         public int languageIndex;
         public List<VioParameter> vioInternalParameters;
+        public float zOffset;
     }
 }

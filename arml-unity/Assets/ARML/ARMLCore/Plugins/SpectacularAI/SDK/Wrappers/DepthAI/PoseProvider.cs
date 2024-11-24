@@ -1,5 +1,8 @@
+using System;
 using System.Drawing.Drawing2D;
 using ARML.Arduino;
+using ARML.Saving;
+using ARML.SceneManagement;
 using UnityEngine;
 
 namespace SpectacularAI.DepthAI
@@ -35,6 +38,9 @@ namespace SpectacularAI.DepthAI
 
         public Vector3 rotationOffset;
 
+        public bool ReadLauncherSettings;
+        private SettingsConfiguration launcherSettings;
+
         // Pose reset, pose = target->world * (pose_t0.inverse * pose_t1) = _origin * pose_t1
         private Matrix4x4 _origin = Matrix4x4.identity;
         private Pose _currentPose = Pose.FromMatrix(0, Matrix4x4.identity);
@@ -43,6 +49,18 @@ namespace SpectacularAI.DepthAI
         private TrackingStatus _prevTrackingStatus = TrackingStatus.INIT;
         private Vector3 _prevSmoothedPosition;
         private UnityEngine.Quaternion _prevSmoothedOrientation;
+        
+        private IDataService DataService = new JsonDataService();
+
+        private void OnEnable()
+        {
+            if (ReadLauncherSettings)
+            {
+                string path = $"{Application.persistentDataPath}/launcherSettings.json";
+                launcherSettings = DataService.LoadData<SettingsConfiguration>(path, false);
+                rotationOffset = new Vector3(0, 0, launcherSettings.zOffset);
+            }
+        }
 
         private void Start()
         {
