@@ -58,8 +58,6 @@ namespace ARML.Interaction
                 KeyboardControl();
 #endif
 
-            HandleAppExit();
-
             if (vectorText)
             {
                 vectorText.text = transform.position.ToString();
@@ -121,17 +119,6 @@ namespace ARML.Interaction
             transform.Rotate(rotationX * rotateSpeed * Time.deltaTime, rotationY * rotateSpeed * Time.deltaTime, 0);
             Vector3 currentRotation = transform.rotation.eulerAngles;
             transform.rotation = Quaternion.Euler(currentRotation.x, currentRotation.y, 0);
-        }
-
-        /// <summary>
-        /// Handles the application exit process.
-        /// </summary>
-        private void HandleAppExit()
-        {
-            if (Input.GetKeyDown(KeyCode.Escape))
-            {
-                Application.Quit();
-            }
         }
 
         /// <summary>

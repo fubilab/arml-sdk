@@ -86,7 +86,7 @@ namespace ARML.Saving
             }
             catch (Exception e)
             {
-                Debug.LogError($"Failed to load data due to: {e.Message} {e.StackTrace}");
+                Debug.LogError($"Failed to load data from: {path}");
                 throw e;
             }
         }

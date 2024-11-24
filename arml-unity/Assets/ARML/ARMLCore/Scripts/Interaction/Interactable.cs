@@ -218,7 +218,7 @@ namespace ARML.Interaction
             {
                 //Set Arduino colour
                 Color arduinoColor = Color.magenta;
-                ArduinoController.Instance?.SetArduinoColor(arduinoColor, 20f);
+                ArduinoController.Instance?.SetArduinoColor(arduinoColor);
             }
         }
 
@@ -247,7 +247,7 @@ namespace ARML.Interaction
 
             //Set Arduino colour
             if (ArduinoController.Instance.enabled)
-                ArduinoController.Instance.SetArduinoColor(Color.clear, 0f);
+                ArduinoController.Instance.SetArduinoDefault();
         }
 
         /// <summary>
@@ -273,7 +273,7 @@ namespace ARML.Interaction
                 iTimer.StartInteraction();
 
             if (interactionType == InteractionType.DWELL)
-                ArduinoController.Instance?.SetArduinoAnimation(Color.magenta, Color.yellow, 20, requiredInteractionTime, 1);
+                ArduinoController.Instance?.SetArduinoAnimation(Color.magenta, Color.yellow, requiredInteractionTime, 1);
         }
 
         /// <summary>
@@ -285,7 +285,7 @@ namespace ARML.Interaction
                 iTimer.CancelInteraction();
 
             if (interactionType == InteractionType.DWELL)
-                ArduinoController.Instance?.SetArduinoColor(Color.clear, 0f);
+                ArduinoController.Instance?.SetArduinoDefault();
         }
 
         /// <summary>

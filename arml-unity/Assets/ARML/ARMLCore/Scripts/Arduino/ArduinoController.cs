@@ -8,6 +8,8 @@ using System.Threading;
 using UnityEditor;
 using UnityEngine;
 using ARML.Voice;
+using System.Runtime.InteropServices;
+using UnityEngine.Serialization;
 
 namespace ARML.Arduino
 {
@@ -35,19 +37,45 @@ namespace ARML.Arduino
         [SerializeField, Tooltip("If true, all received messages will be printed in the console.")]
         private bool printAllMessages;
 
-        [Header("Color Settings")] [SerializeField, Tooltip("The solid color used for the Arduino display.")]
+        [Header("Color Settings")] [SerializeField, Tooltip("The solid color used for the Arduino display."),
+            OnValueChanged("onSolidColorChanged")]
         private Color solidColor;
+        private void onSolidColorChanged()
+        {
+            if (!Application.isPlaying) return;
+            if (!previewSolidColor) return;
+            SetArduinoColor(solidColor);
+        }
 
         [SerializeField, Tooltip("The progress color used during animations.")]
         private Color progressColor;
 
-        [Range(0, 254), SerializeField, Tooltip("Brightness level of the white channel.")]
-        private float whiteBrightness;
+        [Range(0, 254), SerializeField, Tooltip("Brightness level of the white channel."),
+             OnValueChanged("onSolidColorChanged")]
+        private int whiteBrightness;
 
-        [Range(0, 254), SerializeField, Tooltip("Overall brightness of the colors.")]
-        private float overallBrightness;
+        [SerializeField, Range(0, 254), Tooltip("Overall brightness of the colors."),
+            OnValueChanged("onOverallBrightnessChanged")]
+        private int overallBrightness;
+        private void onOverallBrightnessChanged()
+        {
+            SetArduinoBrightness(overallBrightness);
+        }
+        
 
         [SerializeField] private float fadeLength = 2f;
+
+        [SerializeField, Tooltip("Set solid color on button down.")]
+        private bool solidColorOnButtonClick;
+        
+        [SerializeField, Tooltip("Preview changes to the color and white level (play mode only)."),
+            OnValueChanged("onPreviewSolidColorChanged")]
+        private bool previewSolidColor;
+        private void onPreviewSolidColorChanged()
+        {
+            if (previewSolidColor)
+                SetArduinoColor(solidColor);
+        }
 
         [Header("Animation Settings")] [SerializeField, Tooltip("Enables or disables snake-style animation.")]
         private bool isSnakeAnimation = false;
@@ -79,6 +107,14 @@ namespace ARML.Arduino
          Tooltip("A reference to the ArduinoAnimationSO ScriptableObject containing the animation settings.")]
         private ArduinoAnimationSO animationSO;
 
+        [SerializeField,
+         Tooltip("Filename of ScriptableObject for animation.")]
+        private string animationName;
+
+        [SerializeField,
+         Tooltip("Path to save ScriptableObject files for animations.")]
+        private string animationFilePath;
+
         private List<string> messagesList = new List<string>();
         private int progressPixelIndex;
         private Coroutine sendMsgCoroutine;
@@ -87,6 +123,31 @@ namespace ARML.Arduino
         private bool readThreadRunning;
         private string prevMsg;
         private bool readyToSend;
+
+        /// <summary>
+        /// Quaternion values received from the sensor.
+        /// </summary>
+        private double qx, qy, qz, qw;
+
+        /// <summary>
+        /// The initial Euler angles of the camera.
+        /// </summary>
+        private Vector3 camStartEuler;
+
+        /// <summary>
+        /// The initial rotation value from the IMU.
+        /// </summary>
+        private Vector3 initialImuRotation = Vector3.zero;
+
+        /// <summary>
+        /// The current rotation value from the IMU.
+        /// </summary>
+        public Quaternion remappedImuRotation;
+
+        /// <summary>
+        /// The computed orientation euler angles from the IMU.
+        /// </summary>
+        public Vector3 bnoEulerAngles;
 
         #region Singleton
 
@@ -123,25 +184,43 @@ namespace ARML.Arduino
             };
         }
 
-        // Start is called before the first frame update
-        private void Start()
+        private bool buttonDown = false;
+        private void Update()
         {
-            readyToSend = true;
 
-            try
+            // trigger lights on click
+            if (solidColorOnButtonClick)
             {
-                serialPort.Open();
-                readThreadRunning = true;
-                readThread = new Thread(ReadSerialData);
-                readThread.Start();
-                Debug.Log("Arduino Thread running");
+                if (!buttonDown && Input.GetMouseButtonDown(0))
+                {
+                    buttonDown = true;
+                    SetArduinoColor(solidColor);
+                }
+                if (buttonDown && Input.GetMouseButtonUp(0))
+                {
+                    buttonDown = false;
+                    SetArduinoDefault();
+                }
+            }
 
-                sendMsgCoroutine = StartCoroutine(SendMessageToArduino());
-            }
-            catch (Exception e)
+            // handle BNO sensor interpretation
+            remappedImuRotation = new Quaternion(-(float)qy, -(float)qz, (float)qx, (float)qw);
+            if (initialImuRotation == Vector3.zero)
             {
-                Debug.LogWarning("Error opening serial port: " + e.Message);
+                initialImuRotation = new Quaternion(remappedImuRotation.x, remappedImuRotation.y, 0, remappedImuRotation.w).eulerAngles;
             }
+            Vector3 correctedImuRotation = remappedImuRotation.eulerAngles - initialImuRotation;
+            bnoEulerAngles = correctedImuRotation + camStartEuler;
+        }
+
+        public void ActivateBNO()
+        {
+            AddMessageToQueue("ARML_ENABLE_BNO");
+        }
+
+        public void ResetOrientation() 
+        {
+            initialImuRotation = remappedImuRotation.eulerAngles;
         }
 
         /// <summary>
@@ -149,7 +228,7 @@ namespace ARML.Arduino
         /// </summary>
         private void SendMicLoudness()
         {
-            SetArduinoBrightness(MicInput.Instance.MicLoudness);
+            SetArduinoBrightness((int)MicInput.Instance.MicLoudness);
         }
 
         /// <summary>
@@ -165,28 +244,40 @@ namespace ARML.Arduino
                     if (printAllMessages)
                         print(readData);
 
-                    // If last read is not last command, it was sent incorrectly, try again
+                    // read LED-related commands
                     if (readData.Contains("CMD"))
                     {
                         // Remove CMD: and line breaks
                         string splitData = readData.Substring(readData.IndexOf(":") + 2)
                             .Replace("\r\n", "").Replace("\r", "").Replace("\n", "");
 
+                        // If last read is not last command, it was sent incorrectly, try again
                         if (splitData != prevMsg)
                         {
-                            print($"ArduinoController: Sending again");
+                            // print($"ArduinoController: Sending again");
                             ForceSendMessageToArduino(prevMsg);
                         }
                         else
                         {
-                            print($"ArduinoController: Can send next message");
+                            // print($"ArduinoController: Can send next message");
                             readyToSend = true;
                         }
+                    }
+                    // try to parse quaternion values from BNO sensor
+                    else
+                    {
+                        string[] values = readData.Split(',');
+                        bool parsed = values.Length == 4
+                            && double.TryParse(values[0], out qx) 
+                            && double.TryParse(values[1], out qy)
+                            && double.TryParse(values[2], out qz) 
+                            && double.TryParse(values[3], out qw);
                     }
                 }
                 catch (Exception e)
                 {
-                    //Debug.LogError("Error reading serial data: " + e.Message);
+                    if (!e.Message.Contains("timed out"))
+                        Debug.LogError("Error reading serial data: " + e.Message);
                 }
             }
         }
@@ -201,7 +292,7 @@ namespace ARML.Arduino
             {
                 return;
             }
-
+            // print("[ARDUINO] adding msg to q: " + msg);
             messagesList.Add(msg);
         }
 
@@ -221,16 +312,12 @@ namespace ARML.Arduino
             string msg = messagesList.First();
             messagesList.RemoveAt(0);
 
-            if (msg == prevMsg)
-            {
-                sendMsgCoroutine = StartCoroutine(SendMessageToArduino());
-                yield break;
-            }
+            // print("[ARDUINO] processing msg in q: " + msg);
 
             if (serialPort.IsOpen)
             {
                 serialPort.WriteLine(msg);
-                print($"ArduinoController Sent message: {msg}");
+                //($"ArduinoController Sent message: {msg}");
                 prevMsg = msg;
                 readyToSend = false;
             }
@@ -247,34 +334,57 @@ namespace ARML.Arduino
             if (serialPort.IsOpen)
             {
                 serialPort.WriteLine(msg);
-                print($"ArduinoController Sent message: {msg}");
+                // print($"ArduinoController Sent message: {msg}");
             }
         }
 
-        private void OnDestroy()
+        private void OnEnable()
         {
-            whiteBrightness = 0f;
-            overallBrightness = 0f;
-            SetArduinoColor(Color.clear, 0f, true);
-            readThreadRunning = false;
+            readyToSend = true;
 
-            if (serialPort != null && serialPort.IsOpen)
+            try
             {
-                serialPort.Close();
+                serialPort.Open();
+                readThreadRunning = true;
+                readThread = new Thread(ReadSerialData);
+                readThread.Start();
+                // Debug.Log("Arduino Thread running");
+
+                sendMsgCoroutine = StartCoroutine(SendMessageToArduino());
+
+                SetArduinoBrightness(overallBrightness);
+                SetArduinoReady(true);
+                SetArduinoDefault();
             }
-
-            if (readThread != null && readThread.IsAlive)
+            catch (Exception e)
             {
-                readThread.Join();
+                Debug.LogWarning("Error opening serial port: " + e.Message);
             }
         }
 
-        private void OnValidate()
+        private void OnDisable()
         {
-            if (!Application.isPlaying) return;
+            try
+            {
+                // whiteBrightness = 0f;
+                // overallBrightness = 0f;
+                // SetArduinoColor(Color.clear, 0f, true);
+                readThreadRunning = false;
 
-            if (serialPort != null && serialPort.IsOpen)
-                AddMessageToQueue(GetSolidColorCommand(solidColor));
+                if (serialPort != null && serialPort.IsOpen)
+                {
+                    serialPort.Close();
+                }
+
+                if (readThread != null && readThread.IsAlive)
+                {
+                    readThread.Join();
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning("Error closing serial port: " + e.Message);
+            }
         }
 
         /// <summary>
@@ -288,8 +398,22 @@ namespace ARML.Arduino
                    $"G{(solidColor.g * 255):F0}" +
                    $"B{(solidColor.b * 255):F0}" +
                    $"W{whiteBrightness:F0}" +
-                   $"A{overallBrightness:F0}" +
+                   $"A{(solidColor.a * 255):F0}" +
                    "E"; // E used to set end of command, used to prevent wrong colors by ignoring anything after this
+        }
+
+        /// <summary>
+        /// Sends message to Arduino to transition between loading animation and default lights.
+        /// </summary>
+        /// <param name="ready">Ready state to send to the Arduino</param>
+        /// <param name="force">If true, forces the command to be sent immediately, ignoring the queue.</param>
+        public void SetArduinoReady(bool ready, bool force = false)
+        {
+            string msg = ready ? "ARML_READY" : "ARML_LOADING";
+            if (!force)
+                AddMessageToQueue(msg);
+            else
+                ForceSendMessageToArduino(msg);
         }
 
         /// <summary>
@@ -298,13 +422,25 @@ namespace ARML.Arduino
         /// <param name="color">The color to set.</param>
         /// <param name="brightness">The brightness level.</param>
         /// <param name="force">If true, forces the command to be sent immediately, ignoring the queue.</param>
-        public void SetArduinoColor(Color color, float brightness, bool force = false)
+        public void SetArduinoColor(Color color, bool force = false)
         {
-            overallBrightness = brightness;
+            solidColor = color;
             if (!force)
                 AddMessageToQueue(GetSolidColorCommand(color));
             else
                 ForceSendMessageToArduino(GetSolidColorCommand(color));
+        }
+
+        /// <summary>
+        /// Sets the Arduino to display default lights.
+        /// </summary>
+        /// <param name="force">If true, forces the command to be sent immediately, ignoring the queue.</param>
+        public void SetArduinoDefault(bool force = false)
+        {
+            if (!force)
+                AddMessageToQueue("ARML_DEFAULT");
+            else
+                ForceSendMessageToArduino("ARML_DEFAULT");
         }
 
         /// <summary>
@@ -315,15 +451,15 @@ namespace ARML.Arduino
         /// <param name="duration">Duration of the fade in seconds.</param>
         public void SetArduinoFade(Color from, Color to, float duration)
         {
-            SetArduinoColor(from, overallBrightness);
+            SetArduinoColor(from);
             int fadeSteps = Mathf.RoundToInt(duration * 10f - 2f);
             for (int i = 0; i < fadeSteps; i++)
             {
                 float lerpValue = (1f / fadeSteps * (i + 1f));
                 Color lerpColor = Color.Lerp(from, to, lerpValue);
-                SetArduinoColor(lerpColor, overallBrightness);
+                SetArduinoColor(lerpColor);
             }
-            SetArduinoColor(to, overallBrightness);
+            SetArduinoColor(to);
         }
 
         /// <summary>
@@ -336,13 +472,9 @@ namespace ARML.Arduino
         /// <param name="length">The length of the animation.</param>
         /// <param name="startPixelIndex">The starting pixel index.</param>
         /// <param name="endPixelIndex">The ending pixel index.</param>
-        public void SetArduinoAnimation(Color bgColor, Color aColor, float brightness = -1, float rate = -1,
+        public void SetArduinoAnimation(Color bgColor, Color aColor, float rate = -1,
             int length = -1, int startPixelIndex = -1, int endPixelIndex = -1)
         {
-            //Default value checks
-            if (brightness == -1)
-                brightness = overallBrightness;
-
             if (rate == -1)
                 rate = animationTime;
 
@@ -355,10 +487,8 @@ namespace ARML.Arduino
             if (endPixelIndex == -1)
                 endPixelIndex = totalPixelsInStrip;
 
-            if (endPixelIndex == 0)
+            if (endPixelIndex == -1)
                 endPixelIndex = animationEndPixelIndex;
-
-            overallBrightness = brightness;
 
             string animMode = isSnakeAnimation ? "Anim2" : "Anim1";
 
@@ -379,17 +509,23 @@ namespace ARML.Arduino
         /// Sets the brightness of the Arduino display.
         /// </summary>
         /// <param name="brightness">The brightness level.</param>
-        public void SetArduinoBrightness(float brightness)
+        /// <param name="force">If true, forces the command to be sent immediately, ignoring the queue.</param>
+        public void SetArduinoBrightness(int brightness, bool force = false)
         {
             overallBrightness = brightness;
-            AddMessageToQueue(GetSolidColorCommand(solidColor));
+            // print("[ARDUINO] set brightness: " + overallBrightness);
+            string cmd = $"ARML_B{overallBrightness}";
+            if (!force) 
+                AddMessageToQueue(cmd);
+            else
+                ForceSendMessageToArduino(cmd);
         }
 
 #if UNITY_EDITOR
         [Button]
         private void TestSolidColor()
         {
-            SetArduinoColor(solidColor, overallBrightness);
+            SetArduinoColor(solidColor);
         }
 
         [Button]
@@ -401,7 +537,7 @@ namespace ARML.Arduino
         [Button]
         private void TestAnimation()
         {
-            SetArduinoAnimation(solidColor, progressColor, overallBrightness, animationTime,
+            SetArduinoAnimation(solidColor, progressColor, animationTime,
                 animationPixelLength, animationStartPixelIndex, animationEndPixelIndex);
         }
 
@@ -425,12 +561,12 @@ namespace ARML.Arduino
 
             animationSO = asset;
 
-            AssetDatabase.CreateAsset(asset, "Assets/Scripts/Arduino/Animations/NewArduinoAnimation.asset");
+            AssetDatabase.CreateAsset(asset, animationFilePath + animationName + ".asset");
             AssetDatabase.SaveAssets();
 
             EditorUtility.FocusProjectWindow();
 
-            Selection.activeObject = asset;
+            //Selection.activeObject = asset;
         }
 
         [Button]

@@ -37,7 +37,6 @@ namespace ARML.SceneManagement
         }
         #endregion
 
-        public SceneField gameSceneToLoad;
         public bool loadOnStart;
         public bool loadLauncherSettings;
 
@@ -57,6 +56,13 @@ namespace ARML.SceneManagement
         {
             if (loadLauncherSettings)
                 LoadLauncherSettings();
+#if !UNITY_EDITOR            
+            if (loadOnStart)
+            {
+                debugCanvasController.ToggleAllDebug();
+                LoadGame();
+            }
+#endif
         }
 
         private void SetAprilTagsPath()
@@ -87,13 +93,23 @@ namespace ARML.SceneManagement
             {
                 LoadGame();
             }
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                Application.Quit();
+            }
+        }
+
+        public void QuitGame()
+        {
+            Application.Quit();
         }
 
         public void LoadGame()
         {
+            print("LoadGame");
             if (!gameAlreadyLoaded)
             {
-                StartCoroutine(SceneController.Instance.LoadSceneByName(gameSceneToLoad));
+                StartCoroutine(SceneController.Instance.LoadSceneByIndex(1));
                 gameAlreadyLoaded = true;
             }
         }

@@ -2,12 +2,15 @@ using ARML.Saving;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Collections.Generic;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using SpectacularAI;
+using System;
+using System.Linq;
+using System.Threading;
 
 namespace ARML.SceneManagement
 {
@@ -41,22 +44,21 @@ namespace ARML.SceneManagement
         {
             LoadLauncherSettings();
 
+            DirectoryInfo d = new DirectoryInfo(Application.dataPath);
+
             eventSystem = EventSystem.current;
+            applicationsDirectory = d.Parent.Parent.FullName;
+            fileFormatExtension = ".x86_64";
 
 #if UNITY_EDITOR_WIN
-            applicationsDirectory = $"{System.IO.Directory.GetCurrentDirectory()}/_build/";
+            applicationsDirectory = $"{System.IO.Directory.GetCurrentDirectory()}\\_build\\";
             fileFormatExtension = ".exe";
-#else
-            applicationsDirectory = "/home/fubintlab/Desktop/unitybuilds/";
-            fileFormatExtension = ".x86_64";
 #endif
-
-        
 
             if (!Directory.Exists(applicationsDirectory))
                 return;
 
-            DirectoryInfo d = new DirectoryInfo(applicationsDirectory);
+            d = new DirectoryInfo(applicationsDirectory);
 
 
             FileInfo[] files = d.GetFiles($"*{fileFormatExtension}", SearchOption.AllDirectories);
@@ -64,10 +66,25 @@ namespace ARML.SceneManagement
             foreach (var file in d.GetFiles($"*{fileFormatExtension}", SearchOption.AllDirectories))
             {
                 //Log file names
-                print(file);
+                //print(file.Directory?.Name);
+
+                // skip if relative path starts with _
+                string[] pathSplit = file.Directory.FullName
+                    .Replace(applicationsDirectory, "")
+                    .Split(Path.DirectorySeparatorChar);
+                if (pathSplit.Any(dirname => dirname.StartsWith("_")))
+                {
+                    continue;
+                }
+
+                // skip if already in list
+                if (applicationPathList.Contains(file.Directory.Name))
+                {
+                    continue;
+                }
 
                 //Add to list
-                applicationPathList.Add(file.Name);
+                applicationPathList.Add(file.Directory.Name);
 
                 //Remove format in string and display in container
                 GameObject container = Instantiate(appLaunchContainerPrefab, content.transform);
@@ -104,6 +121,11 @@ namespace ARML.SceneManagement
 #endif
         }
 
+        void OnApplicationFocus(bool focus)
+        {
+            Arduino.ArduinoController.Instance.enabled = focus;
+        }
+
         /// <summary>
         /// Makes a file at the specified path executable.
         /// </summary>
@@ -127,6 +149,7 @@ namespace ARML.SceneManagement
         /// <param name="filePath">The file path of the application to launch.</param>
         void LoadApplication(string filePath)
         {
+            Arduino.ArduinoController.Instance.SetArduinoReady(false);
             if (File.Exists(filePath))
             {
                 MakeExecutable(filePath);
@@ -148,10 +171,18 @@ namespace ARML.SceneManagement
             settings = DataService.LoadData<SettingsConfiguration>(path, false);
         }
 
-        public void ToggleSettingsPanel()
+        private void UpdateSettingsUI()
+        {
+            TMP_Text zOffsetText = GameObject.Find("Z Offset/Value")?.GetComponent<TMP_Text>();
+            zOffsetText.text = settings.zOffset.ToString();
+        }
+
+    public void ToggleSettingsPanel()
         {
             scrollView.SetActive(!scrollView.activeInHierarchy);
             settingsPanel.SetActive(!settingsPanel.activeInHierarchy);
+            if (settingsPanel.activeInHierarchy)
+                UpdateSettingsUI();
         }
 
         public void SetLanguageSettings(int languageIndex)
@@ -171,6 +202,18 @@ namespace ARML.SceneManagement
             settings.displayScan = state;
             SaveSettings();
         }
+        
+        public void IncreaseZOffset()
+        {
+            settings.zOffset += 0.5f;
+            SaveSettings();
+        }
+        
+        public void DecreaseZOffset()
+        {
+            settings.zOffset -= 0.5f;
+            SaveSettings();
+        }
 
         private void SaveSettings()
         {
@@ -178,6 +221,7 @@ namespace ARML.SceneManagement
             {
                 print("Successfully saved settings data");
             }
+            UpdateSettingsUI();
         }
     }
 
@@ -188,5 +232,6 @@ namespace ARML.SceneManagement
         public bool displayScan;
         public int languageIndex;
         public List<VioParameter> vioInternalParameters;
+        public float zOffset;
     }
 }

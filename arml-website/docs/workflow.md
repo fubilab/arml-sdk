@@ -16,7 +16,7 @@ The SDK includes a Unity project that contains all the components and libraries 
 *Screenshot of the Build Settings window configured for building the Garum Game example scene to the ARML.*
 
 When ready to build the application for the ARML, follow these configuration steps in the Build Settings window:
-1. In the “Scenes in Build” list, make sure Logic Scene is checked, as well as the game scene you want to run. Make sure the game scene checked here is also set as the “Load on start” property in the GameController component in the Logic Scene. See SDK Configuration section for details.
+1. In the “Scenes in Build” list, make sure Logic Scene is checked, as well as the game scene you want to run. Make sure the Logic Scene is first (index 0) and the game scene is second (index 1).
 2. Choose platform “Windows, Mac, Linux” and choose Linux as the “Target Platform.” Use the “Build” button to build the application to a local directory. Choose a name for the “Save as” value that clearly identifies your application, because this is the name that will show in the ARML launcher.
 
 ## 4. Copy application files to ARML device

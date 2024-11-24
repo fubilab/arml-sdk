@@ -1,5 +1,6 @@
 using FishNet;
 using System.Collections;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -17,6 +18,7 @@ namespace ARML.SceneManagement
         [SerializeField] private float fadeDuration;
 
         #region Singleton
+
         public static SceneController Instance { get; private set; }
 
         private void Singleton()
@@ -33,6 +35,7 @@ namespace ARML.SceneManagement
                 DontDestroyOnLoad(transform.parent);
             }
         }
+
         #endregion
 
         private void Awake()
@@ -121,8 +124,22 @@ namespace ARML.SceneManagement
             InstanceFinder.SceneManager.LoadGlobalScenes(new FishNet.Managing.Scened.SceneLoadData(scene));
         }
 
-
         /// <summary>
+        /// Loads a specific scene by its build index with an additive load mode.
+        /// Includes fade in and fade out effects if enabled.
+        /// </summary>
+        /// <param name="index">The build index of the scene to load.</param>
+        public IEnumerator LoadSceneByIndex(int index)
+        {
+            string scenePath = SceneUtility.GetScenePathByBuildIndex(index);
+            print($"scenePath: {scenePath}");
+            string sceneName = scenePath.Split(System.IO.Path.DirectorySeparatorChar).Last().Replace(".unity", "");
+            print($"sceneName {sceneName}");
+            return LoadSceneByName(sceneName);
+        }
+
+
+    /// <summary>
         /// Logic to run after scene has finished loading
         /// </summary>
         public void PostLoadingScene(FishNet.Managing.Scened.SceneLoadEndEventArgs args)
