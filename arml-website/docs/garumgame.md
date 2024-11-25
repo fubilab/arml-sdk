@@ -2,7 +2,7 @@
 
 The Garum Game is designed to showcase a wider range of interactions with the ARML. It mostly focuses on the use of Grabbables and PlacementTargets, along with CollisionChecks. When the game starts, the player is introduced to a Garum Cook character that welcomes the player and offers information about the Garum recipe that is going to be done. First he encourages the player to grab a knife and cut the fish. Then to grab the Spoon, scoop salt from a bowl, and pour it over the bowl where the sauce is being cooked. After that, to grab some bay leaves. Finally, the player is instructed to grab a stirring stick and move it within the cooking sauce for a bit. 
 
-Open `Scenes > GarumGame`.
+Go to `ARML -> Welcome Window` and click "Open GarumGame scene`.
 
 ![](images/Pasted%20image%2020240123163632.png)  
 *Screenshot from Unity editor showing the elements of the GarumGame example.*

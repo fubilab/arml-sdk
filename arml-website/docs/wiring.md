@@ -27,9 +27,9 @@ C = color(s)
 | ac5.p | 28AWG | 90  | ![](images/color-red.jpg) | Audio amp power, positive |
 | ac5.g | 28AWG | 90  | ![](images/color-white.jpg) | Audio amp power, ground |
 | vc1 | USB 3.1 SuperSpeed | 500 |     | Cable: USB C to USB A SuperSpeed 3.1 Connects camera to mainboard 90 degree male both ends, 50cm length <br>[Amazon](https://www.amazon.es/dp/B09F38HMZS) |
-| vc2 | HDMI | 100 |     | CY CN-018-LE HDMI Type A Male Connector 90 degree angle (up-left) <br>[Amazon](https://www.amazon.es/dp/B0894T9534) [Newegg](https://www.newegg.com/p/0ZF-010R-000K5) |
-|     |     |     |     | CY CN-017-UP Mini HDMI Type C Male 90 Degree angle (up) <br>[Amazon](https://www.amazon.es/dp/B01M8HDX8Z) [Newegg](https://www.newegg.com/p/183-0071-000B8) |
-|     |     |     |     | Cable: 10 cm FFC Connects HDMI from mainboard to projector (using CY plugs) <br>[Amazon](https://www.amazon.es/dp/B09HS9TVFN) |
+| vc2 | HDMI | 100 |     | CYFPV CN-018-LE HDMI Type A Male Connector 90 degree angle (up-left) <br>[Amazon](https://www.amazon.es/dp/B0894T9534) [Newegg](https://www.newegg.com/p/0ZF-010R-000K5) |
+|     |     |     |     | CYFPV CN-017-UP Mini HDMI Type C Male 90 Degree angle (up) <br>[Amazon](https://www.amazon.es/dp/B01M8HDX8Z) [Newegg](https://www.newegg.com/p/183-0071-000B8) |
+|     |     |     |     | CYFPV CN-019-0.2M Flat Cable 0.5mm Pitch 20Pin 10cm <br>[Amazon](https://www.amazon.es/dp/B01M0ANUUF) |
 | vc3.p/g/d | 24AWG | 380 | ![](images/color-red.jpg)![](images/color-white.jpg)![](images/color-green.jpg) | LED strip to Arduino, positive/negative/data |
 | vc4.p/g/d | 24AWG | 160 | ![](images/color-red.jpg)![](images/color-white.jpg)![](images/color-green.jpg) | LED strip chaining, positive/negative/data Wires split in the middle, joined with Dupont connectors |
 | vc5.p/g/d | 24AWG | 200 | ![](images/color-red.jpg)![](images/color-white.jpg)![](images/color-green.jpg) | LED strip chaining, positive/negative/data |
@@ -57,5 +57,5 @@ C = color(s)
 | cx1 | T-Tap Connector |     |     | Scotch Lock connector 18-22 AWG <br>[Amazon](https://www.amazon.es/dp/B07G9HBYGH) |
 | cx2 | T-Tap Connector |     |     | UG Wire Connector 19-26 AWG <br>[Amazon](https://www.amazon.es/dp/B0CPPKFJVG) |
 | cx3 | JST Connector |     |     | JST PH 2.0 4-pin female IC plugs <br>[Amazon](https://www.amazon.es/gp/product/B0C61SJFCC) |
-| cx4 | Molex connector |     |     | Molex 2-pin quick-release connectors <br>[Amazon](https://www.amazon.es/dp/B082ZLMRKV) [AliExpress](https://www.aliexpress.com/item/1005005429021426.html) |
+| cx4 | Tamiya connector |     |     | Tamiya compatible 2-pin 13.5mm 10A connector <br>[Amazon](https://www.amazon.es/dp/B07ND8SPBH) |
 | cx5 | Spade connector |     |     | Spade wire connectors, 10A 16-22 AWG (red) <br>[Amazon](https://www.amazon.es/gp/product/B07DXFC9TJ) |

@@ -26,17 +26,22 @@ The ARML Documentation Website is build using [docfx](https://github.com/dotnet/
    npm install
    ``` 
 
-5. Build docfx.  
-   From the `arml-website` directory, run:
-   
-   ```bash
-   docfx build
-   ``` 
+## Generating API docs
 
+Before viewing or editing the docs, you must build the local website. 
+
+From the `arml-website` directory, run:
+
+```bash
+docfx metadata
+docfx build
+```
+
+You should re-run this whenever you make changes to the Unity project source that might affect the documention.
 
 ## Editing documentation
 
-Once you have installed dependencies and done the initial `docfx build` described above, you can launch the docs site locally.
+Once you have installed dependencies and generated the website, you can launch the docs site locally.
 
 From the `arml-website` directory, run:
 
@@ -49,19 +54,6 @@ Open a browser and load: http://localhost:8080
 - When you make changes to files in the [/docs](./docs/) directory, the site will be rebuilt automatically. You will have to refresh the browser to see updates.
 
 - Images must go in [/docs/images](./docs/images/) to be served
-
-## Generating API docs
-
-The [API docs](http://localhost:8080/api/) will not be found until you generate them. 
-
-You can use docfx to generate them from the Unity project by running:
-
-```bash
-docfx metadata
-docfx build
-```
-
-You should re-run this whenever you make changes to the Unity project source that might affect the documention.
 
 
 <hr size="1">

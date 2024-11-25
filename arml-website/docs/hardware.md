@@ -8,6 +8,7 @@ If you are interested in obtaining an ARML hardware developer kit, please contac
 - [Component Reference](components.md)
 - [Wiring Reference](wiring.md)
 - [Power Reference](power.md) 
+- [Peripherals](peripherals.md) 
 
 ### Hardware Summary
 

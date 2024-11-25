@@ -3,7 +3,7 @@ To help you understand how all the components of the ARML SDK work together, let
 
 The Wall Game showcases simple interaction with the ARML, stencil effects, and the use of the Dialogue and Timeline systems. The player will see a wall comprised of bricks of 2 different colours. The ones with a lighter shade are interactable and can be pushed inward to reveal the environment behind (based on the location around the ancient Barcino city). Once all the bricks have been removed, a roman centurion character climbs up a ladder and starts a conversation with the player, eventually leading up to a question of whether the player will help him fix the wall or not. Regardless of the answer, the player can then interact with the fallen bricks on the floor to have them fly back to their original position.
 
-Open `Scenes > WallGame`.
+Go to `ARML -> Welcome Window` and click "Open WallGame scene`.
 
 ![](images/Pasted%20image%2020240119121346.png)  
 *Screenshot of WallGame hierarchy, scene view and camera view*

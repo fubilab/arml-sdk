@@ -18,6 +18,8 @@
     href: launcher.md
   - name: Configuration
     href: configuration.md
+  - name: Operating System
+    href: os.md
 - name: ARML Hardware
   href: hardware.md
   expanded: true
@@ -28,6 +30,8 @@
     href: wiring.md
   - name: Power Reference
     href: power.md
+  - name: Peripherals
+    href: peripherals.md
 - name: Examples
   expanded: true
   items:
