@@ -12,11 +12,11 @@ There is some basic configuration necessary to prepare the OS on the ARML for op
 
     ```bash
     amixer set 'Auto-Mute Mode' Disabled
-    amixer set Speaker 100% toggle
+    amixer set Speaker 50% toggle
     sudo alsactl store
     ```
     
-2. Run `pavucontrol` and in the **Configuration** tab, set **Built-in Audio** profile to **Analog Stereo** and set all other profiles to **Off.**
+2. Run `pavucontrol` and in the **Configuration** tab, set **Built-in Audio** profile to **Analog Stereo Duplex** and set all other profiles to **Off.**
 
 3. Run `sudo pico /etc/pulse/default.pa` and add the following lines at the bottom: 
     
@@ -31,6 +31,9 @@ There is some basic configuration necessary to prepare the OS on the ARML for op
 Run the following:
 ```bash
 gsettings set com.ubuntu.update-notifier no-show-notifications true
+sudo apt remove update-notifier update-notifier-common
+sudo systemctl stop snapd
+sudo systemctl disable snapd
 ```
 
 ### Create build directory and add network share
