@@ -4,12 +4,6 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes:
-  - enabled: 1
-    path: Assets/ARML/ARMLCore/Scenes/Logic.unity
-    guid: dfacc51e72fdf104dbac5b5ecffd54ce
-  - enabled: 1
-    path: Assets/ARML/Examples/GarumGame/Scenes/GarumGameLab.unity
-    guid: cef75f7513624e7479f5aaa0c941f251
+  m_Scenes: []
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0
