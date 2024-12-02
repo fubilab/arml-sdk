@@ -17,3 +17,15 @@ If you are interested in obtaining an ARML hardware developer kit, please contac
 
 In addition to a powerful, 600 ANSI lumen projector, the ARML contains a camera/IMU module, a mainboard with a powerful processor and GPU, stereo speakers, a microphone, and an embedded cooling system. It is powered by a rechargeable, swappable lithium-ion battery that allows 90 minutes to 2 hours of play time, depending on the system load. The system also integrates an Arduino-compatible microcontroller for marshalling input from a button on the device's handle and controlling an LED array mounted in the front of the ARML.
 
+### Physical Specifications
+
+| Attribute                                                         | Value                 |
+|-------------------------------------------------------------------|-----------------------|
+| Width (front)                                                     | 195mm                 |
+| Height (front)                                                    | 115mm                 |
+| Width (back)                                                      | 150mm                 |
+| Height (back)                                                     | 85mm                  |
+| Length                                                            | 330mm                 |
+| Weight (without battery)                                          | 1.6kg                 |
+| Weight (with [10Ah battery](./power.md#battery-specifications))   | 1.9kg                 |
+| Autonomy (with [10Ah battery](./power.md#battery-specifications)) | 2 hours               |
