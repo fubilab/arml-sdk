@@ -31,3 +31,7 @@
 .navbar #navbar form.icons {
   order: 45;
 }
+
+.footnote-back-ref {
+  display: none;
+}

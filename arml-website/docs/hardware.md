@@ -21,11 +21,27 @@ In addition to a powerful, 600 ANSI lumen projector, the ARML contains a camera/
 
 | Attribute                                                         | Value                 |
 |-------------------------------------------------------------------|-----------------------|
-| Width (front)                                                     | 195mm                 |
-| Height (front)                                                    | 115mm                 |
-| Width (back)                                                      | 150mm                 |
-| Height (back)                                                     | 85mm                  |
+| Max Width (front)                                                 | 200mm                 |
+| Height (front)                                                    | 110mm                 |
+| Width (back)                                                      | 145mm                 |
+| Height (back)                                                     | 80mm                  |
+| Max Height (with handle)                                          | 150mm                 |
 | Length                                                            | 330mm                 |
 | Weight (without battery)                                          | 1.6kg                 |
-| Weight (with [10Ah battery](./power.md#battery-specifications))   | 1.9kg                 |
-| Autonomy (with [10Ah battery](./power.md#battery-specifications)) | 2 hours               |
+| Weight (with 10Ah battery[^1])                                   | 1.9kg                 |
+
+### Electrical Specifications
+
+| Attribute                                                         | Value                 |
+|-------------------------------------------------------------------|-----------------------|
+| Min input voltage                                                 | 11VDC                 |
+| Max input voltage                                                 | 13VDC                 |
+| Current (typical)                                                 | 8A                    |
+| Current (max)                                                     | 10A                   |
+| Autonomy (with 10Ah battery[^1])                                  | 1.5 - 2 hours         |
+| Battery charge time (10Ah battery, 2A charger[^2])                | ~6 hours              |
+| Battery charge time (10Ah battery, 5A charger[^3])                | ~2 hours              |
+
+[^1]: [10Ah battery](./power.md#battery-specifications)
+[^2]: [2A battery charger](./peripherals.md#accessories)
+[^3]: [5A battery charger](./peripherals.md#accessories)

@@ -47,6 +47,11 @@
       "_enableNewTab": true,
       "_appLogoPath": "public/ARML-logo-circular.png",
       "pdf": false
+    },
+    "markdownEngineProperties": {
+      "markdigExtensions": [
+        "FootNotes"
+      ]
     }
   }
 }
