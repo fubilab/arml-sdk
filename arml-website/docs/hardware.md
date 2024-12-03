@@ -28,19 +28,22 @@ In addition to a powerful, 600 ANSI lumen projector, the ARML contains a camera/
 | Max Height (with handle)                                          | 150mm                 |
 | Length                                                            | 330mm                 |
 | Weight (without battery)                                          | 1.6kg                 |
-| Weight (with 10Ah battery[^1])                                   | 1.9kg                 |
+| Weight (with 10Ah battery[^1])                                    | 1.9kg                 |
 
 ### Electrical Specifications
+
+These specifications apply when powering the ARML via the connector in the battery compartment. For information on powering the device via the USB-C port on the back, see [Using USB-C power](./power.md#using-usb-c-power).
 
 | Attribute                                                         | Value                 |
 |-------------------------------------------------------------------|-----------------------|
 | Min input voltage                                                 | 11VDC                 |
 | Max input voltage                                                 | 13VDC                 |
+| Current (min)                                                     | 5A                    |
 | Current (typical)                                                 | 8A                    |
 | Current (max)                                                     | 10A                   |
 | Autonomy (with 10Ah battery[^1])                                  | 1.5 - 2 hours         |
-| Battery charge time (10Ah battery, 2A charger[^2])                | ~6 hours              |
-| Battery charge time (10Ah battery, 5A charger[^3])                | ~2 hours              |
+| Battery charge time (10Ah battery, 2A charger[^2])                | 12 hours              |
+| Battery charge time (10Ah battery, 5A charger[^3])                | ~3 hours              |
 
 [^1]: [10Ah battery](./power.md#battery-specifications)
 [^2]: [2A battery charger](./peripherals.md#accessories)
