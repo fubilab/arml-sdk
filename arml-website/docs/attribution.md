@@ -19,11 +19,14 @@ The following tables list the source of 3rd party assets, packages and plugins u
 | Plugin | License | Author | Used in | Commercial alternative |
 |:---|:---|:---|:---|:---|  
 | [NaughtyAttributes](https://github.com/dbrizov/NaughtyAttributes) | MIT[^4] | [Denis Rizov](https://github.com/dbrizov) | ARMLCore | |
+| [Spectacular AI SDK](https://github.com/SpectacularAI/sdk) | [Free for non-commercial use](https://github.com/SpectacularAI/sdk?tab=readme-ov-file#license) | [Spectacular AI](https://github.com/SpectacularAI) | ARMLCore | [Contact Spectacular AI](https://www.spectacularai.com/#contact) |
+| [Spectacular AI Unity wrapper](https://github.com/SpectacularAI/unity-wrapper) | Apache[^5] | [Spectacular AI](https://github.com/SpectacularAI) | ARMLCore | |
 | [UnityScreenLogger](https://github.com/gportelli/UnityScreenLogger) | MIT[^4] | [Giuseppe Portelli](https://github.com/gportelli) | ARMLCore | |
-| [UltEvents](https://github.com/KybernetikGames/ultevents) | Unity Asset Store EULA[^5] | [Kailas Dierk](https://github.com/KybernetikGames) | ARMLCore | |
+| [UltEvents](https://github.com/KybernetikGames/ultevents) | Unity Asset Store EULA[^6] | [Kailas Dierk](https://github.com/KybernetikGames) | ARMLCore | |
 
 [^1]: [CC Attribution Non-Commercial International 4.0](https://creativecommons.org/licenses/by-nc/)
 [^2]: [CC Attribution International 4.0](https://creativecommons.org/licenses/by/)
 [^3]: [Royalty Free No AI](https://www.cgtrader.com/pages/terms-and-conditions#royalty-free-license)
 [^4]: [MIT License](https://opensource.org/license/mit)
-[^5]: [Standard Unity Asset Store EULA](https://unity.com/legal/as-terms)
+[^5]: [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0)
+[^6]: [Standard Unity Asset Store EULA](https://unity.com/legal/as-terms)
