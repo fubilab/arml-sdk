@@ -24,8 +24,8 @@ The following tables list the source of 3rd party assets, packages and plugins u
 | [UnityScreenLogger](https://github.com/gportelli/UnityScreenLogger) | MIT[^4] | [Giuseppe Portelli](https://github.com/gportelli) | ARMLCore | |
 | [UltEvents](https://github.com/KybernetikGames/ultevents) | Unity Asset Store EULA[^6] | [Kailas Dierk](https://github.com/KybernetikGames) | ARMLCore | |
 
-[^1]: [CC Attribution Non-Commercial International 4.0](https://creativecommons.org/licenses/by-nc/)
-[^2]: [CC Attribution International 4.0](https://creativecommons.org/licenses/by/)
+[^1]: [CC Attribution Non-Commercial International 4.0](https://creativecommons.org/licenses/by-nc/4.0/legalcode.en)
+[^2]: [CC Attribution International 4.0](https://creativecommons.org/licenses/by/4.0/legalcode.en)
 [^3]: [Royalty Free No AI](https://www.cgtrader.com/pages/terms-and-conditions#royalty-free-license)
 [^4]: [MIT License](https://opensource.org/license/mit)
 [^5]: [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0)
