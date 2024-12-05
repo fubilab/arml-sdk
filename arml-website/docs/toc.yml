@@ -20,6 +20,8 @@
     href: configuration.md
   - name: Operating System
     href: os.md
+  - name: Attribution
+    href: attribution.md
 - name: ARML Hardware
   href: hardware.md
   expanded: true

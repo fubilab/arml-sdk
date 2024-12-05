@@ -3,6 +3,9 @@ To help you understand how all the components of the ARML SDK work together, let
 
 The Wall Game showcases simple interaction with the ARML, stencil effects, and the use of the Dialogue and Timeline systems. The player will see a wall comprised of bricks of 2 different colours. The ones with a lighter shade are interactable and can be pushed inward to reveal the environment behind (based on the location around the ancient Barcino city). Once all the bricks have been removed, a roman centurion character climbs up a ladder and starts a conversation with the player, eventually leading up to a question of whether the player will help him fix the wall or not. Regardless of the answer, the player can then interact with the fallen bricks on the floor to have them fly back to their original position.
 
+> [!NOTE]
+> The screenshots are from an internal demonstrator version that contain some commercial assets that could not be included in the SDK. The commercial alternatives are noted and linked on the [Attribution](./attribution.md) page.
+
 Go to `ARML -> Welcome Window` and click "Open WallGame scene`.
 
 ![](images/Pasted%20image%2020240119121346.png)  
@@ -30,20 +33,6 @@ As a Content scene, it contains parent GameObjects holding both visual and inter
 Visually, the scene consists of a terrain made based on height-map information of Barcelona, with a series of roman-themed assets portraying farms, crops, trees, a road, and a villa in the distance. All of these assets are seen through a Wall made of bricks. Some of these bricks can be interacted with to be pushed outward, in order to progressively reveal the environment behind.  
 
 Apart from the Wall itself, all the visual environments are placed on a "Stencil" layer that determines that they will only be rendered when seen through a GameObject with a specific material "M_Stencil". This creates an illusion that helps bridge the physical and digital elements of the application.
-
-### Asset Attribution
-
-The following table lists the source of 3D models used in the SDK (if we did not model them internally). The screenshots are from an internal demonstrator version that contain some commercial assets that could not be included in the SDK. The commercial alternatives are noted and linked in the table below.
-
-| Visual asset       | License | Author | Commercial alternative |
-|:---|:---|:---|:---|  
-| [Wheat Bag](https://www.cgtrader.com/free-3d-models/military/other/sandbag-1) | Royalty Free No AI | [icekazim](https://www.cgtrader.com/designers/icekazim) |
-| [Sheep shed](https://sketchfab.com/3d-models/sheep-shed-024cd7a8d35147c8b3e3064685c6bf4b) | CC Attribution | [Maria Stashko](https://sketchfab.com/maria_stashko) | [POLYGON Ancient Empire](https://assetstore.unity.com/packages/3d/environments/historic/polygon-ancient-empire-low-poly-3d-art-by-synty-224020) |
-| [Animated Sheep](https://sketchfab.com/3d-models/sheep-test-non-commercial-196bb78e6e6343888d09f468a6a9dbc7) | CC Attribution-NonCommercial | [Nyilonelycompany](https://sketchfab.com/Nyilonelycompany) | [Animal pack deluxe](https://assetstore.unity.com/packages/3d/characters/animals/animal-pack-deluxe-99702) |
-| [Wooden Crate](https://sketchfab.com/3d-models/ikea-wooden-crate-4c5d81d4b18644df9f9f2959f198f186) | CC Attribution | [szymon.burek](https://sketchfab.com/szymon.burek) 
-| [Roman Villa](https://sketchfab.com/3d-models/roman-villa-fcc3241662174fbbb146e6cf658293a9) | CC Attribution | [deltorvik](https://sketchfab.com/deltorvik) | [POLYGON Ancient Empire](https://assetstore.unity.com/packages/3d/environments/historic/polygon-ancient-empire-low-poly-3d-art-by-synty-224020) |
-| [Roman Centurion Armor](https://sketchfab.com/3d-models/roman-centurion-armor-d0c6de99f16c49f386a9f8d7c3120dec) | CC Attribution | [Tactical_Beard](https://sketchfab.com/Tactical_Beard) |
-
 
 ## Interactables
 ![](images/Pasted%20image%2020240119123837.png)
