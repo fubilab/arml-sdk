@@ -32,8 +32,8 @@ Run the following:
 ```bash
 gsettings set com.ubuntu.update-notifier no-show-notifications true
 sudo apt remove update-notifier update-notifier-common
-sudo systemctl stop snapd
-sudo systemctl disable snapd
+sudo apt remove --purge gnome-software
+sudo apt autoremove --purge snapd
 ```
 
 ### Create build directory and add network share
