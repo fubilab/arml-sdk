@@ -66,7 +66,7 @@ If you want to connect the ARML to another computer using ethernet to be able to
       - IP address: 192.168.121.1
       - Netmask: 255.255.255.0
       - Gateway: 192.168.121.1
-6. If everything went well, you should be able to enter `\\192.168.1.1` in the file explorer on your computer and see the "unitybuilds" shared directory. If this method fails, see the following section for an alternative method.
+6. If everything went well, you should be able to enter `\\192.168.121.1` in the file explorer on your computer and see the "unitybuilds" shared directory. If this method fails, see the following section for an alternative method.
 
 ### Install the Arduino software and scripts
 1. Follow the directions from Arduino to [install the Arduino IDE](https://docs.arduino.cc/software/ide-v1/tutorials/Linux/).
