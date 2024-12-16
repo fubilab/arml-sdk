@@ -48,6 +48,12 @@
       "_appLogoPath": "public/ARML-logo-circular.png",
       "pdf": false
     },
+    "fileMetadata": {
+      "_disableTocFilter": {
+          "**": true,
+          "api/**": false
+      }
+    },
     "markdownEngineProperties": {
       "markdigExtensions": [
         "FootNotes"

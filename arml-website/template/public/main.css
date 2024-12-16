@@ -27,6 +27,12 @@
   height: 30px;
 }
 
+.sourceurl p {
+  font-size: 14px;
+  margin: 0;
+  padding: 0;  
+}
+
 
 .navbar #navbar form.icons {
   order: 45;

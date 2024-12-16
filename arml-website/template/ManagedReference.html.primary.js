@@ -21,7 +21,10 @@ exports.transform = function (model) {
   }
   if (model.sourceurl) {
     model.sourcepath = model.sourceurl.replace(
-      'https://github.com/fubilab/arml-sdk/blob/main/arml-unity',
+      'https://github.com/fubilab/arml-sdk/blob/main/arml-unity/Assets/ARML/ARMLCore/',
+      ''
+    ).replace(
+      /\/#.*/,
       ''
     )
   }
