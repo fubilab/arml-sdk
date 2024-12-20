@@ -1,0 +1,31 @@
+{{!Licensed to the .NET Foundation under one or more agreements. The .NET Foundation licenses this file to you under the MIT license.}}
+{{!master(layout/_master.tmpl)}}
+<h1>{{title}}</h1>
+{{#items.Length}}
+<div class="media-container">
+{{#items}}
+  <div class="card">
+    <img src="{{thumbnail}}" class="card-img-top" alt="{{name}}">
+    <div class="card-body flex-fill">
+      <p class="card-title">{{name}}</p>
+      <div class="card-text">{{{description}}}</div>
+    </div>
+    <div class="card-body flex-grow-0 asset-container">
+      {{#assets}}
+          <a href="{{url}}" alt="{{format}}" target="_blank">
+            <div class="asset-item">
+              {{format}}
+            </div>
+          </a>
+      {{/assets}}
+    </div>
+  </div>
+{{/items}}
+</div>
+{{/items.Length}}
+
+<style type="text/css">
+  .affix {
+    display: none !important;
+  }
+</style>

@@ -33,11 +33,60 @@
   padding: 0;  
 }
 
-
 .navbar #navbar form.icons {
   order: 45;
 }
 
 .footnote-back-ref {
   display: none;
+}
+
+/* media */
+
+
+
+.media-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.media-container .card {
+  width: 30%;
+  margin-right: 1rem;
+  overflow: hidden
+}
+
+.media-container .card-text {
+  font-size: 12px;
+}
+
+.media-container .card-img-top {
+  height: 11rem;
+  object-fit: contain;
+  background: #000000;
+}
+
+.media-container .asset-container {
+  border-top: 1px solid var(--bs-card-border-color);
+  display: flex;
+  flex-wrap: wrap;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.media-container .asset-item {
+  font-size: 12px;
+  border-right: 1px solid var(--bs-card-border-color);
+  background: rgba(128, 128, 255, 0.05);
+  padding: 0.5rem;
+}
+.media-container .asset-item:hover {
+  background: rgba(128, 128, 255, 0.1);
+}
+
+.media-container .asset-container > :first-child {
+  border-left: 1px solid var(--bs-card-border-color);
 }

@@ -1,0 +1,25 @@
+﻿### YamlMime:Media
+---
+title: 3D Models
+description: These 3D models can be used to print the enclosure and supporting parts in order to build an ARML reference prototype.
+documentType: media
+# contributionLink: https://github.com/dotnet/docfx/edit/main/docs/extensions/templates.yml
+items: 
+  - name: body_upper
+    description: The upper part of the ARML body.
+    type: 3D Model
+    thumbnail: images/models/body_upper.jpg
+    assets:
+      - format: IGS
+        url: assets/models/body_lower.igs
+      - format: GLB
+        url: assets/models/body_lower.igs
+  - name: body_lower
+    description: The lower part of the ARML body.
+    type: 3D Model
+    thumbnail: images/models/body_lower.jpg
+    assets:
+      - format: IGS
+        url: assets/models/body_lower.igs
+      - format: GLB
+        url: assets/models/body_lower.igs

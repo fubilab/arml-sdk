@@ -7,7 +7,7 @@
     "doc": "docs"
   },
   "scripts": {
-    "docfx": "concurrently --kill-others-on-fail \"chokidar --initial \\\"docs/**/*\\\" \\\"template/**/*\\\" -c \\\"docfx build\\\"\" \"docfx serve _site\""
+    "docfx": "concurrently --kill-others-on-fail \"chokidar --initial \\\"docs/**/*\\\" \\\"template/**/*\\\" \\\"media/**/*\\\" -c \\\"docfx build\\\"\" \"docfx serve _site\""
   },
   "repository": {
     "type": "git",
