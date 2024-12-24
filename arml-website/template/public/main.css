@@ -54,6 +54,7 @@
 .media-container .card {
   width: 30%;
   margin-right: 1rem;
+  margin-bottom: 1rem;
   overflow: hidden
 }
 
@@ -62,8 +63,8 @@
 }
 
 .media-container .card-img-top {
-  height: 11rem;
-  object-fit: contain;
+  height: 12rem;
+  object-fit: cover;
   background: #000000;
 }
 

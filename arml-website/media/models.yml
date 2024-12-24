@@ -5,10 +5,64 @@ description: These 3D models can be used to print the enclosure and supporting p
 documentType: media
 # contributionLink: https://github.com/dotnet/docfx/edit/main/docs/extensions/templates.yml
 items: 
+  - name: battery_panel
+    description: The cover for the battery panel on the bottom of the ARML.
+    type: 3D Model
+    thumbnail: images/models/battery_panel.jpeg
+    assets:
+      - format: IGS
+        url: assets/models/battery_panel.igs
+      - format: GLB
+        url: assets/models/battery_panel.igs
+  - name: bezel_camera
+    description: The bezel mounted in front of the camera to shield it from the light of the LEDs.
+    type: 3D Model
+    thumbnail: images/models/bezel_camera.jpeg
+    assets:
+      - format: IGS
+        url: assets/models/bezel_camera.igs
+      - format: GLB
+        url: assets/models/bezel_camera.igs
+  - name: bezel_speaker_left
+    description: The bezel that holds the left speaker grille in place.
+    type: 3D Model
+    thumbnail: images/models/bezel_speaker_left.jpeg
+    assets:
+      - format: IGS
+        url: assets/models/bezel_speaker_left.igs
+      - format: GLB
+        url: assets/models/bezel_speaker_left.igs
+  - name: bezel_speaker_right
+    description: The bezel that holds the right speaker grille in place.
+    type: 3D Model
+    thumbnail: images/models/bezel_speaker_right.jpeg
+    assets:
+      - format: IGS
+        url: assets/models/bezel_speaker_right.igs
+      - format: GLB
+        url: assets/models/bezel_speaker_right.igs
+  - name: body_back
+    description: The back part of the ARML body.
+    type: 3D Model
+    thumbnail: images/models/body_back.jpeg
+    assets:
+      - format: IGS
+        url: assets/models/body_back.igs
+      - format: GLB
+        url: assets/models/body_back.igs
+  - name: body_front
+    description: The front part of the ARML body.
+    type: 3D Model
+    thumbnail: images/models/body_front.jpeg
+    assets:
+      - format: IGS
+        url: assets/models/body_front.igs
+      - format: GLB
+        url: assets/models/body_front.igs
   - name: body_upper
     description: The upper part of the ARML body.
     type: 3D Model
-    thumbnail: images/models/body_upper.jpg
+    thumbnail: images/models/body_upper.jpeg
     assets:
       - format: IGS
         url: assets/models/body_lower.igs
@@ -17,9 +71,90 @@ items:
   - name: body_lower
     description: The lower part of the ARML body.
     type: 3D Model
-    thumbnail: images/models/body_lower.jpg
+    thumbnail: images/models/body_lower.jpeg
     assets:
       - format: IGS
         url: assets/models/body_lower.igs
       - format: GLB
         url: assets/models/body_lower.igs
+  - name: button_cap
+    description: The cap for the button on the handle.
+    type: 3D Model
+    thumbnail: images/models/button_cap.jpeg
+    assets:
+      - format: IGS
+        url: assets/models/button_cap.igs
+      - format: GLB
+        url: assets/models/button_cap.igs
+  - name: button_panel
+    description: The cover for the button panel on the handle.
+    type: 3D Model
+    thumbnail: images/models/button_panel.jpeg
+    assets:
+      - format: IGS
+        url: assets/models/button_panel.igs
+      - format: GLB
+        url: assets/models/button_panel.igs
+  - name: grille_vent_back
+    description: The ventilation grille mounted in the rear of the ARML.
+    type: 3D Model
+    thumbnail: images/models/grille_vent_back.jpeg
+    assets:
+      - format: IGS
+        url: assets/models/grille_vent_back.igs
+      - format: GLB
+        url: assets/models/grille_vent_back.igs
+  - name: grille_vent_left
+    description: The ventilation grille mounted on the front-left of the ARML.
+    type: 3D Model
+    thumbnail: images/models/grille_vent_left.jpeg
+    assets:
+      - format: IGS
+        url: assets/models/grille_vent_left.igs
+      - format: GLB
+        url: assets/models/grille_vent_left.igs
+  - name: grille_vent_right
+    description: The ventilation grille mounted on the front-right of the ARML.
+    type: 3D Model
+    thumbnail: images/models/grille_vent_right.jpeg
+    assets:
+      - format: IGS
+        url: assets/models/grille_vent_right.igs
+      - format: GLB
+        url: assets/models/grille_vent_right.igs
+  - name: handle
+    description: The handle of the ARML.
+    type: 3D Model
+    thumbnail: images/models/handle.jpeg
+    assets:
+      - format: IGS
+        url: assets/models/handle.igs
+      - format: GLB
+        url: assets/models/handle.igs
+  - name: logo_window
+    description: The retro-illuminated logo window on the top of the ARML.
+    type: 3D Model
+    thumbnail: images/models/logo_window.jpeg
+    assets:
+      - format: IGS
+        url: assets/models/logo_window.igs
+      - format: GLB
+        url: assets/models/logo_window.igs
+  - name: support_camera
+    description: The bracket for mounting the camera inside the ARML body.
+    type: 3D Model
+    thumbnail: images/models/support_camera.jpeg
+    assets:
+      - format: IGS
+        url: assets/models/support_camera.igs
+      - format: GLB
+        url: assets/models/support_camera.igs
+  - name: support_pcb
+    description: The bracket for mounting the mainboard and other PCBs inside the ARML body.
+    type: 3D Model
+    thumbnail: images/models/support_pcb.jpeg
+    assets:
+      - format: IGS
+        url: assets/models/support_pcb.igs
+      - format: GLB
+        url: assets/models/support_pcb.igs
