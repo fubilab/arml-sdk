@@ -32,7 +32,8 @@
       {
         "files": [
           "docs/images/**",
-          "media/images/**"
+          "media/images/**",
+          "media/assets/**"
         ]
       }
     ],

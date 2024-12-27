@@ -67,6 +67,13 @@
   object-fit: cover;
   background: #000000;
 }
+.media-container .card-img-container {
+  height: 12rem;
+  width: 100%;
+  background-size: cover !important;
+  background-position: center center;
+  background: #000000;
+}
 
 .media-container .asset-container {
   border-top: 1px solid var(--bs-card-border-color);
