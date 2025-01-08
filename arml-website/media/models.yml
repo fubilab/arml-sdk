@@ -1,32 +1,38 @@
 ﻿### YamlMime:Media
 ---
-title: 3D Models
+title: ARML Models
 description: These 3D models can be used to print the enclosure and supporting parts in order to build an ARML reference prototype.
 documentType: media
-# contributionLink: https://github.com/dotnet/docfx/edit/main/docs/extensions/templates.yml
 items: 
+  - name: arml_overview
+    description: All of the models composed as if assembled, to show an overview of their arrangement.
+    type: 3D Model
+    thumbnail: images/models/arml_overview.jpeg
+    assets:
+      - format: IGS
+        url: assets/igs/arml_overview.igs.zip
+      - format: STL
+        url: assets/stl/arml_overview.stl.zip
   - name: battery_panel
     description: The cover for the battery panel on the bottom of the ARML.
     type: 3D Model
     thumbnail: images/models/battery_panel.jpeg
+    glb: assets/glb/battery_panel.glb
     assets:
       - format: IGS
         url: assets/igs/battery_panel.igs.zip
       - format: STL
         url: assets/stl/battery_panel.stl.zip
-      - format: GLB
-        url: assets/glb/battery_panel.glb
   - name: bezel_camera
     description: The bezel mounted in front of the camera to shield it from the light of the LEDs.
     type: 3D Model
     thumbnail: images/models/bezel_camera.jpeg
+    glb: assets/glb/bezel_camera.glb
     assets:
       - format: IGS
         url: assets/igs/bezel_camera.igs.zip
       - format: STL
         url: assets/stl/bezel_camera.stl.zip
-      - format: GLB
-        url: assets/glb/bezel_camera.glb
   - name: bezel_speaker_left
     description: The bezel that holds the left speaker grille in place.
     type: 3D Model

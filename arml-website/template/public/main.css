@@ -43,23 +43,36 @@
 
 /* media */
 
-
+@import "https://unpkg.com/@egjs/view3d@latest/css/view3d-bundle.min.css";
 
 .media-container {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.5rem;
 }
 
-.media-container .card {
-  width: 30%;
-  margin-right: 1rem;
-  margin-bottom: 1rem;
-  overflow: hidden
+.media-container .card h3 {
+  font-size: 1rem;
+  margin: 0.5rem;
+}
+
+.media-container > :first-child {
+  grid-column: 1 / -1;
+}
+
+.media-container > :first-child .card-img-container {
+  height: 40vw;
+  min-height: 12rem;
+  max-height: 50vh;
+  background-position: center 60% !important;
 }
 
 .media-container .card-text {
   font-size: 12px;
+}
+
+.media-container .card-body {
+  padding: 0.5rem;
 }
 
 .media-container .card-img-top {
@@ -69,9 +82,8 @@
 }
 .media-container .card-img-container {
   height: 12rem;
-  width: 100%;
   background-size: cover !important;
-  background-position: center center;
+  background-position: center center !important;
   background: #000000;
 }
 

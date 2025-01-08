@@ -1,31 +1,30 @@
 {{!Licensed to the .NET Foundation under one or more agreements. The .NET Foundation licenses this file to you under the MIT license.}}
 {{!master(layout/_master.tmpl)}}
 <h1>{{title}}</h1>
+<div class="hdescription">
+  {{{description}}}
+</div>
 {{#items.Length}}
-<div class="media-container">
+<script>
+  let modelList = []
+  let currentView3D = null
+</script>
+<div class="media-container cards-container">
 {{#items}}
-  <div class="card">
-    <div style="background-image: url({{thumbnail}})" class="card-img-container" alt="{{name}}" />
-    <div class="card-body flex-fill">
-      <p class="card-title">{{name}}</p>
-      <div class="card-text">{{{description}}}</div>
-    </div>
-    <div class="card-body flex-grow-0 asset-container">
-      {{#assets}}
-          <a href="{{url}}" alt="{{format}}" target="_blank">
-            <div class="asset-item">
-              {{format}}
-            </div>
-          </a>
-      {{/assets}}
-    </div>
-  </div>
+  {{>partials/mediacard}}
 {{/items}}
 </div>
 {{/items.Length}}
 
-<style type="text/css">
-  .affix {
-    display: none !important;
-  }
-</style>
+<script src="https://unpkg.com/@egjs/view3d@latest/dist/view3d.pkgd.min.js"></script>
+<script>
+  modelList.forEach((modelDef) => {
+    const el = document.getElementById(modelDef.id)
+    el.addEventListener('click', () => {
+        if (currentView3D) {
+            currentView3D.destroy()
+        }
+        currentView3D = new View3D(el, modelDef.v3d)
+    })
+  })
+</script>
