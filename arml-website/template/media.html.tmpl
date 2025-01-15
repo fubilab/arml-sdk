@@ -22,7 +22,6 @@
   </div>
   <div class="v3d_modal_close" onclick="hideModal()">❌</div>
   <svg id="v3d_modal_loading" width="50" height="50" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><style>.spinner_V8m1{transform-origin:center;animation:spinner_zKoa 2s linear infinite}.spinner_V8m1 circle{stroke-linecap:round;animation:spinner_YpZS 1.5s ease-in-out infinite}@keyframes spinner_zKoa{100%{transform:rotate(360deg)}}@keyframes spinner_YpZS{0%{stroke-dasharray:0 150;stroke-dashoffset:0}47.5%{stroke-dasharray:42 150;stroke-dashoffset:-16}95%,100%{stroke-dasharray:42 150;stroke-dashoffset:-59}}</style><g class="spinner_V8m1"><circle cx="12" cy="12" r="9.5" fill="none" stroke-width="1"></circle></g></svg>
-  <canvas class="view3d-canvas"></canvas>
   <div id="v3d_modal_downloads">
     <a alt="GLB">GLB</a>
     <a alt="IGS">IGS</a>
@@ -33,7 +32,7 @@
 <script src="{{_rel}}public/view3d.pkgd.min.js"></script>
 <script>
   const v3dModal = document.getElementById('v3d_modal')
-  const v3dModalCanvas = document.querySelector('#v3d_modal canvas')
+  let v3dModalCanvas
   const v3dModalLoading = document.getElementById('v3d_modal_loading')
   const v3dModalName = document.getElementById('v3d_modal_name')
   const v3dModalDescription = document.getElementById('v3d_modal_description')
@@ -44,10 +43,14 @@
     STL: v3dModalDownloads.item(2)
   }
   function showModal() {
+    document.body.parentElement.style.overflow = 'hidden'
     v3dModal.style.display = 'flex'
   }
   function hideModal() {
+    document.body.parentElement.style.overflow = 'auto'
+    v3dCurrent.destroy()
     v3dModal.style.display = 'none'
+    v3dModal.removeChild(v3dModalCanvas)
   }
   modelList.forEach((modelDef) => {
     const clickHandler = () => {
@@ -58,13 +61,11 @@
           pitch: 8,
         }
         console.log(v3dOptions)
+        v3dModalCanvas = v3dModal.appendChild(document.createElement('canvas'))
+        v3dModalCanvas.className = 'view3d-canvas'
         v3dModalCanvas.style.visibility = 'hidden'
         v3dModalLoading.style.visibility = 'visible'
-        if (v3dCurrent) {
-            v3dCurrent.load(modelDef.v3d.src, v3dOptions)
-        } else {
-          v3dCurrent = new View3D(v3dModal, v3dOptions)
-        }
+        v3dCurrent = new View3D(v3dModal, v3dOptions)
         v3dModalName.innerText = modelDef.name
         v3dModalDescription.innerHTML= modelDef.description
         v3dModalDownloads.forEach(n => {
