@@ -7,7 +7,7 @@
     <div class="flex-grow-0 asset-container">
         <span>
         {{#glb}}
-            <a href="{{url}}" alt="glb" target="_blank">
+            <a href="{{glb}}" alt="glb" target="_blank">
             <div class="asset-item">
                 GLB
             </div>
