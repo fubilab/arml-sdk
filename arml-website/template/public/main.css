@@ -81,7 +81,6 @@
   padding-right: 0.7rem;
   margin-bottom: 0.5rem;
   height: 60px;
-  overflow: hidden;
   margin-top: 0.2rem;
 }
 
@@ -206,6 +205,7 @@
   border: 1px solid var(--bs-border-color);
   border-radius: 5px;
   background: var(--bs-body-bg);
+  z-index: 100;
 }
 
 #v3d_modal_downloads a {
