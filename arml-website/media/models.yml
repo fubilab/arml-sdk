@@ -1,7 +1,9 @@
 ﻿### YamlMime:Media
 ---
 title: ARML Models
-description: These 3D models can be used to print the enclosure and supporting parts in order to build an ARML reference prototype.
+description: | 
+  These 3D models can be used to print the enclosure and supporting parts in order to build an ARML reference prototype. 
+  Industrial design by [Victor Freire](https://www.linkedin.com/in/victor-a-freire-garcia/).
 documentType: media
 items: 
   - name: arml_overview
@@ -78,12 +80,12 @@ items:
     description: The upper part of the ARML body.
     type: 3D Model
     thumbnail: images/models/body_upper.jpeg
-    glb: assets/glb/body_lower.glb
+    glb: assets/glb/body_upper.glb
     assets:
       - format: IGS
-        url: assets/igs/body_lower.igs.zip
+        url: assets/igs/body_upper.igs.zip
       - format: STL
-        url: assets/stl/body_lower.stl.zip
+        url: assets/stl/body_upper.stl.zip
   - name: body_lower
     description: The lower part of the ARML body.
     type: 3D Model

@@ -50,15 +50,20 @@
     v3dModal.style.display = 'none'
   }
   modelList.forEach((modelDef) => {
-    const el = document.getElementById(modelDef.id)
-    el.addEventListener('click', () => {
-        console.log(modelDef.v3d)
+    const clickHandler = () => {
+        const v3dOptions = {
+          ...modelDef.v3d,
+          autoplay: true,
+          disableOnInterrupt: true,
+          pitch: 8,
+        }
+        console.log(v3dOptions)
         v3dModalCanvas.style.visibility = 'hidden'
         v3dModalLoading.style.visibility = 'visible'
         if (v3dCurrent) {
-            v3dCurrent.load(modelDef.v3d.src, modelDef.v3d)
+            v3dCurrent.load(modelDef.v3d.src, v3dOptions)
         } else {
-          v3dCurrent = new View3D(v3dModal, modelDef.v3d)
+          v3dCurrent = new View3D(v3dModal, v3dOptions)
         }
         v3dModalName.innerText = modelDef.name
         v3dModalDescription.innerHTML= modelDef.description
@@ -74,6 +79,10 @@
           v3dModalLoading.style.visibility = 'hidden'
         })
         showModal()
-    })
+    }
+    const triggers = document.getElementsByClassName(modelDef.triggerClass)
+    for (var i = 0; i < triggers.length; i++) {
+      triggers.item(i).addEventListener('click', clickHandler)
+    }
   })
 </script>

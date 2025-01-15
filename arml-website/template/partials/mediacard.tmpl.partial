@@ -1,10 +1,11 @@
 <div class="card">
-    <h3 class="card-title">{{name}}</h3>
-    <div id="v3d_{{name}}" style="background-image: url({{thumbnail}})" class="card-img-container" alt="{{name}}" />
     <div class="card-body flex-fill">
+        <h3 class="card-title">{{name}}</h3>
         <div class="card-text">{{description}}</div>
     </div>
-    <div class="card-body flex-grow-0 asset-container">
+    <div style="background-image: url({{thumbnail}})" class="v3d_{{name}} card-img-container" alt="{{name}}" />
+    <div class="flex-grow-0 asset-container">
+        <span>
         {{#glb}}
             <a href="{{url}}" alt="glb" target="_blank">
             <div class="asset-item">
@@ -19,13 +20,15 @@
             </div>
             </a>
         {{/assets}}
+        </span>
+        <div class="zoom-button v3d_{{name}}">🔎</div>
     </div>
 </div>
 
 {{#glb}}
 <script>
     modelList.push({
-        id: 'v3d_{{name}}',
+        triggerClass: 'v3d_{{name}}',
         name: '{{name}}',
         description: '{{description}}',
         assets: [
