@@ -1,0 +1,44 @@
+{
+    "title": "Media",
+    "$schema": "https://dotnet.github.io/docfx/schemas/v1.0/schema.json#",
+    "version": "1.0.0",
+    "description": "Schema for media",
+    "id": "https://github.com/fubilab/arml-sdk/arml-website/schemas/Media.schema.json",
+    "type": "object",
+    "properties": {
+        "uid": {
+            "type": "string",
+            "contentType": "uid"
+        },
+        "title": {
+            "type": "string",
+            "tags": [
+                "localizable"
+            ]
+        },
+        "description": {
+            "type": "string",
+            "contentType": "markdown",
+            "tags": [
+                "localizable"
+            ]
+        },
+        "items": {
+            "items": {
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string",
+                        "tags": [
+                            "localizable"
+                        ]
+                    }
+                },
+                "type": "object"
+            },
+            "type": "array"
+        }
+    }
+}

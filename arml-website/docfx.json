@@ -23,14 +23,17 @@
           "toc.yml",
           "index.md",
           "api/**/*.{md,yml}",
-          "docs/**/*.{md,yml}"
+          "docs/**/*.{md,yml}",
+          "media/**/*.{md,yml}"
         ]
       }
     ],
     "resource": [
       {
         "files": [
-          "docs/images/**"
+          "docs/images/**",
+          "media/images/**",
+          "media/assets/**"
         ]
       }
     ],
