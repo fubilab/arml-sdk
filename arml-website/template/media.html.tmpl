@@ -56,8 +56,10 @@
     const clickHandler = () => {
         const v3dOptions = {
           ...modelDef.v3d,
-          autoplay: true,
-          disableOnInterrupt: true,
+          autoplay: {
+            disableOnInterrupt: true,
+            speed: 0.2,
+          },
           pitch: 8,
           scrollable: false
         }
