@@ -43,8 +43,6 @@
 
 /* media */
 
-@import "https://unpkg.com/@egjs/view3d@latest/css/view3d-bundle.min.css";
-
 .media-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -85,6 +83,7 @@
   background-size: cover !important;
   background-position: center center !important;
   background: #000000;
+  cursor: pointer;
 }
 
 .media-container .asset-container {
@@ -109,4 +108,84 @@
 
 .media-container .asset-container > :first-child {
   border-left: 1px solid var(--bs-card-border-color);
+}
+
+/* View3D */
+
+#v3d_modal {
+  display: none;
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-color: var(--bs-body-bg);
+  z-index: 10000;
+  align-items: center;
+  justify-content: center;
+}
+
+#v3d_modal_loading {
+  stroke: var(--bs-body-color);
+}
+
+.v3d_modal_close {
+  position: absolute;
+  right: 15px;
+  top: 15px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--bs-border-color);
+  background-color: var(--bs-body-bg);
+  border-radius: 5px;
+  cursor: pointer;
+  z-index: 100;
+}
+
+.v3d_modal_titlebox {
+  padding: 10px;
+  border-radius: 5px;
+  position: absolute;
+  left: 15px;
+  top: 0;
+  right: 70px;
+  color: var(--bs-body-color);
+  z-index: 100;
+  text-shadow: 0px 0px 12px var(--bs-body-bg), 1px 1px var(--bs-body-bg);
+}
+
+#v3d_modal_name {
+  display: flex;
+  height: 40px;
+  align-items: center;
+  margin-bottom: 0;
+}
+
+#v3d_modal_description {
+  max-width: 70%;
+  font-size: var(--bs-body-font-size);
+}
+
+#v3d_modal_downloads {
+  position: absolute;
+  margin-left: auto;
+  margin-right: auto;
+  bottom: 8%;
+  display: flex;
+  flex-direction: row;
+  border: 1px solid var(--bs-border-color);
+  border-radius: 5px;
+  background: var(--bs-body-bg);
+}
+
+#v3d_modal_downloads a {
+  border-right: 1px solid var(--bs-border-color);
+  padding: 0.5rem;
+}
+
+#v3d_modal_downloads > :last-child {
+  border-right: none;
 }

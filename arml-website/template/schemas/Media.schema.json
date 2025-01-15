@@ -31,7 +31,6 @@
                     },
                     "description": {
                         "type": "string",
-                        "contentType": "markdown",
                         "tags": [
                             "localizable"
                         ]

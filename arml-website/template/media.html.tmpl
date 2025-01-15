@@ -7,7 +7,7 @@
 {{#items.Length}}
 <script>
   let modelList = []
-  let currentView3D = null
+  let v3dCurrent = null
 </script>
 <div class="media-container cards-container">
 {{#items}}
@@ -15,16 +15,65 @@
 {{/items}}
 </div>
 {{/items.Length}}
+<div id="v3d_modal" class="view3d-wrapper">
+  <div class="v3d_modal_titlebox">
+    <h3 id="v3d_modal_name" />
+    <div id="v3d_modal_description" />
+  </div>
+  <div class="v3d_modal_close" onclick="hideModal()">❌</div>
+  <svg id="v3d_modal_loading" width="50" height="50" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><style>.spinner_V8m1{transform-origin:center;animation:spinner_zKoa 2s linear infinite}.spinner_V8m1 circle{stroke-linecap:round;animation:spinner_YpZS 1.5s ease-in-out infinite}@keyframes spinner_zKoa{100%{transform:rotate(360deg)}}@keyframes spinner_YpZS{0%{stroke-dasharray:0 150;stroke-dashoffset:0}47.5%{stroke-dasharray:42 150;stroke-dashoffset:-16}95%,100%{stroke-dasharray:42 150;stroke-dashoffset:-59}}</style><g class="spinner_V8m1"><circle cx="12" cy="12" r="9.5" fill="none" stroke-width="1"></circle></g></svg>
+  <canvas class="view3d-canvas"></canvas>
+  <div id="v3d_modal_downloads">
+    <a alt="GLB">GLB</a>
+    <a alt="IGS">IGS</a>
+    <a alt="STL">STL</a>
+  </div>
+</div>
 
-<script src="https://unpkg.com/@egjs/view3d@latest/dist/view3d.pkgd.min.js"></script>
+<script src="{{_rel}}public/view3d.pkgd.min.js"></script>
 <script>
+  const v3dModal = document.getElementById('v3d_modal')
+  const v3dModalCanvas = document.querySelector('#v3d_modal canvas')
+  const v3dModalLoading = document.getElementById('v3d_modal_loading')
+  const v3dModalName = document.getElementById('v3d_modal_name')
+  const v3dModalDescription = document.getElementById('v3d_modal_description')
+  const v3dModalDownloads = document.querySelectorAll('#v3d_modal_downloads a');
+  const v3dModalDownloadLinks = {
+    GLB: v3dModalDownloads.item(0),
+    IGS: v3dModalDownloads.item(1),
+    STL: v3dModalDownloads.item(2)
+  }
+  function showModal() {
+    v3dModal.style.display = 'flex'
+  }
+  function hideModal() {
+    v3dModal.style.display = 'none'
+  }
   modelList.forEach((modelDef) => {
     const el = document.getElementById(modelDef.id)
     el.addEventListener('click', () => {
-        if (currentView3D) {
-            currentView3D.destroy()
+        console.log(modelDef.v3d)
+        v3dModalCanvas.style.visibility = 'hidden'
+        v3dModalLoading.style.visibility = 'visible'
+        if (v3dCurrent) {
+            v3dCurrent.load(modelDef.v3d.src, modelDef.v3d)
+        } else {
+          v3dCurrent = new View3D(v3dModal, modelDef.v3d)
         }
-        currentView3D = new View3D(el, modelDef.v3d)
+        v3dModalName.innerText = modelDef.name
+        v3dModalDescription.innerHTML= modelDef.description
+        v3dModalDownloads.forEach(n => {
+          n.style.display = 'none'
+        })
+        modelDef.assets.forEach(a => {
+          v3dModalDownloadLinks[a.format].style.display = 'block'
+          v3dModalDownloadLinks[a.format].href = a.url
+        })
+        v3dCurrent.on('loadFinish', () => {
+          v3dModalCanvas.style.visibility = 'visible'
+          v3dModalLoading.style.visibility = 'hidden'
+        })
+        showModal()
     })
   })
 </script>

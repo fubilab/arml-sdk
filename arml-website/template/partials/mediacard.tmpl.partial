@@ -1,12 +1,17 @@
 <div class="card">
     <h3 class="card-title">{{name}}</h3>
-    <div id="v3d_{{name}}" style="background-image: url({{thumbnail}})" class="card-img-container view3d-wrapper" alt="{{name}}">
-        <canvas class="view3d-canvas"></canvas>
-    </div>
+    <div id="v3d_{{name}}" style="background-image: url({{thumbnail}})" class="card-img-container" alt="{{name}}" />
     <div class="card-body flex-fill">
-        <div class="card-text">{{{description}}}</div>
+        <div class="card-text">{{description}}</div>
     </div>
     <div class="card-body flex-grow-0 asset-container">
+        {{#glb}}
+            <a href="{{url}}" alt="glb" target="_blank">
+            <div class="asset-item">
+                GLB
+            </div>
+            </a>
+        {{/glb}}
         {{#assets}}
             <a href="{{url}}" alt="{{format}}" target="_blank">
             <div class="asset-item">
@@ -21,10 +26,25 @@
 <script>
     modelList.push({
         id: 'v3d_{{name}}',
+        name: '{{name}}',
+        description: '{{description}}',
+        assets: [
+        {{#assets}}
+            {
+                format: '{{format}}',
+                url: '{{url}}'
+            },
+        {{/assets}}
+        {{#glb}}
+            {
+                format: 'GLB',
+                url: '{{glb}}'
+            },
+        {{/glb}}
+        ],
         v3d: {
             src: '{{glb}}',
-            poster: '{{thumbnail}}',
-        } 
+        }
     })
 </script>
 {{/glb}}
