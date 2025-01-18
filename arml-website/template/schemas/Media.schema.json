@@ -18,6 +18,12 @@
         },
         "description": {
             "type": "string",
+            "tags": [
+                "localizable"
+            ]
+        },
+        "introduction": {
+            "type": "string",
             "contentType": "markdown",
             "tags": [
                 "localizable"

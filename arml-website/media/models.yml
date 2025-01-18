@@ -1,9 +1,8 @@
 ﻿### YamlMime:Media
 ---
 title: ARML Models
-description: | 
-  These 3D models can be used to print the enclosure and supporting parts in order to build an ARML reference prototype. 
-  Industrial design by [Victor Freire](https://www.linkedin.com/in/victor-a-freire-garcia/).
+description: 3D models that can be used to print the enclosure and supporting parts in order to build an ARML reference prototype. 
+introduction: Industrial design by [Victor Freire](https://www.linkedin.com/in/victor-a-freire-garcia/).
 documentType: media
 items: 
   - name: arml_overview
@@ -16,6 +15,26 @@ items:
         url: assets/igs/arml_overview.igs.zip
       - format: STL
         url: assets/stl/arml_overview.stl.zip
+    groups:
+      - name: Top
+        visible: true
+        meshes:
+          - Mesh_36
+          - Mesh_37
+          - Mesh_51
+      - name: Battery panel
+        visible: true
+        meshes:
+          - Mesh_48
+      - name: Front
+        visible: true
+        meshes:
+          - Mesh_53
+          - Mesh_49
+          - Mesh_50
+          - Mesh_21
+          - Mesh_52
+          - Mesh_60
   - name: battery_panel
     description: The cover for the battery panel on the bottom of the ARML.
     type: 3D Model

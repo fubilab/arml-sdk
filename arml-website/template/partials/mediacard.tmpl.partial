@@ -47,7 +47,20 @@
         ],
         v3d: {
             src: '{{glb}}',
-        }
+        },
+        groups: [
+        {{#groups}}
+            {
+                name: '{{name}}',
+                visible: '{{visible}}'.toLowerCase() === 'true',
+                meshes: [
+                {{#meshes}}
+                    '{{.}}',
+                {{/meshes}}
+                ]
+            },
+        {{/groups}}
+        ]
     })
 </script>
 {{/glb}}

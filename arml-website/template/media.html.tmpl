@@ -2,12 +2,12 @@
 {{!master(layout/_master.tmpl)}}
 <h1>{{title}}</h1>
 <div class="hdescription">
-  {{{description}}}
+  <p>{{description}}</p>
+  {{{introduction}}}
 </div>
 {{#items.Length}}
 <script>
   let modelList = []
-  let v3dCurrent = null
 </script>
 <div class="media-container cards-container">
 {{#items}}
@@ -21,19 +21,29 @@
     <div id="v3d_modal_description" />
   </div>
   <div class="v3d_modal_close" onclick="hideModal()">❌</div>
-  <svg id="v3d_modal_loading" width="50" height="50" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><style>.spinner_V8m1{transform-origin:center;animation:spinner_zKoa 2s linear infinite}.spinner_V8m1 circle{stroke-linecap:round;animation:spinner_YpZS 1.5s ease-in-out infinite}@keyframes spinner_zKoa{100%{transform:rotate(360deg)}}@keyframes spinner_YpZS{0%{stroke-dasharray:0 150;stroke-dashoffset:0}47.5%{stroke-dasharray:42 150;stroke-dashoffset:-16}95%,100%{stroke-dasharray:42 150;stroke-dashoffset:-59}}</style><g class="spinner_V8m1"><circle cx="12" cy="12" r="9.5" fill="none" stroke-width="1"></circle></g></svg>
-  <div id="v3d_modal_downloads">
-    <a alt="GLB">GLB</a>
-    <a alt="IGS">IGS</a>
-    <a alt="STL">STL</a>
-  </div>
+  <svg id="v3d_modal_loading" width="40" height="40" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><style>.spinner_V8m1{transform-origin:center;animation:spinner_zKoa 2s linear infinite}.spinner_V8m1 circle{stroke-linecap:round;animation:spinner_YpZS 1.5s ease-in-out infinite}@keyframes spinner_zKoa{100%{transform:rotate(360deg)}}@keyframes spinner_YpZS{0%{stroke-dasharray:0 150;stroke-dashoffset:0}47.5%{stroke-dasharray:42 150;stroke-dashoffset:-16}95%,100%{stroke-dasharray:42 150;stroke-dashoffset:-59}}</style><g class="spinner_V8m1"><circle cx="12" cy="12" r="9.5" fill="none" stroke-width="1"></circle></g></svg>
+  <div id="v3d_modal_toolbar">
+    <div id="v3d_modal_layers">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="inherit" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+    </div>
+    <div id="v3d_modal_downloads">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather feather-download"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+      <a alt="GLB">GLB</a>
+      <a alt="IGS">IGS</a>
+      <a alt="STL">STL</a>
+    </div>
+</div>
 </div>
 
 <script src="{{_rel}}public/view3d.pkgd.min.js"></script>
 <script>
+  let v3dCurrent = null
+  let modelDefCurrent = null
   const v3dModal = document.getElementById('v3d_modal')
   let v3dModalCanvas
+  let v3dLayerToggles = []
   const v3dModalLoading = document.getElementById('v3d_modal_loading')
+  const v3dModalLayerDiv = document.getElementById('v3d_modal_layers');
   const v3dModalName = document.getElementById('v3d_modal_name')
   const v3dModalDescription = document.getElementById('v3d_modal_description')
   const v3dModalDownloads = document.querySelectorAll('#v3d_modal_downloads a');
@@ -45,12 +55,39 @@
   function showModal() {
     document.body.parentElement.style.overflow = 'hidden'
     v3dModal.style.display = 'flex'
+    
   }
   function hideModal() {
     document.body.parentElement.style.overflow = 'auto'
     v3dCurrent.destroy()
     v3dModal.style.display = 'none'
     v3dModal.removeChild(v3dModalCanvas)
+    modelDefCurrent.groups.forEach((group) => {
+      group.visible = true
+    })
+  }
+  function populateLayers() {
+    //clear existing
+    v3dLayerToggles.forEach(el => v3dModalLayerDiv.removeChild(el))
+    v3dLayerToggles = []
+    v3dModalLayerDiv.style.display = modelDefCurrent.groups.length ? 'flex' : 'none'
+    modelDefCurrent.groups.forEach((group) => {
+      const layerToggle = v3dModalLayerDiv.appendChild(document.createElement('span'))
+      v3dLayerToggles.push(layerToggle)
+      layerToggle.innerText = group.name
+      layerToggle.className = group.visible ? 'visible' : ''
+      layerToggle.addEventListener('click', () => {
+        group.visible = !group.visible
+        layerToggle.className = group.visible ? 'visible' : ''
+        group.meshes.forEach((meshName) => {
+          const mesh = v3dCurrent.scene.root.getObjectByName(meshName)
+          if (mesh) {
+            mesh.visible = group.visible
+          }
+        })
+        v3dCurrent.renderer.threeRenderer.render(v3dCurrent.scene.root, v3dCurrent.camera.threeCamera)
+      })
+    })
   }
   modelList.forEach((modelDef) => {
     const clickHandler = () => {
@@ -63,7 +100,6 @@
           pitch: 8,
           scrollable: false
         }
-        console.log(v3dOptions)
         v3dModalCanvas = v3dModal.appendChild(document.createElement('canvas'))
         v3dModalCanvas.className = 'view3d-canvas'
         v3dModalCanvas.style.visibility = 'hidden'
@@ -78,9 +114,11 @@
           v3dModalDownloadLinks[a.format].style.display = 'block'
           v3dModalDownloadLinks[a.format].href = a.url
         })
+        modelDefCurrent = modelDef
         v3dCurrent.on('loadFinish', () => {
           v3dModalCanvas.style.visibility = 'visible'
           v3dModalLoading.style.visibility = 'hidden'
+          populateLayers(modelDef)
         })
         showModal()
     }
