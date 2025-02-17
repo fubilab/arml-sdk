@@ -7,8 +7,9 @@
 | Name | Description | Vendor&nbsp;Links |
 | --- | --- | --- |
 | AC12V | External 12V DC power supply, minimum current 5A (60W). See [Power Reference](power.md) | [Amazon](https://www.amazon.es/dp/B07PGLXK4X) |
-| USBHUB | USB Hub with USB-C PD support (60W min), HDMI, Ethernet (Gigabit).See [Connect the ARML to a Computer](./workflow.md#connect-the-arml-to-the-computer) | [Amazon](https://www.amazon.es/gp/product/B0BW2TLQ8S) | 
+| USBHUB | USB Hub with HDMI, USB-A and Gigabit Ethernet. See [Using USB-C Power](power.md#using-usb-c-power) and [Connect the ARML to a Computer](./workflow.md#connect-the-arml-to-the-computer). | [Amazon](https://www.amazon.es/gp/product/B0BW2TLQ8S) | 
 | USBNET | USB-C to Ethernet adaptor (Gigabit). See [Connect the ARML to a Computer](./workflow.md#connect-the-arml-to-the-computer) | [Amazon](https://www.amazon.es/gp/product/B08FYB5HHK) | 
+| USBPD | USB-C power supply. Must be compatible with the Power Delivery (PD) standard, provide 12V, and support at least 45W (60W is recommended). See [Using USB-C Power](power.md#using-usb-c-power) | [Amazon](https://www.amazon.es/dp/B0D48H3TR4) | 
 
 ### Accessories
 
