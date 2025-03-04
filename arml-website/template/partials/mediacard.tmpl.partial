@@ -3,7 +3,7 @@
         <h3 class="card-title">{{name}}</h3>
         <div class="card-text">{{description}}</div>
     </div>
-    <div style="background-image: url({{thumbnail}})" class="v3d_{{name}} card-img-container" alt="{{name}}" />
+    <div style="background-image: url({{thumbnail}})" class="{{#glb}}v3d_{{name}} glb{{/glb}} card-img-container" alt="{{name}}" />
     <div class="flex-grow-0 asset-container">
         <span>
         {{#glb}}
@@ -21,7 +21,9 @@
             </a>
         {{/assets}}
         </span>
-        <div class="zoom-button v3d_{{name}}">🔎</div>
+        {{#glb}}
+            <div class="zoom-button v3d_{{name}}">🔎</div>
+        {{/glb}}
     </div>
 </div>
 

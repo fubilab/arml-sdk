@@ -89,12 +89,14 @@
   object-fit: cover;
   background: #000000;
 }
+.media-container .card-img-container.glb {
+  cursor: pointer;
+  background: #000000;
+}
 .media-container .card-img-container {
   height: 12rem;
   background-size: cover !important;
   background-position: center center !important;
-  background: #000000;
-  cursor: pointer;
 }
 
 .media-container .asset-container {

@@ -1,0 +1,47 @@
+﻿### YamlMime:Media
+---
+title: Logos and Backgrounds
+description: Graphics that can be used for promotional material, social media, website, etc. 
+documentType: media
+items: 
+  - name: arml_bg_wxga
+    description: WXGA background (1280x800) suggested as the Ubuntu desktop background on the ARML.
+    type: Image
+    thumbnail: assets/png/arml_bg_wxga.png
+    assets:
+      - format: PNG
+        url: assets/png/arml_bg_wxga.png
+  - name: arml_logo_dark
+    description: ARML logo on dark background.
+    type: Image
+    thumbnail: assets/png/arml_logo_dark.png
+    assets:
+      - format: PNG
+        url: assets/png/arml_logo_dark.png
+      - format: PSD
+        url: assets/psd/arml_logo_dark.psd
+  - name: arml_logo_light
+    description: ARML logo on light background.
+    type: Image
+    thumbnail: assets/png/arml_logo_light.png
+    assets:
+      - format: PNG
+        url: assets/png/arml_logo_light.png
+      - format: PSD
+        url: assets/psd/arml_logo_light.psd
+  - name: arml_logo_transparent
+    description: Transparent ARML logo.
+    type: Image
+    thumbnail: assets/png/arml_logo_transparent.png
+    assets:
+      - format: PNG
+        url: assets/png/arml_logo_transparent.png
+  - name: arml_logo_small
+    description: ARML logo with abreviated text, useful for smaller formats.
+    type: Image
+    thumbnail: images/branding/arml_logo_small.jpeg
+    assets:
+      - format: PNG
+        url: assets/png/arml_logo_small.png
+      - format: PSD
+        url: assets/psd/arml_logo_small.psd
