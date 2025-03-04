@@ -3,11 +3,12 @@
 title: Logos and Backgrounds
 description: Graphics that can be used for promotional material, social media, website, etc. 
 documentType: media
+mediaType: graphics
 items: 
   - name: arml_bg_wxga
     description: WXGA background (1280x800) suggested as the Ubuntu desktop background on the ARML.
     type: Image
-    thumbnail: assets/png/arml_bg_wxga.png
+    thumbnail: images/branding/arml_bg_wxga.jpg
     assets:
       - format: PNG
         url: assets/png/arml_bg_wxga.png

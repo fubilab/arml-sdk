@@ -4,6 +4,7 @@ title: ARML Models
 description: 3D models that can be used to print the enclosure and supporting parts in order to build an ARML reference prototype. 
 introduction: Industrial design by [Victor Freire](https://www.linkedin.com/in/victor-a-freire-garcia/).
 documentType: media
+mediaType: threed
 items: 
   - name: arml_overview
     description: All of the models composed as if assembled, to show an overview of their arrangement.

@@ -74,7 +74,7 @@
   background-position: center center !important;
 }
 
-.media-container > :first-child.glb .card-img-container {
+.media-container.threed > :first-child .card-img-container {
   max-height: 50vh;
   background-position: center 60% !important;
 }
@@ -107,14 +107,22 @@
   object-fit: cover;
   background: #000000;
 }
-.media-container .glb .card-img-container {
+.media-container .card-img-container {
+  height: 12rem;
+  background-position: center center !important;
+  background-repeat: no-repeat;
+}
+.media-container.threed .card-img-container {
+  background-size: cover !important;
   cursor: pointer;
   background: #000000;
 }
-.media-container .card-img-container {
-  height: 12rem;
+.media-container.graphics .card-img-container {
   background-size: cover !important;
-  background-position: center center !important;
+
+}
+.media-container.photos .card-img-container {
+  background-size: contain !important;
 }
 
 .media-container .asset-container {

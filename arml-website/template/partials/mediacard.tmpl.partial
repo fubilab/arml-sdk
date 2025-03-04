@@ -1,4 +1,4 @@
-<div class="card {{#glb}}glb{{/glb}}">
+<div class="card">
     <div class="card-body flex-fill">
         <h3 class="card-title"><div class="card-name" title="{{name}}">{{name}}</div></h3>
         <div class="card-text" title="{{description}}">{{description}}</div>

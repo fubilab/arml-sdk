@@ -2,3 +2,5 @@
   href: models.yml
 - name: Logos and Backgrounds
   href: branding.yml
+- name: Posters
+  href: posters.yml

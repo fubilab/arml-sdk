@@ -1,0 +1,16 @@
+﻿### YamlMime:Media
+---
+title: Posters
+description: Posters we have used when presenting the ARML.
+documentType: media
+mediaType: photos
+items: 
+  - name: arml_poster_fmx
+    description: Poster used to present the ARML at the FMX conference in 2024.
+    type: Image
+    thumbnail: images/posters/arml_poster_fmx.jpg
+    assets:
+      - format: JPG
+        url: assets/jpg/arml_poster_fmx.jpg
+      - format: PSD
+        url: assets/psd/arml_poster_fmx.psd.zip
