@@ -56,6 +56,7 @@
   display: flex;
   align-items: center;
   font-size: 1rem;
+  margin-bottom: 0.3rem
 }
 
 .media-container .card {
@@ -82,7 +83,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  max-widt  : 85%;
+  max-width: 85%;
   display: inline-block;
 }
 .media-container .card-text {
@@ -96,9 +97,9 @@
 .media-container .card-body {
   padding: 0.5rem;
   padding-right: 0.7rem;
-  margin-bottom: 0.5rem;
-  height: 60px;
+  height: 65px;
   margin-top: 0.2rem;
+  border-bottom: 1px solid var(--bs-card-border-color);
 }
 
 .media-container .card-img-top {
