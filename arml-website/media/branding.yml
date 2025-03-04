@@ -12,36 +12,50 @@ items:
       - format: PNG
         url: assets/png/arml_bg_wxga.png
   - name: arml_logo_dark
-    description: ARML logo on dark background.
+    description: Logo on dark background.
     type: Image
-    thumbnail: assets/png/arml_logo_dark.png
+    thumbnail: images/branding/arml_logo_dark.jpg
     assets:
       - format: PNG
         url: assets/png/arml_logo_dark.png
       - format: PSD
         url: assets/psd/arml_logo_dark.psd
   - name: arml_logo_light
-    description: ARML logo on light background.
+    description: Logo on light background.
     type: Image
-    thumbnail: assets/png/arml_logo_light.png
+    thumbnail: images/branding/arml_logo_light.jpg
     assets:
       - format: PNG
         url: assets/png/arml_logo_light.png
       - format: PSD
         url: assets/psd/arml_logo_light.psd
   - name: arml_logo_transparent
-    description: Transparent ARML logo.
+    description: Transparent logo.
     type: Image
-    thumbnail: assets/png/arml_logo_transparent.png
+    thumbnail: images/branding/arml_logo_transparent.png
     assets:
       - format: PNG
         url: assets/png/arml_logo_transparent.png
   - name: arml_logo_small
-    description: ARML logo with abreviated text, useful for smaller formats.
+    description: Logo with acronym for smaller formats.
     type: Image
-    thumbnail: images/branding/arml_logo_small.jpeg
+    thumbnail: images/branding/arml_logo_small.jpg
     assets:
       - format: PNG
         url: assets/png/arml_logo_small.png
       - format: PSD
         url: assets/psd/arml_logo_small.psd
+  - name: arml_logo_icon
+    description: Round transparent logo for icons.
+    type: Image
+    thumbnail: images/branding/arml_logo_icon.png
+    assets:
+      - format: PNG
+        url: assets/png/arml_logo_icon.png
+  - name: arml_logo_ekb
+    description: Logo for the projector BIOS splash screen.
+    type: Image
+    thumbnail: images/branding/arml_logo_ekb.jpg
+    assets:
+      - format: BMP
+        url: assets/bmp/arml_logo_ekb.bmp
