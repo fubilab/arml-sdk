@@ -43,6 +43,9 @@
 
 /* media */
 
+.media-header .hintro {
+  font-size: 14px;
+}
 .media-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -50,6 +53,8 @@
 }
 
 .media-container .card h3 {
+  display: flex;
+  align-items: center;
   font-size: 1rem;
 }
 
@@ -64,10 +69,22 @@
 .media-container > :first-child .card-img-container {
   height: 40vw;
   min-height: 12rem;
+  max-height: 40vh;
+  background-position: center center !important;
+}
+
+.media-container > :first-child.glb .card-img-container {
   max-height: 50vh;
   background-position: center 60% !important;
 }
 
+.media-container .card-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-widt  : 85%;
+  display: inline-block;
+}
 .media-container .card-text {
   font-size: 14px;
   height: 100%;
@@ -89,7 +106,7 @@
   object-fit: cover;
   background: #000000;
 }
-.media-container .card-img-container.glb {
+.media-container .glb .card-img-container {
   cursor: pointer;
   background: #000000;
 }

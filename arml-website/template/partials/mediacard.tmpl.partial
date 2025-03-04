@@ -1,9 +1,9 @@
-<div class="card">
+<div class="card {{#glb}}glb{{/glb}}">
     <div class="card-body flex-fill">
-        <h3 class="card-title">{{name}}</h3>
-        <div class="card-text">{{description}}</div>
+        <h3 class="card-title"><div class="card-name" title="{{name}}">{{name}}</div></h3>
+        <div class="card-text" title="{{description}}">{{description}}</div>
     </div>
-    <div style="background-image: url({{thumbnail}})" class="{{#glb}}v3d_{{name}} glb{{/glb}} card-img-container" alt="{{name}}" />
+    <div style="background-image: url({{thumbnail}})" class="{{#glb}}v3d_{{name}}{{/glb}} card-img-container" alt="{{name}}" />
     <div class="flex-grow-0 asset-container">
         <span>
         {{#glb}}

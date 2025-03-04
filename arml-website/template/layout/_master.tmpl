@@ -106,6 +106,7 @@
       {{/_disableToc}}
 
       <div class="content">
+        {{^_disableActionbar}}
         <div class="actionbar">
           {{^_disableToc}}
           <button class="btn btn-lg border-0 d-md-none"
@@ -119,6 +120,7 @@
           <nav id="breadcrumb"></nav>
           {{/_disableBreadcrumb}}
         </div>
+        {{/_disableActionbar}}
 
         <article data-uid="{{uid}}">
           {{!body}}
