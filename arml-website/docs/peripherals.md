@@ -19,3 +19,5 @@
 | CASECARRY | Hard-shell carrying case, 57cm x 42cm x 22cm | [Amazon](https://www.amazon.es/dp/B08K3HWVCL) |
 | CHARGE2A  | 2A battery charger | [AliExpress](https://www.aliexpress.com/item/1005006233034942.html) |
 | CHARGE5A  | 5A rapid battery charger | [AliExpress](https://www.aliexpress.com/item/1005001608750083.html) |
+| STRAP     | Wrist strap for safety | [Amazon](https://www.amazon.es/dp/B09QPRXW4Q) |
+| VELCRO    | Velcro to connect battery to battery panel door | [Amazon](https://www.amazon.es/dp/B09TH3936Y) |

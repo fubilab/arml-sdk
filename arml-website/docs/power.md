@@ -28,6 +28,8 @@ The battery used in the AR Magic lantern is a custom fabrication that includes a
 ![](images/battery-gauge.jpg)
 *Close-up photo of the front of the ARML battery pack, showing the fuel gauge after the "TEST" button has been pressed*
 
+The velcro on the battery can be found on the [Accessories](./peripherals.md#accessories) page.
+
 | Attribute                 | Value                 |
 |---------------------------|-----------------------|
 | Dimensions                | 135x75x25mm           |

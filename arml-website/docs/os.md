@@ -4,7 +4,45 @@ The mainboard of the ARML (LattePanda Delta 3 864) has support for Ubuntu 20.04 
 
 ## Configuration
 
-There is some basic configuration necessary to prepare the OS on the ARML for optimal functioning and make it accessible as a network drive for deploying applications.
+There is some basic configuration necessary to prepare the OS on the ARML, such as installing the launcher application and making it accessible as a network drive for deploying applications. We recommend that you follow all of the steps below.
+
+### Install the [launcher application](./launcher.md)
+
+1. Download the [latest release of the launcher application](https://github.com/fubilab/arml-sdk/releases/latest/download/applauncher.zip). 
+2. Create a directory on the desktop called `unitybuilds`.
+3. Extract the contents of the downloaded zip file to the `unitybuilds` directory. If all goes well, you should have a directory named `_applauncher` inside `unitybuilds`.
+4. Run the _Startup Applications_ app from the Ubuntu launcher (usually accessed by pressing the Windows or Apple key on your keyboard). 
+5. Click "Add" and then "Browse". Browse to `Desktop -> unitybuilds -> _applauncher -> linux_applauncher.x86_64`
+6. Click "Save"
+
+Now, when you reboot, the launcher app should appear automatically.
+
+### Hide the bootloader menu
+
+To prevent the GRUB bootloader menu from showing, run the following
+
+```bash
+sudo gedit /etc/default/grub
+```
+
+Then delete everything in the file and enter the following:
+
+```
+GRUB_DEFAULT=0
+GRUB_TIMEOUT_STYLE=hidden
+GRUB_HIDDEN_TIMEOUT=0
+GRUB_HIDDEN_TIMEOUT_QUIET=true
+GRUB_TIMEOUT=0
+GRUB_RECORDFAIL_TIMEOUT=0
+```
+
+Save the file, then run:
+
+```bash
+sudo update-grub
+```
+
+Now, when you restart, you should not see the bootloader menu.
 
 ### Audio configuration
 
@@ -27,8 +65,19 @@ There is some basic configuration necessary to prepare the OS on the ARML for op
     set-sink-port alsa_output.pci-0000_00_1f.3.analog-stereo analog-output-speaker
     set-source-port alsa_input.pci-0000_00_1f.3.analog-stereo analog-input-mic
     ```
-### Disable software update notifications
+### Install Brave (or other browser)
+The next step (Disable software update notifications) will remove the pre-installed software, including Firefox, so it is recommended to install another browser before proceeding.
+
 Run the following:
+```bash
+sudo apt-get install curl
+curl -fsS https://dl.brave.com/install.sh | sh
+```
+
+### Disable software update notifications
+1. In Settings > Updates > Automatically check for updates, select "Never"
+2. In Settings > Updates > Notify me of a new Ubuntu version, select "Never"
+2. Run the following:
 ```bash
 gsettings set com.ubuntu.update-notifier no-show-notifications true
 sudo apt remove update-notifier update-notifier-common
@@ -36,15 +85,16 @@ sudo apt remove --purge gnome-software
 sudo apt autoremove --purge snapd
 ```
 
-### Create build directory and add network share
-If you want to access the ARML builds directory over the network, do the following:
-1. Create a directory on the desktop called `unitybuilds`.
-2. Add an SMB network share. This assumes your user is `fubintlab`, so adapt the username for your system.  
-    Open `/etc/samba/smb.conf` as root and add the following lines:
+### Create network share
+If you want to access the ARML builds directory over the network, you need to add an SMB network share to the _armlbuilds_ directory you created in the [Install the launcher app](./os.md#install-the-launcher-application) step. 
+
+This assumes your user is `goblin`, so adapt the username for your system.  
+
+Open `/etc/samba/smb.conf` as root and add the following lines:
     ```bash
     [unitybuilds]
     comment = Unity builds
-    path = /home/fubintlab/Desktop/unitybuilds
+    path = /home/goblin/Desktop/unitybuilds
     browseable = yes
     guest ok = yes
     ```

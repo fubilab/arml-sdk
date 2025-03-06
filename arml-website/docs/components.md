@@ -44,4 +44,4 @@
 | x1  | Remote control with typical AndroidTV button layout. | [Amazon](https://www.amazon.es/dp/B08DY83SSD) |
 | x2  | Receiver for x1 remote control. Connected to USB A port of mainboard. |
 | x3  | USB peripherals such as a memory stick, hub, etc. |
-| x4  | External USB C port. Connected to (extends) USB C port on mainboard. Supports USB-C PD (power delivery) standard for powering the mainboard in development mode. Cable: USB C male to female, 30cm | [Amazon](https://www.amazon.es/dp/B08HS6X44P?th=1) |
+| x4  | External USB C port. Connected to (extends) USB C port on mainboard. Supports USB-C PD (power delivery) standard for powering the mainboard in development mode. Cable (1): USB C male to female, 30cm. Adaptor (2): USB C U-turn adaptor | [Amazon(1)](https://www.amazon.es/dp/B08HS6X44P?th=1) [Amazon(2)](https://www.amazon.es/dp/B0BFF3VS6Y) |
