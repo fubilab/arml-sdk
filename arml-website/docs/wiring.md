@@ -26,7 +26,7 @@ C = color(s)
 | ac4.4 | 28AWG | 140 | ![](images/color-brown.jpg) | Audio line out, left channel, negative |
 | ac5.p | 28AWG | 90  | ![](images/color-red.jpg) | Audio amp power, positive |
 | ac5.g | 28AWG | 90  | ![](images/color-white.jpg) | Audio amp power, ground |
-| vc1 | USB 3.1 SuperSpeed | 500 |     | Cable: USB C to USB A SuperSpeed 3.1 Connects camera to mainboard 90 degree male both ends, 50cm length <br>[Amazon](https://www.amazon.es/dp/B09F38HMZS) |
+| vc1 | USB 3.1 SuperSpeed | 500 |     | Cable: USB C to USB A SuperSpeed 3.1 Connects camera to mainboard 90 degree male both ends, 50cm length <br>[Cablepelado](https://www.cablepelado.es/cable-usb-c-3-1-macho-a-usb-a-3-1-macho-acodado-0-50-m-negro) |
 | vc2 | HDMI | 100 |     | CYFPV CN-018-LE HDMI Type A Male Connector 90 degree angle (up-left) <br>[Amazon](https://www.amazon.es/dp/B0894T9534) [Newegg](https://www.newegg.com/p/0ZF-010R-000K5) |
 |     |     |     |     | CYFPV CN-017-UP Mini HDMI Type C Male 90 Degree angle (up) <br>[Amazon](https://www.amazon.es/dp/B01M8HDX8Z) [Newegg](https://www.newegg.com/p/183-0071-000B8) |
 |     |     |     |     | CYFPV CN-019-0.2M Flat Cable 0.5mm Pitch 20Pin 10cm <br>[Amazon](https://www.amazon.es/dp/B01M0ANUUF) |
