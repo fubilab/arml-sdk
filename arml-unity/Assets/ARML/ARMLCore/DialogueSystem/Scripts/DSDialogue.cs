@@ -437,9 +437,10 @@ namespace ARML.DS
             //If there are choices, display them
             if (dialogue.DialogueType == DSDialogueType.MultipleChoice)
             {
-                for (int i = 0; i < dialogue.Choices.Count; i++)
+                for (int i = 0; i < choiceDisplayTexts.Count; i++)
                 {
-                    choiceDisplayTexts[i].gameObject.SetActive(true);
+                    if(choiceDisplayTexts[i] != null)
+                        choiceDisplayTexts[i].gameObject.SetActive(true);
                     switch (LanguageController.Instance.currentLanguage)
                     {
                         case Languages.EN:
@@ -651,15 +652,15 @@ namespace ARML.DS
                 case 0:
                     //defaultAnswerClip = didNotHearClip;
                     defaultAnswerClip = (LanguageController.Instance.currentLanguage == Languages.EN) ? didNotHearClipEN : didNotHearClipES;
-                    defaultAnswerText = "Perdona, no te he oído, ¿puedes volver a hablar?";
+                    defaultAnswerText = "Perdona, no te he oï¿½do, ï¿½puedes volver a hablar?";
                     break;
                 case 1:
                     defaultAnswerClip = (LanguageController.Instance.currentLanguage == Languages.EN) ? didNotUnderstandClipEN : didNotUnderstandClipES;
-                    defaultAnswerText = "Disculpa, no te he entendido, ¿puedes responder de nuevo?";
+                    defaultAnswerText = "Disculpa, no te he entendido, ï¿½puedes responder de nuevo?";
                     break;
                 default:
                     defaultAnswerClip = (LanguageController.Instance.currentLanguage == Languages.EN) ? didNotUnderstandClipEN : didNotUnderstandClipES;
-                    defaultAnswerText = "Disculpa, no te he entendido, ¿puedes responder de nuevo?";
+                    defaultAnswerText = "Disculpa, no te he entendido, ï¿½puedes responder de nuevo?";
                     break;
             }
 

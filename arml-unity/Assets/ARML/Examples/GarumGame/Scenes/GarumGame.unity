@@ -137,7 +137,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &10080926
 Transform:
   m_ObjectHideFlags: 0
@@ -7139,7 +7139,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1322736791
 Transform:
   m_ObjectHideFlags: 0
@@ -24563,10 +24563,7 @@ MonoBehaviour:
   selectedDialogueGroupIndex: 0
   selectedDialogueIndex: 1
   dialogueDisplayText: {fileID: 0}
-  choiceDisplayTexts:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  choiceDisplayTexts: []
   dialogueInteractionType: 0
   autoContinueSingleChoice: 1
   secondsToAutoContinue: 1
