@@ -1,8 +1,5 @@
-using System.Diagnostics;
-using System.IO;
 using UnityEngine;
 using ARML.DebugTools;
-using ARML.Saving;
 using ARML.Language;
 
 namespace ARML.SceneManagement
@@ -49,8 +46,7 @@ namespace ARML.SceneManagement
         public bool displayScanAtStart;
         private bool gameAlreadyLoaded;
 
-        private IDataService DataService = new JsonDataService();
-        private SettingsConfiguration settings;
+       private SettingsConfiguration settings;
 
         private void Start()
         {
@@ -63,28 +59,6 @@ namespace ARML.SceneManagement
                 LoadGame();
             }
 #endif
-        }
-
-        private void SetAprilTagsPath()
-        {
-            //string command = @"/home/fubintlab/spectacular.sh " + aprilTagsPath;
-            ////string command = $"/usr/bin/gnome-terminal -- bash -c \"/home/fubintlab/spectacular.sh {aprilTagsPath}; bash\"";
-            //print(command);
-            //Process.Start(command);
-
-            ProcessStartInfo startInfo = new ProcessStartInfo()
-            {
-                FileName = "/home/fubintlab/spectacular.sh",
-                UseShellExecute = true,
-                CreateNoWindow = false,
-                Arguments = "dogtags"
-            };
-            Process myProcess = new Process
-            {
-                StartInfo = startInfo
-            };
-            myProcess.Start();
-            myProcess.WaitForExit();
         }
 
         private void Update()
@@ -116,9 +90,7 @@ namespace ARML.SceneManagement
 
         private void LoadLauncherSettings()
         {
-            string path = $"{Application.persistentDataPath}/launcherSettings.json";
-
-            settings = DataService.LoadData<SettingsConfiguration>(path, false);
+            settings = SettingsConfiguration.LoadFromDisk();
 
             LanguageController.Instance.SetLanguage(settings.languageIndex);
             debugCanvasController.SetScreenLogger(settings.displayLog);

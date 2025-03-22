@@ -87,7 +87,7 @@ namespace ARML.Language
 
             // Update the current language and restart Vosk model.
             currentLanguage = (Languages)language;
-            Debug.Log($"Changed Language to {currentLanguage}");
+            Debug.Log($"[CONFIG] Changed Language to {currentLanguage}");
 
             SetVoskModelPath(); // Set the Vosk model path for the new language.
             voskSTT.ChangeModel(); // Restart Vosk with the new model.

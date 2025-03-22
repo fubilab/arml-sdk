@@ -11,6 +11,7 @@ using SpectacularAI;
 using System;
 using System.Linq;
 using System.Threading;
+using Debug = UnityEngine.Debug;
 
 namespace ARML.SceneManagement
 {
@@ -27,8 +28,6 @@ namespace ARML.SceneManagement
         [SerializeField] GameObject settingsPanel;
         [SerializeField] SettingsConfiguration settings;
 
-        private IDataService DataService = new JsonDataService();
-
         private List<string> applicationPathList = new List<string>();
         private string applicationsDirectory = "";
 
@@ -42,8 +41,7 @@ namespace ARML.SceneManagement
         /// </summary>
         void Awake()
         {
-            LoadLauncherSettings();
-
+            settings = SettingsConfiguration.LoadFromDisk();
             DirectoryInfo d = new DirectoryInfo(Application.dataPath);
 
             eventSystem = EventSystem.current;
@@ -162,15 +160,6 @@ namespace ARML.SceneManagement
             Application.Quit();
         }
 
-        private void LoadLauncherSettings()
-        {
-            string path = $"{Application.persistentDataPath}/launcherSettings.json";
-
-            if (!File.Exists(path)) return;
-
-            settings = DataService.LoadData<SettingsConfiguration>(path, false);
-        }
-
         private void UpdateSettingsUI()
         {
             TMP_Text zOffsetText = GameObject.Find("Z Offset/Value")?.GetComponent<TMP_Text>();
@@ -217,10 +206,7 @@ namespace ARML.SceneManagement
 
         private void SaveSettings()
         {
-            if (DataService.SaveData(Application.persistentDataPath + "/launcherSettings.json", settings, false))
-            {
-                print("Successfully saved settings data");
-            }
+            settings.SaveToDisk();
             UpdateSettingsUI();
         }
     }
@@ -233,5 +219,57 @@ namespace ARML.SceneManagement
         public int languageIndex;
         public List<VioParameter> vioInternalParameters;
         public float zOffset;
+
+        public static readonly SettingsConfiguration DefaultConfiguration = new SettingsConfiguration()
+        {
+            displayLog = false,
+            displayScan = false,
+            zOffset = 0,
+            vioInternalParameters = new List<VioParameter>()
+            {
+                new VioParameter() { Key = "trackerMasks", Value = "0.314,0.347,0.700,0.748" }
+            }
+        };
+        
+        public static string ConfigFilePath {
+            get => $"{Application.persistentDataPath}/launcherSettings.json";
+        }
+
+    public static SettingsConfiguration LoadFromDisk()
+        {
+            if (!File.Exists(ConfigFilePath))
+            {
+                Debug.LogWarning("[CONFIG] Settings file not found, using default configuration.");
+                return DefaultConfiguration;
+            };
+            try
+            {
+                IDataService dataService = new JsonDataService();
+                Debug.Log($"[CONFIG] Settings file loaded from {ConfigFilePath}");
+                return dataService.LoadData<SettingsConfiguration>(ConfigFilePath, false);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"[CONFIG] Error loading settings from: {ConfigFilePath}\n" + e.ToString());
+                Debug.LogWarning("[CONFIG] Using default configuration");
+            }
+
+            return DefaultConfiguration;
+        }
+        public bool SaveToDisk()
+        {
+            try
+            {
+                IDataService dataService = new JsonDataService();
+                dataService.SaveData(ConfigFilePath, this, false);
+                return true;
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"[CONFIG] Error saving settings to: {ConfigFilePath}\n" + e.ToString());
+            }
+
+            return false;
+        }
     }
 }

@@ -50,14 +50,11 @@ namespace SpectacularAI.DepthAI
         private Vector3 _prevSmoothedPosition;
         private UnityEngine.Quaternion _prevSmoothedOrientation;
         
-        private IDataService DataService = new JsonDataService();
-
         private void OnEnable()
         {
             if (ReadLauncherSettings)
             {
-                string path = $"{Application.persistentDataPath}/launcherSettings.json";
-                launcherSettings = DataService.LoadData<SettingsConfiguration>(path, false);
+                launcherSettings = SettingsConfiguration.LoadFromDisk();
                 rotationOffset = new Vector3(0, 0, launcherSettings.zOffset);
             }
         }

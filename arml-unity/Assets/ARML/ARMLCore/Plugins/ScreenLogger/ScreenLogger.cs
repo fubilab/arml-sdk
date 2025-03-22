@@ -230,7 +230,7 @@ namespace AClockworkBerry
                     y = Margin;
                     break;
             }
-
+            
             GUILayout.BeginArea(new Rect(x, y, w, h), styleContainer);
 
             foreach (LogMessage m in queue)
@@ -256,6 +256,7 @@ namespace AClockworkBerry
                         break;
                 }
 
+                styleText.wordWrap = true;
                 GUILayout.Label(m.Message, styleText);
             }
 

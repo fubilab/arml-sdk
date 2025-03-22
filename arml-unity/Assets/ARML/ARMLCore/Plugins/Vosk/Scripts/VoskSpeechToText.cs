@@ -141,12 +141,12 @@ public class VoskSpeechToText : MonoBehaviour
     {
         if (_isInitializing)
         {
-            Debug.LogError("Initializing in progress!");
+            Debug.LogWarning("Initializing in progress!");
             return;
         }
         if (_didInit && !changedLanguage)
         {
-            Debug.LogError("Vosk has already been initialized!");
+            Debug.LogWarning("Vosk has already been initialized!");
             return;
         }
 

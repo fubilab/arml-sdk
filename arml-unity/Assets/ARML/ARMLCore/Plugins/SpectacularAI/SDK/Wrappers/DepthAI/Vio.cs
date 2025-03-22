@@ -1,9 +1,6 @@
 using ARML.SceneManagement;
 using System.Collections.Generic;
 using UnityEngine;
-using System.IO;
-using ARML.Saving;
-using ARML.SceneManagement;
 
 namespace SpectacularAI.DepthAI
 {
@@ -72,16 +69,16 @@ namespace SpectacularAI.DepthAI
 
         private Pipeline _pipeline;
         private Session _session;
-        private SettingsConfiguration launcherSettings;
-        private IDataService DataService = new JsonDataService();
+        private SettingsConfiguration _launcherSettings;
 
         /// <summary>
         /// The current vio output.
         /// </summary>
         public static VioOutput Output { get; private set; }
 
-        private void OnEnable()
+        void Start()
         {
+            Debug.Log("[VIO] Start");
             Configuration config = new Configuration();
             config.LowLatency = LowLatency;
             config.UseStereo = UseStereo;
@@ -96,10 +93,9 @@ namespace SpectacularAI.DepthAI
 
             if (readLauncherSettings)
             {
-                string path = $"{Application.persistentDataPath}/launcherSettings.json";
-                launcherSettings = DataService.LoadData<SettingsConfiguration>(path, false);
+                _launcherSettings = SettingsConfiguration.LoadFromDisk();
 
-                foreach (var internalParameter in launcherSettings.vioInternalParameters)
+                foreach (var internalParameter in _launcherSettings.vioInternalParameters)
                 {
                     InternalParameters.Add(internalParameter);
                 }
@@ -108,6 +104,7 @@ namespace SpectacularAI.DepthAI
 #if UNITY_EDITOR_WIN || UNITY_EDITOR_OSX
             return;
 #endif
+            Debug.Log("[VIO] StartSession");
             _pipeline = new Pipeline(configuration: config, enableMappingAPI: MappingAPI, internalParameters: InternalParameters.ToArray());
             _session = _pipeline.StartSession();
         }
