@@ -1,4 +1,6 @@
+using ARML.AprilTags;
 using ARML.SceneManagement;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -55,9 +57,8 @@ namespace SpectacularAI.DepthAI
         [Tooltip("If not empty, the session will be recorded to the given folder")]
         public string RecordingFolder = "";
 
-        [Tooltip("Path to .json file with AprilTag information. AprilTag detection is enabled when not empty.\n" +
-            "For the file format see: https://github.com/SpectacularAI/docs/blob/main/pdf/april_tag_instructions.pdf\n" +
-            "Note: sets useSlam=true")]
+        [Tooltip("Path to .json file with AprilTag information. If set, overrides the automatic generation \n" +
+            "based on placed AprilTag components in the scene.")]
         [SerializeField]
         public string AprilTagPath = "";
 
@@ -78,7 +79,6 @@ namespace SpectacularAI.DepthAI
 
         void Start()
         {
-            Debug.Log("[VIO] Start");
             Configuration config = new Configuration();
             config.LowLatency = LowLatency;
             config.UseStereo = UseStereo;
@@ -89,7 +89,19 @@ namespace SpectacularAI.DepthAI
             config.GyroFrequencyHz = (uint)GyroFrequencyHz;
             config.RecordingOnly = RecordingOnly;
             config.RecordingFolder = RecordingFolder;
-            config.AprilTagPath = AprilTagPath;
+
+            if (!String.IsNullOrEmpty(AprilTagPath)) 
+            {
+                // override tag generation
+                config.AprilTagPath = AprilTagPath;
+            }
+            else
+            {
+                // look for AprilTag JSON in the 
+                AprilTag[] aprilTags = FindObjectsByType<AprilTag>(FindObjectsSortMode.None);
+                string jsonPath = ARML.AprilTags.Utility.SerializeAprilTags(aprilTags);
+                config.AprilTagPath = jsonPath;
+            }
 
             if (readLauncherSettings)
             {
