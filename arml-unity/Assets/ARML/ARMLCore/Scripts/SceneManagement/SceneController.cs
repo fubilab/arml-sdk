@@ -1,3 +1,4 @@
+using System;
 using FishNet;
 using System.Collections;
 using System.Linq;
@@ -5,8 +6,6 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using ARML.Interaction;
-using SpectacularAI.DepthAI;
-using System.Threading.Tasks;
 
 namespace ARML.SceneManagement
 {
@@ -39,6 +38,8 @@ namespace ARML.SceneManagement
         }
 
         #endregion
+
+        public Action<Scene> OnGameSceneLoaded;
 
         private void Awake()
         {
@@ -193,15 +194,9 @@ namespace ARML.SceneManagement
             if (fadeToBlackBetweenLoads)
                 StartCoroutine(FadeBackToGame());
 
-            // start VIO session
-            Vio vio = FindFirstObjectByType<Vio>();
-            if (vio == null)
+            if (OnGameSceneLoaded != null) 
             {
-                Debug.LogWarning("[SceneController] VIO component not found, can't start tracking session");
-            }
-            else
-            {
-                vio.StartSession();
+                OnGameSceneLoaded(scene);
             }
         }
 

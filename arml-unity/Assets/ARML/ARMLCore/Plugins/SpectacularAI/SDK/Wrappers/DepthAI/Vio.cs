@@ -3,6 +3,7 @@ using ARML.SceneManagement;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace SpectacularAI.DepthAI
 {
@@ -72,7 +73,8 @@ namespace SpectacularAI.DepthAI
         private Session _session;
         private SettingsConfiguration _launcherSettings;
 
-        [Tooltip("Start VIO Session on component Start")]
+        [Tooltip("Start VIO Session on component Start, rather than waiting for the game scene to load.\n" + 
+            "Do not set this if using AprilTags in your scene.")]
         public bool autoStartSession;
 
         /// <summary>
@@ -86,6 +88,15 @@ namespace SpectacularAI.DepthAI
             {
                 StartSession();
             }
+            else 
+            {
+                SceneController.Instance.OnGameSceneLoaded += GameSceneLoaded;
+            }
+        }
+
+        private void GameSceneLoaded(Scene scene)
+        {
+            StartSession();
         }
 
         public void StartSession()
