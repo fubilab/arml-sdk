@@ -72,13 +72,29 @@ namespace SpectacularAI.DepthAI
         private Session _session;
         private SettingsConfiguration _launcherSettings;
 
+        [Tooltip("Start VIO Session on component Start")]
+        public bool autoStartSession;
+
         /// <summary>
         /// The current vio output.
         /// </summary>
         public static VioOutput Output { get; private set; }
 
-        void Start()
+        void Start() 
         {
+            if (autoStartSession) 
+            {
+                StartSession();
+            }
+        }
+
+        public void StartSession()
+        {
+            if (_session != null)
+            {
+                Debug.LogWarning("[VIO] StartSession called when session already started, skipping.");
+                return;
+            }
             Configuration config = new Configuration();
             config.LowLatency = LowLatency;
             config.UseStereo = UseStereo;

@@ -12,7 +12,9 @@ namespace ARML.AprilTags {
         {
             AprilTag[] aprilTags = FindObjectsByType<AprilTag>(FindObjectsSortMode.None);
             string jsonPath = ARML.AprilTags.Utility.SerializeAprilTags(aprilTags);
+#if UNITY_EDITOR
             EditorUtility.RevealInFinder(jsonPath);
+#endif
         }
     }
 }

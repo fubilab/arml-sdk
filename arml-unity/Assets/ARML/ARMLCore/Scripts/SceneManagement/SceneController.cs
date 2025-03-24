@@ -5,6 +5,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using ARML.Interaction;
+using SpectacularAI.DepthAI;
+using System.Threading.Tasks;
 
 namespace ARML.SceneManagement
 {
@@ -45,10 +47,15 @@ namespace ARML.SceneManagement
 
         private void OnEnable()
         {
-            if (InstanceFinder.SceneManager) 
+            if (InstanceFinder.NetworkManager != null) 
             {
-                InstanceFinder.SceneManager.OnLoadEnd += PostLoadingScene;
+                InstanceFinder.SceneManager.OnLoadEnd += NetworkSceneLoaded;
             }
+            else
+            {
+                SceneManager.sceneLoaded += SceneLoaded;
+            }
+            
         }
 
         /// <summary>
@@ -100,7 +107,7 @@ namespace ARML.SceneManagement
         /// <param name="scene">The name of the scene to load.</param>
         public IEnumerator LoadSceneByName(string scene)
         {
-            // If Game Scene is already loaded, return
+            // If Game ScenSceneManagere is already loaded, return
             for (int i = 0; i < SceneManager.sceneCount; i++)
             {
                 if (SceneManager.GetSceneAt(i).name == scene)
@@ -119,12 +126,17 @@ namespace ARML.SceneManagement
             }
 
             //Load Level
-            Debug.Log($"Started loading scene {scene}");
-
-            //yield return SceneManager.LoadSceneAsync(scene, LoadSceneMode.Additive);
+            Debug.Log($"[SceneController] Started loading scene {scene}");
 
             //Networked version
-            InstanceFinder.SceneManager.LoadGlobalScenes(new FishNet.Managing.Scened.SceneLoadData(scene));
+            if (InstanceFinder.NetworkManager != null) 
+            {
+                InstanceFinder.SceneManager.LoadGlobalScenes(new FishNet.Managing.Scened.SceneLoadData(scene));
+            }
+            else
+            {
+                SceneManager.LoadScene(scene, LoadSceneMode.Additive);   
+            }
         }
 
         /// <summary>
@@ -141,11 +153,19 @@ namespace ARML.SceneManagement
             return LoadSceneByName(sceneName);
         }
 
+        private void SceneLoaded(Scene scene, LoadSceneMode mode)
+        {
+            if (scene.name == "Logic")
+                return;
+            
+            PostLoadScene(scene);
+        }
 
-    /// <summary>
-        /// Logic to run after scene has finished loading
+
+        /// <summary>
+        /// Logic to run after scene has finished loading (when NetworkManager is active)
         /// </summary>
-        public void PostLoadingScene(FishNet.Managing.Scened.SceneLoadEndEventArgs args)
+        private void NetworkSceneLoaded(FishNet.Managing.Scened.SceneLoadEndEventArgs args)
         {
             string loadedScene = "";
 
@@ -159,14 +179,30 @@ namespace ARML.SceneManagement
 
             if (loadedScene == "") return;
 
-            SceneManager.SetActiveScene(args.LoadedScenes[0]);
-            Debug.Log($"Finished loading scene {loadedScene} and set as active");
+            PostLoadScene(args.LoadedScenes[0]);
+        }
+
+        private void PostLoadScene(Scene scene)
+        {
+            SceneManager.SetActiveScene(scene);
+            Debug.Log($"[SceneController] Finished loading scene {scene.name} and set as active");
 
             //Set Camera transform to Scene Origin 
             FindObjectOfType<CameraParentController>()?.MoveToSceneOrigin();
 
             if (fadeToBlackBetweenLoads)
                 StartCoroutine(FadeBackToGame());
+
+            // start VIO session
+            Vio vio = FindFirstObjectByType<Vio>();
+            if (vio == null)
+            {
+                Debug.LogWarning("[SceneController] VIO component not found, can't start tracking session");
+            }
+            else
+            {
+                vio.StartSession();
+            }
         }
 
         /// <summary>

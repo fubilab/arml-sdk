@@ -1524,6 +1524,7 @@ MonoBehaviour:
   AprilTagPath: 
   InternalParameters: []
   readLauncherSettings: 1
+  autoStartSession: 0
 --- !u!114 &381384618863297024
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7511,7 +7512,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa0afa61f775305429a6c5930482c488, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ShowLog: 1
+  ShowLog: 0
   ShowInEditor: 1
   Height: 1
   Width: 1
