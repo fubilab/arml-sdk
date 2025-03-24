@@ -1521,7 +1521,7 @@ MonoBehaviour:
   GyroFrequencyHz: 400
   RecordingOnly: 0
   RecordingFolder: 
-  AprilTagPath: /home/fubintlab/.config/unity3d/FuBILab/ARML/tags.json
+  AprilTagPath: 
   InternalParameters: []
   readLauncherSettings: 1
 --- !u!114 &381384618863297024
@@ -6331,7 +6331,6 @@ MonoBehaviour:
   UseVIO: 1
   UseOrientationFromBNO: 0
   Origin: {fileID: 0}
-  ResetOnStart: 1
   PosePredictDt: 0
   PoseSmoothAlpha: 1
   rotationOffset: {x: 0, y: 0, z: 0}
