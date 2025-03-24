@@ -99,8 +99,12 @@ namespace SpectacularAI.DepthAI
             {
                 // look for AprilTag JSON in the 
                 AprilTag[] aprilTags = FindObjectsByType<AprilTag>(FindObjectsSortMode.None);
-                string jsonPath = ARML.AprilTags.Utility.SerializeAprilTags(aprilTags);
-                config.AprilTagPath = jsonPath;
+                if (aprilTags.Length > 0) 
+                {
+                    string jsonPath = ARML.AprilTags.Utility.SerializeAprilTags(aprilTags);
+                    config.AprilTagPath = jsonPath;
+                    AprilTagPath = jsonPath;
+                }
             }
 
             if (readLauncherSettings)

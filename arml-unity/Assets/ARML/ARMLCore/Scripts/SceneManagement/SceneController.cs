@@ -45,7 +45,10 @@ namespace ARML.SceneManagement
 
         private void OnEnable()
         {
-            InstanceFinder.SceneManager.OnLoadEnd += PostLoadingScene;
+            if (InstanceFinder.SceneManager) 
+            {
+                InstanceFinder.SceneManager.OnLoadEnd += PostLoadingScene;
+            }
         }
 
         /// <summary>
