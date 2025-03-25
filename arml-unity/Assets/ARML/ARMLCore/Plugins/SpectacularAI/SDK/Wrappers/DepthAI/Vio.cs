@@ -2,6 +2,7 @@ using ARML.AprilTags;
 using ARML.SceneManagement;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -88,9 +89,16 @@ namespace SpectacularAI.DepthAI
             {
                 StartSession();
             }
-            else 
+            else
             {
-                SceneController.Instance.OnGameSceneLoaded += GameSceneLoaded;
+                if (SceneController.Instance.LoadedGameScene != null)
+                {
+                    GameSceneLoaded(SceneController.Instance.LoadedGameScene);
+                }
+                else
+                {
+                    SceneController.Instance.OnGameSceneLoaded += GameSceneLoaded;
+                }
             }
         }
 
@@ -157,8 +165,11 @@ namespace SpectacularAI.DepthAI
 #if UNITY_EDITOR_WIN || UNITY_EDITOR_OSX
             return;
 #endif
-            _session.Dispose();
-            _pipeline.Dispose();
+            if (_session != null)
+                _session.Dispose();
+            if (_pipeline != null)
+                _pipeline.Dispose();
+            
             _session = null;
             _pipeline = null;
         }

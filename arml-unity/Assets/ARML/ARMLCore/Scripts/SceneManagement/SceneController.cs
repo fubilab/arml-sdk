@@ -40,6 +40,7 @@ namespace ARML.SceneManagement
         #endregion
 
         public Action<Scene> OnGameSceneLoaded;
+        public Scene LoadedGameScene;
 
         private void Awake()
         {
@@ -186,6 +187,7 @@ namespace ARML.SceneManagement
         private void PostLoadScene(Scene scene)
         {
             SceneManager.SetActiveScene(scene);
+            LoadedGameScene = scene;
             Debug.Log($"[SceneController] Finished loading scene {scene.name} and set as active");
 
             //Set Camera transform to Scene Origin 
