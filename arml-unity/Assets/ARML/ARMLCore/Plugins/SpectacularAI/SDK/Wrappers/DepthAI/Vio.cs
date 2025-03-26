@@ -1,6 +1,10 @@
+using ARML.AprilTags;
 using ARML.SceneManagement;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace SpectacularAI.DepthAI
 {
@@ -55,9 +59,8 @@ namespace SpectacularAI.DepthAI
         [Tooltip("If not empty, the session will be recorded to the given folder")]
         public string RecordingFolder = "";
 
-        [Tooltip("Path to .json file with AprilTag information. AprilTag detection is enabled when not empty.\n" +
-            "For the file format see: https://github.com/SpectacularAI/docs/blob/main/pdf/april_tag_instructions.pdf\n" +
-            "Note: sets useSlam=true")]
+        [Tooltip("Path to .json file with AprilTag information. If set, overrides the automatic generation \n" +
+            "based on placed AprilTag components in the scene.")]
         [SerializeField]
         public string AprilTagPath = "";
 
@@ -71,14 +74,46 @@ namespace SpectacularAI.DepthAI
         private Session _session;
         private SettingsConfiguration _launcherSettings;
 
+        [Tooltip("Start VIO Session on component Start, rather than waiting for the game scene to load.\n" + 
+            "Do not set this if using AprilTags in your scene.")]
+        public bool autoStartSession;
+
         /// <summary>
         /// The current vio output.
         /// </summary>
         public static VioOutput Output { get; private set; }
 
-        void Start()
+        void Start() 
         {
-            Debug.Log("[VIO] Start");
+            if (autoStartSession) 
+            {
+                StartSession();
+            }
+            else
+            {
+                if (SceneController.Instance.LoadedGameScene != null)
+                {
+                    GameSceneLoaded(SceneController.Instance.LoadedGameScene);
+                }
+                else
+                {
+                    SceneController.Instance.OnGameSceneLoaded += GameSceneLoaded;
+                }
+            }
+        }
+
+        private void GameSceneLoaded(Scene scene)
+        {
+            StartSession();
+        }
+
+        public void StartSession()
+        {
+            if (_session != null)
+            {
+                Debug.LogWarning("[VIO] StartSession called when session already started, skipping.");
+                return;
+            }
             Configuration config = new Configuration();
             config.LowLatency = LowLatency;
             config.UseStereo = UseStereo;
@@ -89,7 +124,23 @@ namespace SpectacularAI.DepthAI
             config.GyroFrequencyHz = (uint)GyroFrequencyHz;
             config.RecordingOnly = RecordingOnly;
             config.RecordingFolder = RecordingFolder;
-            config.AprilTagPath = AprilTagPath;
+
+            if (!String.IsNullOrEmpty(AprilTagPath)) 
+            {
+                // override tag generation
+                config.AprilTagPath = AprilTagPath;
+            }
+            else
+            {
+                // look for AprilTag JSON in the 
+                AprilTag[] aprilTags = FindObjectsByType<AprilTag>(FindObjectsSortMode.None);
+                if (aprilTags.Length > 0) 
+                {
+                    string jsonPath = ARML.AprilTags.Utility.SerializeAprilTags(aprilTags);
+                    config.AprilTagPath = jsonPath;
+                    AprilTagPath = jsonPath;
+                }
+            }
 
             if (readLauncherSettings)
             {
@@ -114,8 +165,11 @@ namespace SpectacularAI.DepthAI
 #if UNITY_EDITOR_WIN || UNITY_EDITOR_OSX
             return;
 #endif
-            _session.Dispose();
-            _pipeline.Dispose();
+            if (_session != null)
+                _session.Dispose();
+            if (_pipeline != null)
+                _pipeline.Dispose();
+            
             _session = null;
             _pipeline = null;
         }

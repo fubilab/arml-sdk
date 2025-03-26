@@ -26,10 +26,6 @@ namespace SpectacularAI.DepthAI
         [Tooltip("Position and yaw are set to match this transformation, identity if None")]
         public Transform Origin;
 
-
-        [Tooltip("Reset on start up")]
-        public bool ResetOnStart = false;
-
         [Tooltip("Pose is predicted assuming constant linear/angular velocity"), Range(0, 0.2f)]
         public float PosePredictDt = 0f;
 
@@ -105,11 +101,6 @@ namespace SpectacularAI.DepthAI
             }
 
             _currentPose = output.Pose;
-            if (ResetOnStart)
-            {
-                ResetOnStart = false;
-                ResetPositionAndYaw();
-            }
 
             // Pose prediction
             Vector3 predictedPosition = Utility.PredictPosition(output.Pose.Position, output.Velocity, PosePredictDt);
