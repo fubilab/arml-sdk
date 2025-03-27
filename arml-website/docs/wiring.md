@@ -51,7 +51,7 @@ C = color(s)
 | pc5.p | 18AWG | 45  | ![](images/color-red.jpg) | Connects boost 1 (mainboard) to T-tap (cx1) on pc6.p |
 | pc6.p | 18AWG | 480 | ![](images/color-red.jpg) | Connects ext power switch to boost 2 (projector) Female spade connector (cx5) on power switch end |
 | pc7.g | 18AWG | 240 | ![](images/color-black.jpg) | Connects Tamiya connector (cx4) to boost 2 (projector) |
-| pc7.p | 20AWG | 420 | ![](images/color-red.jpg) | Connects ext power switch to Tamiya connector (cx4) Female spade connector (cx5) on power switch end |
+| pc7.p | 18AWG | 420 | ![](images/color-red.jpg) | Connects ext power switch to Tamiya connector (cx4) Female spade connector (cx5) on power switch end |
 | pc8.p/g | 16AWG | 120 | ![](images/color-red.jpg)![](images/color-black.jpg) | Connects Tamiya connector (cx4, male) to battery |
 | pc9.p/g | | 60  | ![](images/color-red.jpg)![](images/color-black.jpg) | Provides plug (5.5mm barrel, female) for charging battery |
 | cx1 | T-Tap Connector |     |     | Scotch Lock connector 18-22 AWG <br>[Amazon](https://www.amazon.es/dp/B07G9HBYGH) |
