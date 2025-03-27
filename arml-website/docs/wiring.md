@@ -38,7 +38,8 @@ C = color(s)
 | fc4.p/g | 30AWG | 150 | ![](images/color-red.jpg)![](images/color-black.jpg) | Back-left fan power, positive/ground |
 | fc5.p | 30AWG | 60  | ![](images/color-red.jpg) | Back-right fan power, positive Connect to T-taps (cx2) on fc4.p|
 | fc5.g | 30AWG | 70  | ![](images/color-black.jpg) | Back-right fan power, ground Connect to T-taps (cx2) on fc4.g |
-| hc1 | 28AWG | 380 | ![](images/color-brown.jpg) | Connects push-button to Arduino |
+| hc1.1 | 28AWG | 380 | ![](images/color-brown.jpg) | Connects push-button to Arduino (1) |
+| hc1.2 | 28AWG | 380 | ![](images/color-brown.jpg) | Connects push-button to Arduino (2) |
 | hc2, hc3 | QWIIC (30AWG) | 160 | ![](images/color-red.jpg)![](images/color-black.jpg)![](images/color-gold.jpg)![](images/color-blue.jpg) | Connects IMU to mainboard 4-pin QWIIC connector on one end <br>[Amazon](https://www.amazon.es/gp/product/B08HQ1VSVL) |
 | pc1.p | 20AWG | 75  | ![](images/color-red.jpg) | Mainboard power, positive |
 | pc1.g | 20AWG | 80  | ![](images/color-black.jpg) | Mainboard power, ground |
