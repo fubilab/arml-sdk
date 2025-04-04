@@ -52,6 +52,25 @@ namespace SpectacularAI.DepthAI
             {
                 launcherSettings = SettingsConfiguration.LoadFromDisk();
                 rotationOffset = new Vector3(0, 0, launcherSettings.zOffset);
+                if (launcherSettings.trackingMode == TrackingMode.ImuOnly)
+                {
+                    UseVIO = false;
+                    UseOrientationFromBNO = true;
+                }
+                else if (launcherSettings.trackingMode == TrackingMode.VioOnly)
+                {
+                    UseVIO = true;
+                    UseOrientationFromBNO = false;
+                }
+                else if (launcherSettings.trackingMode == TrackingMode.VioPlusImu)
+                {
+                    UseVIO = true;
+                    UseOrientationFromBNO = true;
+                }
+            }
+            else
+            {
+                launcherSettings = new SettingsConfiguration();
             }
         }
 
@@ -79,7 +98,18 @@ namespace SpectacularAI.DepthAI
 
         private void UpdateBNO()
         {
-            transform.localEulerAngles = ArduinoController.Instance.bnoEulerAngles;
+            if (launcherSettings.imuOrientation == ImuOrientation.XBackward)
+            {
+                transform.localEulerAngles = ArduinoController.Instance.bnoEulerAngles;
+            }
+            else
+            {
+                transform.localEulerAngles = new Vector3(
+                    -1 * ArduinoController.Instance.bnoEulerAngles.x,
+                    ArduinoController.Instance.bnoEulerAngles.y,
+                    -1 * ArduinoController.Instance.bnoEulerAngles.z
+                );
+            }
         }
 
         private void UpdateVIO() {

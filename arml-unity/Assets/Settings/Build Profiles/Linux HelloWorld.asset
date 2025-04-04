@@ -22,6 +22,8 @@ MonoBehaviour:
   m_Scenes:
   - m_enabled: 1
     m_path: Assets/ARML/ARMLCore/Scenes/Logic.unity
+  - m_enabled: 1
+    m_path: Assets/ARML/ARMLCore/Scenes/HelloWorld.unity
   m_ScriptingDefines: []
   m_PlayerSettingsYaml:
     m_Settings:

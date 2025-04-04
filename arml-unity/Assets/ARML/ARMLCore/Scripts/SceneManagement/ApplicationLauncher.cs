@@ -11,10 +11,23 @@ using SpectacularAI;
 using System;
 using System.Linq;
 using System.Threading;
+using System.Reflection;
 using Debug = UnityEngine.Debug;
 
 namespace ARML.SceneManagement
 {
+    public enum TrackingMode
+    {
+        VioOnly,
+        ImuOnly,
+        VioPlusImu,
+    }
+
+    public enum ImuOrientation
+    {
+        XForward,
+        XBackward,
+    }
     /// <summary>
     /// Manages the launch of external applications from within a Unity application. 
     /// It dynamically creates UI elements to represent and launch these applications.
@@ -26,7 +39,8 @@ namespace ARML.SceneManagement
         [SerializeField] string fileFormatExtension;
         [SerializeField] GameObject scrollView;
         [SerializeField] GameObject settingsPanel;
-        [SerializeField] SettingsConfiguration settings;
+        
+        public SettingsConfiguration settings;
 
         private List<string> applicationPathList = new List<string>();
         private string applicationsDirectory = "";
@@ -173,25 +187,7 @@ namespace ARML.SceneManagement
             if (settingsPanel.activeInHierarchy)
                 UpdateSettingsUI();
         }
-
-        public void SetLanguageSettings(int languageIndex)
-        {
-            settings.languageIndex = languageIndex;
-            SaveSettings();
-        }
-
-        public void SetLogSettings(bool state)
-        {
-            settings.displayLog = state;
-            SaveSettings();
-        }
-
-        public void SetScanSettings(bool state)
-        {
-            settings.displayScan = state;
-            SaveSettings();
-        }
-        
+    
         public void IncreaseZOffset()
         {
             settings.zOffset += 0.5f;
@@ -204,21 +200,25 @@ namespace ARML.SceneManagement
             SaveSettings();
         }
 
-        private void SaveSettings()
+        public void SaveSettings()
         {
+            print("displayLog");
+            print(settings.displayLog.ToString());
             settings.SaveToDisk();
             UpdateSettingsUI();
         }
     }
 
     [System.Serializable]
-    class SettingsConfiguration
+    public class SettingsConfiguration
     {
         public bool displayLog;
         public bool displayScan;
         public int languageIndex;
         public List<VioParameter> vioInternalParameters;
         public float zOffset;
+        public TrackingMode trackingMode;
+        public ImuOrientation imuOrientation;
 
         public static readonly SettingsConfiguration DefaultConfiguration = new SettingsConfiguration()
         {
@@ -228,14 +228,32 @@ namespace ARML.SceneManagement
             vioInternalParameters = new List<VioParameter>()
             {
                 new VioParameter() { Key = "trackerMasks", Value = "0.314,0.347,0.700,0.748" }
-            }
+            },
+            trackingMode = TrackingMode.VioOnly,
+            imuOrientation = ImuOrientation.XBackward,
         };
+        
+        public void ApplyDefaultValues()
+        {
+            Type type = typeof(SettingsConfiguration);
+            FieldInfo[] fields = type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+
+            foreach (FieldInfo field in fields)
+            {
+                object currentValue = field.GetValue(this);
+                if (currentValue == null)
+                {
+                    object defaultValue = field.GetValue(DefaultConfiguration);
+                    field.SetValue(this, defaultValue);
+                }
+            }
+        }
         
         public static string ConfigFilePath {
             get => $"{Application.persistentDataPath}/launcherSettings.json";
         }
 
-    public static SettingsConfiguration LoadFromDisk()
+        public static SettingsConfiguration LoadFromDisk()
         {
             if (!File.Exists(ConfigFilePath))
             {
@@ -246,7 +264,8 @@ namespace ARML.SceneManagement
             {
                 IDataService dataService = new JsonDataService();
                 Debug.Log($"[CONFIG] Settings file loaded from {ConfigFilePath}");
-                return dataService.LoadData<SettingsConfiguration>(ConfigFilePath, false);
+                var settings = dataService.LoadData<SettingsConfiguration>(ConfigFilePath, false);
+                settings.ApplyDefaultValues();
             }
             catch (Exception e)
             {
@@ -258,6 +277,7 @@ namespace ARML.SceneManagement
         }
         public bool SaveToDisk()
         {
+            ApplyDefaultValues();
             try
             {
                 IDataService dataService = new JsonDataService();
