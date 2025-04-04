@@ -202,8 +202,6 @@ namespace ARML.SceneManagement
 
         public void SaveSettings()
         {
-            print("displayLog");
-            print(settings.displayLog.ToString());
             settings.SaveToDisk();
             UpdateSettingsUI();
         }
@@ -266,6 +264,7 @@ namespace ARML.SceneManagement
                 Debug.Log($"[CONFIG] Settings file loaded from {ConfigFilePath}");
                 var settings = dataService.LoadData<SettingsConfiguration>(ConfigFilePath, false);
                 settings.ApplyDefaultValues();
+                return settings;
             }
             catch (Exception e)
             {

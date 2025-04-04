@@ -20,7 +20,7 @@ namespace ARML.SceneManagement
         private ApplicationLauncher launcher;
         private SettingsConfiguration targetObject;
 
-        private void Awake()
+        private void Start()
         {
             button = GetComponent<Button>();
             launcher = GetComponentInParent<ApplicationLauncher>();
