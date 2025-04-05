@@ -211,6 +211,8 @@ namespace ARML.SceneManagement
     [System.Serializable]
     public class SettingsConfiguration
     {
+        // note that the DefaultValueAttribute is used because Newtonsoft JSON uses it to populate 
+        // missing values when deserializing
         [DefaultValue(false)] public bool displayLog;
         [DefaultValue(false)] public bool displayScan;
         [DefaultValue(0)] public int languageIndex;
@@ -228,6 +230,11 @@ namespace ARML.SceneManagement
         }
 
         private static SettingsConfiguration _settingsConfiguration;
+
+        public SettingsConfiguration()
+        {
+            InitializeDefaults();
+        }
 
         public static SettingsConfiguration LoadFromDisk(bool forceLoad = false)
         {
@@ -269,6 +276,17 @@ namespace ARML.SceneManagement
             }
 
             return false;
+        }
+        private void InitializeDefaults()
+        {
+            foreach (var field in this.GetType().GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
+            {
+                var defaultValueAttr = field.GetCustomAttribute<DefaultValueAttribute>();
+                if (defaultValueAttr != null)
+                {
+                    field.SetValue(this, defaultValueAttr.Value);
+                }
+            }
         }
     }
 }
