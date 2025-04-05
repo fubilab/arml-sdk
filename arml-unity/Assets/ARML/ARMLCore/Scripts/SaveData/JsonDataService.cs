@@ -80,7 +80,10 @@ namespace ARML.Saving
                 }
                 else
                 {
-                    data = JsonConvert.DeserializeObject<T>(File.ReadAllText(path));
+                    data = JsonConvert.DeserializeObject<T>(
+                        File.ReadAllText(path), 
+                        new JsonSerializerSettings { DefaultValueHandling = DefaultValueHandling.Populate }
+                    );
                 }
                 return data;
             }

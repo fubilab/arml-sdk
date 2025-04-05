@@ -148,9 +148,18 @@ namespace SpectacularAI.DepthAI
 
                 config.UseSlam = UseSlam = _launcherSettings.useSlam;
 
-                foreach (var internalParameter in _launcherSettings.vioInternalParameters)
+                if (_launcherSettings.vioInternalParameters == null)
                 {
-                    InternalParameters.Add(internalParameter);
+                    InternalParameters.Add(
+                        new VioParameter() { Key = "trackerMasks", Value = "0.314,0.347,0.700,0.748" }
+                    );
+                }
+                else
+                {
+                    foreach (var internalParameter in _launcherSettings.vioInternalParameters)
+                    {
+                        InternalParameters.Add(internalParameter);
+                    }
                 }
             }
 

@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using ARML.SceneManagement;
 using UnityEngine;
 
 public class RemoteControl : MonoBehaviour {
@@ -26,8 +27,13 @@ public class RemoteControl : MonoBehaviour {
 
     [Tooltip("Menu key assignment")]
     public KeyCode MenuKey = KeyCode.Menu;
+    [Tooltip("Alt menu key assignment")]
+    public KeyCode MenuKey2 = KeyCode.PageUp;
+
     [Tooltip("Reset pose key assignment (for systems that do not support long press).")]
     public KeyCode ResetKey = KeyCode.Backspace;
+
+    public bool ReadLauncherSettings = true;
 
     public Action OnMenuPress;
     public Action OnMenuLongPress;
@@ -39,23 +45,34 @@ public class RemoteControl : MonoBehaviour {
         OnMenuLongPress?.Invoke();
         // print("Menu long press");
         _MenuButtonPressCoroutine = null;
-
     }
 
-    void Awake() {
+    void Awake() 
+    {
         Singleton();
+    }
+
+    void Start()
+    {
+        if (ReadLauncherSettings)
+        {
+            var launcherSettings = SettingsConfiguration.LoadFromDisk();
+            MenuKey = launcherSettings.menuKey;
+            MenuKey2 = launcherSettings.menuKey2;
+            ResetKey = launcherSettings.resetKey;
+        }
     }
 
 
     private void Update()
     {
-        if (Input.GetKeyDown(MenuKey))
+        if (Input.GetKeyDown(MenuKey) || Input.GetKeyDown(MenuKey2))
         {
             //print("Down: Menu");
             _MenuButtonPressCoroutine = MenuButtonPress();
             StartCoroutine(_MenuButtonPressCoroutine);
         }
-        if (Input.GetKeyUp(MenuKey))
+        if (Input.GetKeyUp(MenuKey) || Input.GetKeyUp(MenuKey2))
         {
             if (_MenuButtonPressCoroutine != null) {
                 StopCoroutine(_MenuButtonPressCoroutine);

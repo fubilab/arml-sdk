@@ -9,6 +9,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using SpectacularAI;
 using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading;
 using System.Reflection;
@@ -210,62 +211,40 @@ namespace ARML.SceneManagement
     [System.Serializable]
     public class SettingsConfiguration
     {
-        public bool displayLog;
-        public bool displayScan;
-        public int languageIndex;
-        public List<VioParameter> vioInternalParameters;
-        public float zOffset;
-        public TrackingMode trackingMode;
-        public ImuOrientation imuOrientation;
-        public bool useSlam;
-
-        public static readonly SettingsConfiguration DefaultConfiguration = new SettingsConfiguration()
-        {
-            displayLog = false,
-            displayScan = false,
-            zOffset = 0,
-            vioInternalParameters = new List<VioParameter>()
-            {
-                new VioParameter() { Key = "trackerMasks", Value = "0.314,0.347,0.700,0.748" }
-            },
-            trackingMode = TrackingMode.VioOnly,
-            imuOrientation = ImuOrientation.XBackward,
-            useSlam = true,
-        };
-        
-        public void ApplyDefaultValues()
-        {
-            Type type = typeof(SettingsConfiguration);
-            FieldInfo[] fields = type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-
-            foreach (FieldInfo field in fields)
-            {
-                object currentValue = field.GetValue(this);
-                if (currentValue == null)
-                {
-                    object defaultValue = field.GetValue(DefaultConfiguration);
-                    field.SetValue(this, defaultValue);
-                }
-            }
-        }
+        [DefaultValue(false)] public bool displayLog;
+        [DefaultValue(false)] public bool displayScan;
+        [DefaultValue(0)] public int languageIndex;
+        [DefaultValue(null)] public List<VioParameter> vioInternalParameters;
+        [DefaultValue(0)] public float zOffset;
+        [DefaultValue(TrackingMode.VioOnly)] public TrackingMode trackingMode;
+        [DefaultValue(ImuOrientation.XBackward)] public ImuOrientation imuOrientation;
+        [DefaultValue(false)] public bool useSlam;
+        [DefaultValue(KeyCode.Menu)] public KeyCode menuKey;
+        [DefaultValue(KeyCode.PageDown)] public KeyCode menuKey2;
+        [DefaultValue(KeyCode.Backspace)] public KeyCode resetKey;
         
         public static string ConfigFilePath {
             get => $"{Application.persistentDataPath}/launcherSettings.json";
         }
 
-        public static SettingsConfiguration LoadFromDisk()
+        private static SettingsConfiguration _settingsConfiguration;
+
+        public static SettingsConfiguration LoadFromDisk(bool forceLoad = false)
         {
+            if (_settingsConfiguration != null && !forceLoad)
+            {
+                return _settingsConfiguration;
+            }
             if (!File.Exists(ConfigFilePath))
             {
                 Debug.LogWarning("[CONFIG] Settings file not found, using default configuration.");
-                return DefaultConfiguration;
+                return new SettingsConfiguration();
             };
             try
             {
                 IDataService dataService = new JsonDataService();
                 Debug.Log($"[CONFIG] Settings file loaded from {ConfigFilePath}");
                 var settings = dataService.LoadData<SettingsConfiguration>(ConfigFilePath, false);
-                settings.ApplyDefaultValues();
                 return settings;
             }
             catch (Exception e)
@@ -274,11 +253,10 @@ namespace ARML.SceneManagement
                 Debug.LogWarning("[CONFIG] Using default configuration");
             }
 
-            return DefaultConfiguration;
+            return new SettingsConfiguration();
         }
         public bool SaveToDisk()
         {
-            ApplyDefaultValues();
             try
             {
                 IDataService dataService = new JsonDataService();
