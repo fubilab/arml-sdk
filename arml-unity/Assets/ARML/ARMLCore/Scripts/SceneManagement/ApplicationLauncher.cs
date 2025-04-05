@@ -217,6 +217,7 @@ namespace ARML.SceneManagement
         public float zOffset;
         public TrackingMode trackingMode;
         public ImuOrientation imuOrientation;
+        public bool useSlam;
 
         public static readonly SettingsConfiguration DefaultConfiguration = new SettingsConfiguration()
         {
@@ -229,6 +230,7 @@ namespace ARML.SceneManagement
             },
             trackingMode = TrackingMode.VioOnly,
             imuOrientation = ImuOrientation.XBackward,
+            useSlam = true,
         };
         
         public void ApplyDefaultValues()

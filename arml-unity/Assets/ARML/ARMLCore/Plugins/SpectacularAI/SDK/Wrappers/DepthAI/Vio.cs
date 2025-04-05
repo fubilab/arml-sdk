@@ -146,6 +146,8 @@ namespace SpectacularAI.DepthAI
             {
                 _launcherSettings = SettingsConfiguration.LoadFromDisk();
 
+                config.UseSlam = UseSlam = _launcherSettings.useSlam;
+
                 foreach (var internalParameter in _launcherSettings.vioInternalParameters)
                 {
                     InternalParameters.Add(internalParameter);
