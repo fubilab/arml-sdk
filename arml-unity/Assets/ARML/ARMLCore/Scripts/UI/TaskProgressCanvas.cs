@@ -102,6 +102,9 @@ namespace ARML.UI
 
         public void ResetTaskListLanguage()
         {
+            if (levelController == null)
+                levelController = LevelController.Instance;
+            
             List<LevelTask> tasksList = showAllTasksAtStart ? levelController.GetAllLevelsTasks() : levelController.currentLevel.tasksToComplete;
 
             foreach (LevelTask task in tasksList)

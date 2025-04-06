@@ -3631,7 +3631,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cefac9ccca4d4e04ea5a7608e269bc0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentLanguage: 1
+  currentLanguage: 0
   voskSTT: {fileID: 1796440459461456539}
 --- !u!224 &4142129458299230941
 RectTransform:
@@ -4177,14 +4177,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a934925d6272fc4197e33c5814ad0fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  recordingIcon: {fileID: 0}
-  micImage: {fileID: 0}
+  recordingIcon: {fileID: 4158396961974043691}
+  micImage: {fileID: 7377487000891544660}
   currentlyRecording: 0
   voiceCommandMode: 0
-  micOnSFX: {fileID: 0}
-  recordingColour: {r: 0, g: 0, b: 0, a: 0}
+  micOnSFX: {fileID: 8300000, guid: b0bac32126451354e91dda39a7a6a572, type: 3}
+  recordingColour: {r: 1, g: 0, b: 0, a: 1}
   fromDwellToRecord: 0
-  crosshairController: {fileID: 0}
+  crosshairController: {fileID: 5645078716596826230}
 --- !u!4 &4494356566654567295
 Transform:
   m_ObjectHideFlags: 0
@@ -6245,7 +6245,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &7443408886430552749
 MonoBehaviour:
   m_ObjectHideFlags: 0
