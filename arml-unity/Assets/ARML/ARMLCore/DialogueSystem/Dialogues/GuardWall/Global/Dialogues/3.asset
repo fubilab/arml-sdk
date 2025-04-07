@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: 3
   m_EditorClassIdentifier: 
   <DialogueName>k__BackingField: 3
-  <TextEN>k__BackingField: 
+  <TextEN>k__BackingField: "\xBFMe ayudar\xE1s a arreglarlo? Creo que ser\xEDa lo
+    justo."
   <TextES>k__BackingField: "\xBFMe ayudar\xE1s a arreglarlo? Creo que ser\xEDa lo
     justo."
   <TextCA>k__BackingField: 
@@ -21,15 +22,19 @@ MonoBehaviour:
   - <TextEN>k__BackingField: Yes
     <TextES>k__BackingField: "S\xED"
     <TextCA>k__BackingField: Catalan
-    <NextDialogue>k__BackingField: {fileID: 11400000, guid: 5ee846287a56105408bd7a344fadf829, type: 2}
+    <NextDialogue>k__BackingField: {fileID: 11400000, guid: 5ee846287a56105408bd7a344fadf829,
+      type: 2}
   - <TextEN>k__BackingField: No
     <TextES>k__BackingField: No
     <TextCA>k__BackingField: Catalan
-    <NextDialogue>k__BackingField: {fileID: 11400000, guid: f27d63d3cbf95bf45bf617294bf125dd, type: 2}
+    <NextDialogue>k__BackingField: {fileID: 11400000, guid: f27d63d3cbf95bf45bf617294bf125dd,
+      type: 2}
   <DialogueType>k__BackingField: 1
   <IsStartingDialogue>k__BackingField: 0
   <IsEndingDialogue>k__BackingField: 0
-  <AudioClipEN>k__BackingField: {fileID: 0}
-  <AudioClipES>k__BackingField: {fileID: 8300000, guid: 7dc1754be909cfa47998a95bdccd278f, type: 3}
+  <AudioClipEN>k__BackingField: {fileID: 8300000, guid: 7dc1754be909cfa47998a95bdccd278f,
+    type: 3}
+  <AudioClipES>k__BackingField: {fileID: 8300000, guid: 7dc1754be909cfa47998a95bdccd278f,
+    type: 3}
   <AudioClipCA>k__BackingField: {fileID: 0}
   <EventID>k__BackingField: 0

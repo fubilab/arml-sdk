@@ -13,18 +13,21 @@ MonoBehaviour:
   m_Name: 1
   m_EditorClassIdentifier: 
   <DialogueName>k__BackingField: 1
-  <TextEN>k__BackingField: 
+  <TextEN>k__BackingField: "\xA1Oye! Pero... \xBFQu\xE9 has hecho con el muro?"
   <TextES>k__BackingField: "\xA1Oye! Pero... \xBFQu\xE9 has hecho con el muro?"
   <TextCA>k__BackingField: 
   <Choices>k__BackingField:
   - <TextEN>k__BackingField: 
     <TextES>k__BackingField: 
     <TextCA>k__BackingField: 
-    <NextDialogue>k__BackingField: {fileID: 11400000, guid: cdba663f7c16cc4498c3f74ef1d9979b, type: 2}
+    <NextDialogue>k__BackingField: {fileID: 11400000, guid: cdba663f7c16cc4498c3f74ef1d9979b,
+      type: 2}
   <DialogueType>k__BackingField: 0
   <IsStartingDialogue>k__BackingField: 1
   <IsEndingDialogue>k__BackingField: 0
-  <AudioClipEN>k__BackingField: {fileID: 0}
-  <AudioClipES>k__BackingField: {fileID: 8300000, guid: edc9bd8669e165b45aaf5602cb1be2bd, type: 3}
+  <AudioClipEN>k__BackingField: {fileID: 8300000, guid: edc9bd8669e165b45aaf5602cb1be2bd,
+    type: 3}
+  <AudioClipES>k__BackingField: {fileID: 8300000, guid: edc9bd8669e165b45aaf5602cb1be2bd,
+    type: 3}
   <AudioClipCA>k__BackingField: {fileID: 0}
   <EventID>k__BackingField: 1

@@ -13,18 +13,21 @@ MonoBehaviour:
   m_Name: 2
   m_EditorClassIdentifier: 
   <DialogueName>k__BackingField: 2
-  <TextEN>k__BackingField: 
+  <TextEN>k__BackingField: "\xA1Con lo que nos ha costado construirlo!"
   <TextES>k__BackingField: "\xA1Con lo que nos ha costado construirlo!"
   <TextCA>k__BackingField: 
   <Choices>k__BackingField:
   - <TextEN>k__BackingField: 
     <TextES>k__BackingField: 
     <TextCA>k__BackingField: 
-    <NextDialogue>k__BackingField: {fileID: 11400000, guid: 4d507ac3e94fbd941a61637bc2170064, type: 2}
+    <NextDialogue>k__BackingField: {fileID: 11400000, guid: 4d507ac3e94fbd941a61637bc2170064,
+      type: 2}
   <DialogueType>k__BackingField: 0
   <IsStartingDialogue>k__BackingField: 0
   <IsEndingDialogue>k__BackingField: 0
-  <AudioClipEN>k__BackingField: {fileID: 0}
-  <AudioClipES>k__BackingField: {fileID: 8300000, guid: c34bd231461e5c64681757fdba5d637d, type: 3}
+  <AudioClipEN>k__BackingField: {fileID: 8300000, guid: c34bd231461e5c64681757fdba5d637d,
+    type: 3}
+  <AudioClipES>k__BackingField: {fileID: 8300000, guid: c34bd231461e5c64681757fdba5d637d,
+    type: 3}
   <AudioClipCA>k__BackingField: {fileID: 0}
   <EventID>k__BackingField: 2
