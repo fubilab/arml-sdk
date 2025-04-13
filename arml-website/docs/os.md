@@ -34,6 +34,7 @@ GRUB_HIDDEN_TIMEOUT=0
 GRUB_HIDDEN_TIMEOUT_QUIET=true
 GRUB_TIMEOUT=0
 GRUB_RECORDFAIL_TIMEOUT=0
+GRUB_CMDLINE_LINUX_DEFAULT="fsck.mode=skip quiet splash"
 ```
 
 Save the file, then run:
@@ -54,9 +55,15 @@ Now, when you restart, you should not see the bootloader menu.
     sudo alsactl store
     ```
     
-2. Run `pavucontrol` and in the **Configuration** tab, set **Built-in Audio** profile to **Analog Stereo Duplex** and set all other profiles to **Off.**
+2. Install pavucontrol:
 
-3. Run `sudo pico /etc/pulse/default.pa` and add the following lines at the bottom: 
+    ```
+    sudo apt install pavucontrol
+    ```
+
+3. Run `pavucontrol` and in the **Configuration** tab, set **Built-in Audio** profile to **Analog Stereo Duplex** and set all other profiles to **Off.**
+
+4. Run `sudo gedit /etc/pulse/default.pa`, add the following lines at the bottom, and save the file: 
     
     ```bash
     ### Make some devices default
@@ -65,6 +72,7 @@ Now, when you restart, you should not see the bootloader menu.
     set-sink-port alsa_output.pci-0000_00_1f.3.analog-stereo analog-output-speaker
     set-source-port alsa_input.pci-0000_00_1f.3.analog-stereo analog-input-mic
     ```
+
 ### Install Brave (or other browser)
 The next step (Disable software update notifications) will remove the pre-installed software, including Firefox, so it is recommended to install another browser before proceeding.
 
@@ -169,6 +177,15 @@ The SDK depends on some system libraries to run properly. Most are installed aut
 To install the missing dependency, run:
 ```bash
 sudo apt install libusb-1.0-0-dev
+```
+
+### Add udev rules
+
+The [camera SDK ](https://docs.luxonis.com) requires permission to access the USB ports. Run the following:
+
+```bash
+echo 'SUBSYSTEM=="usb", ATTRS{idVendor}=="03e7", MODE="0666"' | sudo tee /etc/udev/rules.d/80-movidius.rules
+sudo udevadm control --reload-rules && sudo udevadm trigger
 ```
 
 ## Troubleshooting
