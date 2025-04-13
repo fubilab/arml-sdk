@@ -26,12 +26,6 @@ namespace SpectacularAI.DepthAI
         [Tooltip("Position and yaw are set to match this transformation, identity if None")]
         public Transform Origin;
 
-        [Tooltip("Pose is predicted assuming constant linear/angular velocity"), Range(0, 0.2f)]
-        public float PosePredictDt = 0f;
-
-        [Tooltip("Smooth pose as pose = prevPose.slerp(predictedPose, alpha). Value 1.0 = no smoothing, decreasing adds delay."), Range(0.001f, 1.0f)]
-        public float PoseSmoothAlpha = 1.0f;
-
         public Vector3 rotationOffset;
 
         public bool ReadLauncherSettings;
@@ -41,11 +35,6 @@ namespace SpectacularAI.DepthAI
         private Matrix4x4 _origin = Matrix4x4.identity;
         private Pose _currentPose = Pose.FromMatrix(0, Matrix4x4.identity);
 
-        // Pose smoothing
-        private TrackingStatus _prevTrackingStatus = TrackingStatus.INIT;
-        private Vector3 _prevSmoothedPosition;
-        private UnityEngine.Quaternion _prevSmoothedOrientation;
-        
         private void OnEnable()
         {
             if (ReadLauncherSettings)
@@ -72,6 +61,18 @@ namespace SpectacularAI.DepthAI
             {
                 launcherSettings = new SettingsConfiguration();
             }
+
+            if (Vio.SlamConfig != null)
+            {
+                // Set the origin to the current pose
+                _origin = Vio.SlamConfig.SlamToAprilTagTransform;
+            }
+            else if (Origin != null)
+            {
+                // Set the origin to the current pose
+                _origin = Origin.localToWorldMatrix;
+            }
+            
         }
 
         private void Start()
@@ -117,35 +118,21 @@ namespace SpectacularAI.DepthAI
             
             // Cannot update pose if no output, or not tracking
             if (output is null) return;
-            if (output.Status is not TrackingStatus.TRACKING)
-            {
-                _prevTrackingStatus = output.Status;
-                return;
-            }
-            
-            if (_prevTrackingStatus is not TrackingStatus.TRACKING)
-            {
-                _prevTrackingStatus = TrackingStatus.TRACKING;
-                _prevSmoothedPosition = output.Pose.Position;
-                _prevSmoothedOrientation = output.Pose.Orientation;
-            }
 
             _currentPose = output.Pose;
 
-            // Pose prediction
-            Vector3 predictedPosition = Utility.PredictPosition(output.Pose.Position, output.Velocity, PosePredictDt);
-            UnityEngine.Quaternion predictedOrientation = Utility.PredictOrientation(output.Pose.Orientation, output.AngularVelocity, PosePredictDt);
-
-            // Pose smoothing
-            _prevSmoothedPosition = Vector3.Lerp(_prevSmoothedPosition, predictedPosition, PoseSmoothAlpha);
-            _prevSmoothedOrientation = UnityEngine.Quaternion.Slerp(_prevSmoothedOrientation, predictedOrientation, PoseSmoothAlpha);
-
             // Pose w.r.t to Origin (after last reset)
-            transform.localPosition = _origin.rotation * _prevSmoothedPosition + _origin.GetPosition();
-
-            if (!UseOrientationFromBNO)
+            if (Vio.SlamConfig != null) {
+                transform.localPosition = output.Pose.Position + _origin.GetPosition();
                 transform.localRotation = 
-                    _origin.rotation * _prevSmoothedOrientation * UnityEngine.Quaternion.Euler(rotationOffset);
+                    _origin.rotation * output.Pose.Orientation * UnityEngine.Quaternion.Euler(rotationOffset);
+            }
+            else 
+            {
+                transform.localPosition = _origin.rotation * output.Pose.Position + _origin.GetPosition();
+                transform.localRotation = 
+                    _origin.rotation * output.Pose.Orientation * UnityEngine.Quaternion.Euler(rotationOffset);
+            }
         }
 
         private Matrix4x4 GetPositionAndYaw(Matrix4x4 pose)

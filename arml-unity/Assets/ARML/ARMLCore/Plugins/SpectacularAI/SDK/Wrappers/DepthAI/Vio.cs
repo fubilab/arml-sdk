@@ -64,9 +64,10 @@ namespace SpectacularAI.DepthAI
         public string AprilTagPath = "";
 
         [Tooltip("Path to .bin file with saved SLAM map.")]
-        [SerializeField]
         public string MapLoadPath = "";
 
+        [Tooltip("Path to .json file with SLAM config.")]
+        public string SlamConfigPath = "";
 
         [Tooltip("Internal algorithm parameters")]
         public List<VioParameter> InternalParameters;
@@ -81,6 +82,8 @@ namespace SpectacularAI.DepthAI
         [Tooltip("Start VIO Session on component Start, rather than waiting for the game scene to load.\n" + 
             "Do not set this if using AprilTags in your scene.")]
         public bool autoStartSession;
+
+        public static SlamConfig SlamConfig { get; private set; }
 
         /// <summary>
         /// The current vio output.
@@ -128,7 +131,11 @@ namespace SpectacularAI.DepthAI
             config.GyroFrequencyHz = (uint)GyroFrequencyHz;
             config.RecordingOnly = RecordingOnly;
             config.RecordingFolder = RecordingFolder;
-            config.MapLoadPath = MapLoadPath;
+
+            if (!String.IsNullOrEmpty(MapLoadPath))
+            {
+                config.MapLoadPath = MapLoadPath;
+            }
 
             if (!String.IsNullOrEmpty(AprilTagPath)) 
             {
@@ -166,6 +173,10 @@ namespace SpectacularAI.DepthAI
                         InternalParameters.Add(internalParameter);
                     }
                 }
+            }
+
+            if (!String.IsNullOrEmpty(SlamConfigPath)) {
+                SlamConfig = SlamConfig.ReadFromFile(SlamConfigPath);
             }
 
 #if UNITY_EDITOR_WIN || UNITY_EDITOR_OSX
