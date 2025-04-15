@@ -61,18 +61,6 @@ namespace SpectacularAI.DepthAI
             {
                 launcherSettings = new SettingsConfiguration();
             }
-
-            if (Vio.SlamConfig != null)
-            {
-                // Set the origin to the current pose
-                _origin = Vio.SlamConfig.SlamToAprilTagTransform;
-            }
-            else if (Origin != null)
-            {
-                // Set the origin to the current pose
-                _origin = Origin.localToWorldMatrix;
-            }
-            
         }
 
         private void Start()
@@ -83,6 +71,18 @@ namespace SpectacularAI.DepthAI
             {
                 ArduinoController.Instance.ActivateBNO();
             }
+
+            // Debug.Log("[PoseProvider] SlamConfig: " + Vio.SlamConfig);
+            // if (Vio.SlamConfig != null)
+            // {
+            //     // Set the origin to the current pose
+            //     _origin = Matrix4x4.Translate().rotation
+            // }
+            // else if (Origin != null)
+            // {
+            //     // Set the origin to the current pose
+            //     _origin = Origin.localToWorldMatrix;
+            // }
         }
 
         private void Update()
@@ -121,17 +121,14 @@ namespace SpectacularAI.DepthAI
 
             _currentPose = output.Pose;
 
-            // Pose w.r.t to Origin (after last reset)
-            if (Vio.SlamConfig != null) {
-                transform.localPosition = output.Pose.Position + _origin.GetPosition();
-                transform.localRotation = 
-                    _origin.rotation * output.Pose.Orientation * UnityEngine.Quaternion.Euler(rotationOffset);
-            }
-            else 
+            if (Vio.SlamConfig != null)
             {
-                transform.localPosition = _origin.rotation * output.Pose.Position + _origin.GetPosition();
-                transform.localRotation = 
-                    _origin.rotation * output.Pose.Orientation * UnityEngine.Quaternion.Euler(rotationOffset);
+                Matrix4x4 slamMatrix = Matrix4x4.TRS(output.Pose.Position, output.Pose.Orientation, Vector3.one);
+                Matrix4x4 cameraMatrix = Vio.SlamConfig.SlamWorldToUnityWorldMatrix * slamMatrix;
+                transform.SetPositionAndRotation(cameraMatrix.GetPosition(), cameraMatrix.rotation);
+            }
+            else {
+                transform.SetPositionAndRotation(output.Pose.Position, output.Pose.Orientation);
             }
         }
 

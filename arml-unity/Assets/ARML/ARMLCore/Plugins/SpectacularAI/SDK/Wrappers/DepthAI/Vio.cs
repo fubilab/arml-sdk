@@ -90,6 +90,13 @@ namespace SpectacularAI.DepthAI
         /// </summary>
         public static VioOutput Output { get; private set; }
 
+        void OnEnable()
+        {
+            if (!String.IsNullOrEmpty(SlamConfigPath)) {
+                SlamConfig = SlamConfig.ReadFromFile(SlamConfigPath);
+            }            
+        }
+
         void Start() 
         {
             if (autoStartSession) 
@@ -173,10 +180,6 @@ namespace SpectacularAI.DepthAI
                         InternalParameters.Add(internalParameter);
                     }
                 }
-            }
-
-            if (!String.IsNullOrEmpty(SlamConfigPath)) {
-                SlamConfig = SlamConfig.ReadFromFile(SlamConfigPath);
             }
 
 #if UNITY_EDITOR_WIN || UNITY_EDITOR_OSX

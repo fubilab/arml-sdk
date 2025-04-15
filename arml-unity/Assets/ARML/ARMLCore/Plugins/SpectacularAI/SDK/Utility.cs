@@ -4,12 +4,12 @@ namespace SpectacularAI
 {
     public static class Utility
     {
-        private static readonly Matrix4x4 SPECTACULAR_AI_WORLD_TO_UNITY_WORLD = CreateMatrix(
+        public static readonly Matrix4x4 SPECTACULAR_AI_WORLD_TO_UNITY_WORLD = CreateMatrix(
             1, 0, 0, 0,
             0, 0, 1, 0,
             0, 1, 0, 0,
             0, 0, 0, 1);
-        private static readonly Matrix4x4 SPECTACULAR_AI_CAMERA_TO_UNITY_CAMERA = CreateMatrix(
+        public static readonly Matrix4x4 SPECTACULAR_AI_CAMERA_TO_UNITY_CAMERA = CreateMatrix(
             1,  0, 0, 0,
             0, -1, 0, 0,
             0,  0, 1, 0,
@@ -19,7 +19,7 @@ namespace SpectacularAI
              0, 0, 1, 0,
              0, -1, 0, 0,
              0, 0, 0, 1);
-        private static readonly Matrix4x4 UNITY_WORLD_TO_SPECTACULAR_AI_WORLD = SPECTACULAR_AI_WORLD_TO_UNITY_WORLD.inverse;
+        public static readonly Matrix4x4 UNITY_WORLD_TO_SPECTACULAR_AI_WORLD = SPECTACULAR_AI_WORLD_TO_UNITY_WORLD.inverse;
         private static readonly Matrix4x4 UNITY_CAMERA_TO_SPECTACULAR_AI_CAMERA = SPECTACULAR_AI_CAMERA_TO_UNITY_CAMERA.inverse;
         private static readonly Matrix4x4 SPECTACULAR_AI_APRIL_TAG_TO_UNITY_APRIL_TAG = UNITY_APRIL_TAG_TO_SPECTACULAR_AI_APRIL_TAG.inverse;
 
