@@ -101,19 +101,25 @@ This assumes your user is `goblin`, so adapt the username for your system.
     comment = Unity builds
     path = /home/goblin/Desktop/unitybuilds
     browseable = yes
-    guest ok = yes
+    guest ok = no
     read only = no
     force user = goblin
     force group = goblin
+    valid users = goblin
     ```
 
-3. Set permissions to allow network share users to write to `unitybuilds`:
+3. Set the password for the SAMBA user. Note that we can't use guest access in Windows 11+, so we have to specifiy a user and password.
+    ```bash
+    sudo smbpasswd -a goblin
+    ```
+
+4. Set permissions to allow network share users to write to `unitybuilds`:
     ```bash
     sudo chmod -R a+x /home
     sudo chmod -R a+w /home/goblin/Desktop/unitybuilds
     ```
 
-3. Restart the samba service:
+5. Restart the samba service:
     ```bash
     sudo service smbd restart
     ```
@@ -135,7 +141,7 @@ If you want to connect the ARML to another computer using ethernet to be able to
       - IP address: 192.168.121.1
       - Netmask: 255.255.255.0
       - Gateway: 192.168.121.1
-6. If everything went well, you should be able to enter `\\192.168.121.1` in the file explorer on your computer and see the `unitybuilds` shared directory. If this method fails, try the [Alternative method for deploying to the ARML](./workflow.md#alternative-method-for-deploying-to-the-arml).
+6. If everything went well, you should be able to enter `\\192.168.121.1` in the file explorer on your computer, enter the username and password configured [above](#create-network-share), and see the `unitybuilds` shared directory. If this method fails, try the [Alternative method for deploying to the ARML](./workflow.md#alternative-method-for-deploying-to-the-arml).
 
 ### Install the Arduino software and scripts
 1. Install AppImageLauncher
