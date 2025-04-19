@@ -9,6 +9,7 @@ namespace ARML.Interaction
     public class CameraParentController : MonoBehaviour
     {
         public bool allowMove;
+        public bool moveUpDown;
 
         [SerializeField] private float speed = 1f;
         [SerializeField] private bool isMouse = false;
@@ -53,10 +54,10 @@ namespace ARML.Interaction
         /// </summary>
         private void Update()
         {
-#if UNITY_EDITOR || UNITY_STANDALONE_WIN
+//#if UNITY_EDITOR || UNITY_STANDALONE_WIN
             if (allowMove)
                 KeyboardControl();
-#endif
+//#endif
 
             if (vectorText)
             {
@@ -75,21 +76,23 @@ namespace ARML.Interaction
             Vector3 direction = Vector3.zero;
 
             // Move camera based on arrow key inputs
-            if (Input.GetKey(KeyCode.A))
+            if (Input.GetKey(KeyCode.LeftArrow))
             {
                 direction += Vector3.left;
             }
-            if (Input.GetKey(KeyCode.D))
+            if (Input.GetKey(KeyCode.RightArrow))
             {
                 direction += Vector3.right;
             }
-            if (Input.GetKey(KeyCode.W))
+            if (Input.GetKey(KeyCode.UpArrow))
             {
-                direction += Vector3.forward;
+                Vector3 v = moveUpDown ? Vector3.up : Vector3.forward;
+                direction += v;
             }
-            if (Input.GetKey(KeyCode.S))
+            if (Input.GetKey(KeyCode.DownArrow))
             {
-                direction += Vector3.back;
+                Vector3 v = moveUpDown ? Vector3.down : Vector3.back;
+                direction += v;
             }
             // Apply movement
             transform.Translate(direction * moveSpeed * Time.deltaTime, Space.World);
@@ -98,19 +101,19 @@ namespace ARML.Interaction
             float rotationY = 0f;
 
             // Rotate camera based on arrow key inputs
-            if (Input.GetKey(KeyCode.UpArrow))
+            if (Input.GetKey(KeyCode.W))
             {
                 rotationX = -1f;  // Rotate up
             }
-            if (Input.GetKey(KeyCode.DownArrow))
+            if (Input.GetKey(KeyCode.S))
             {
                 rotationX = 1f;   // Rotate down
             }
-            if (Input.GetKey(KeyCode.LeftArrow))
+            if (Input.GetKey(KeyCode.A))
             {
                 rotationY = -1f;  // Rotate left
             }
-            if (Input.GetKey(KeyCode.RightArrow))
+            if (Input.GetKey(KeyCode.D))
             {
                 rotationY = 1f;   // Rotate right
             }
@@ -131,6 +134,11 @@ namespace ARML.Interaction
             {
                 transform.SetPositionAndRotation(sceneOrigin.position, sceneOrigin.rotation);
             }
+        }
+
+        public void SetMoveMode(bool upDown)
+        {
+            moveUpDown = upDown;
         }
     }
 }

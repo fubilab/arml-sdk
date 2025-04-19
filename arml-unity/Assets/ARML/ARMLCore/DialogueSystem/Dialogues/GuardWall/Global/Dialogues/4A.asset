@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 4A
   m_EditorClassIdentifier: 
   <DialogueName>k__BackingField: 4A
-  <TextEN>k__BackingField: 
+  <TextEN>k__BackingField: "\xA1Gracias!"
   <TextES>k__BackingField: "\xA1Gracias!"
   <TextCA>k__BackingField: 
   <Choices>k__BackingField:
@@ -24,7 +24,9 @@ MonoBehaviour:
   <DialogueType>k__BackingField: 0
   <IsStartingDialogue>k__BackingField: 0
   <IsEndingDialogue>k__BackingField: 1
-  <AudioClipEN>k__BackingField: {fileID: 0}
-  <AudioClipES>k__BackingField: {fileID: 8300000, guid: 30086d6fb46bd0e49805af34d556f129, type: 3}
+  <AudioClipEN>k__BackingField: {fileID: 8300000, guid: 30086d6fb46bd0e49805af34d556f129,
+    type: 3}
+  <AudioClipES>k__BackingField: {fileID: 8300000, guid: 30086d6fb46bd0e49805af34d556f129,
+    type: 3}
   <AudioClipCA>k__BackingField: {fileID: 0}
   <EventID>k__BackingField: 0

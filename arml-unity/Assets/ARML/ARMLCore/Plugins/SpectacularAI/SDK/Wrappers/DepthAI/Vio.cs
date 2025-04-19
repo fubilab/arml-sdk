@@ -61,8 +61,12 @@ namespace SpectacularAI.DepthAI
 
         [Tooltip("Path to .json file with AprilTag information. If set, overrides the automatic generation \n" +
             "based on placed AprilTag components in the scene.")]
-        [SerializeField]
         public string AprilTagPath = "";
+
+        [Tooltip("Path to .bin file with saved SLAM map.")]
+        [SerializeField]
+        public string MapLoadPath = "";
+
 
         [Tooltip("Internal algorithm parameters")]
         public List<VioParameter> InternalParameters;
@@ -124,6 +128,7 @@ namespace SpectacularAI.DepthAI
             config.GyroFrequencyHz = (uint)GyroFrequencyHz;
             config.RecordingOnly = RecordingOnly;
             config.RecordingFolder = RecordingFolder;
+            config.MapLoadPath = MapLoadPath;
 
             if (!String.IsNullOrEmpty(AprilTagPath)) 
             {

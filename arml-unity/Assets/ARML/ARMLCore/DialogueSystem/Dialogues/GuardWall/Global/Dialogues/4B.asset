@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 4B
   m_EditorClassIdentifier: 
   <DialogueName>k__BackingField: 4B
-  <TextEN>k__BackingField: 
+  <TextEN>k__BackingField: "Pues qu\xE9 mal, \xBFno?"
   <TextES>k__BackingField: "Pues qu\xE9 mal, \xBFno?"
   <TextCA>k__BackingField: 
   <Choices>k__BackingField:
@@ -24,7 +24,9 @@ MonoBehaviour:
   <DialogueType>k__BackingField: 0
   <IsStartingDialogue>k__BackingField: 0
   <IsEndingDialogue>k__BackingField: 1
-  <AudioClipEN>k__BackingField: {fileID: 0}
-  <AudioClipES>k__BackingField: {fileID: 8300000, guid: 60de2e2bb9b7a0445bdedbbf5c663794, type: 3}
+  <AudioClipEN>k__BackingField: {fileID: 8300000, guid: 60de2e2bb9b7a0445bdedbbf5c663794,
+    type: 3}
+  <AudioClipES>k__BackingField: {fileID: 8300000, guid: 60de2e2bb9b7a0445bdedbbf5c663794,
+    type: 3}
   <AudioClipCA>k__BackingField: {fileID: 0}
   <EventID>k__BackingField: 2

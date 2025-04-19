@@ -15,60 +15,10 @@ MonoBehaviour:
   <FileName>k__BackingField: GuardWall
   <Groups>k__BackingField: []
   <Nodes>k__BackingField:
-  - <ID>k__BackingField: a0de59c6-da75-4955-b4e0-2b5cfd82a210
-    <Name>k__BackingField: 4A
-    <TextEN>k__BackingField: 
-    <TextES>k__BackingField: "\xA1Gracias!"
-    <TextCA>k__BackingField: 
-    <Choices>k__BackingField:
-    - <TextEN>k__BackingField: 
-      <TextES>k__BackingField: 
-      <TextCA>k__BackingField: 
-      <NodeID>k__BackingField: 
-    <GroupID>k__BackingField: 
-    <DialogueType>k__BackingField: 0
-    <Position>k__BackingField: {x: 2412, y: 264}
-    <AudioClipEN>k__BackingField: {fileID: 0}
-    <AudioClipES>k__BackingField: {fileID: 8300000, guid: 30086d6fb46bd0e49805af34d556f129, type: 3}
-    <AudioClipCA>k__BackingField: {fileID: 0}
-    <EventID>k__BackingField: 0
-  - <ID>k__BackingField: b830738c-76b5-4b53-b2d8-26fc4cb35bc0
-    <Name>k__BackingField: 1
-    <TextEN>k__BackingField: 
-    <TextES>k__BackingField: "\xA1Oye! Pero... \xBFQu\xE9 has hecho con el muro?"
-    <TextCA>k__BackingField: 
-    <Choices>k__BackingField:
-    - <TextEN>k__BackingField: 
-      <TextES>k__BackingField: 
-      <TextCA>k__BackingField: 
-      <NodeID>k__BackingField: c5d70c3b-4058-4143-9eaf-f6253ad3d27b
-    <GroupID>k__BackingField: 
-    <DialogueType>k__BackingField: 0
-    <Position>k__BackingField: {x: 182, y: 341}
-    <AudioClipEN>k__BackingField: {fileID: 0}
-    <AudioClipES>k__BackingField: {fileID: 8300000, guid: edc9bd8669e165b45aaf5602cb1be2bd, type: 3}
-    <AudioClipCA>k__BackingField: {fileID: 0}
-    <EventID>k__BackingField: 1
-  - <ID>k__BackingField: c5d70c3b-4058-4143-9eaf-f6253ad3d27b
-    <Name>k__BackingField: 2
-    <TextEN>k__BackingField: 
-    <TextES>k__BackingField: "\xA1Con lo que nos ha costado construirlo!"
-    <TextCA>k__BackingField: 
-    <Choices>k__BackingField:
-    - <TextEN>k__BackingField: 
-      <TextES>k__BackingField: 
-      <TextCA>k__BackingField: 
-      <NodeID>k__BackingField: 8dd93a41-0d48-4a3a-813e-a2385e1788cc
-    <GroupID>k__BackingField: 
-    <DialogueType>k__BackingField: 0
-    <Position>k__BackingField: {x: 913, y: 341}
-    <AudioClipEN>k__BackingField: {fileID: 0}
-    <AudioClipES>k__BackingField: {fileID: 8300000, guid: c34bd231461e5c64681757fdba5d637d, type: 3}
-    <AudioClipCA>k__BackingField: {fileID: 0}
-    <EventID>k__BackingField: 2
   - <ID>k__BackingField: 8dd93a41-0d48-4a3a-813e-a2385e1788cc
     <Name>k__BackingField: 3
-    <TextEN>k__BackingField: 
+    <TextEN>k__BackingField: "\xBFMe ayudar\xE1s a arreglarlo? Creo que ser\xEDa
+      lo justo."
     <TextES>k__BackingField: "\xBFMe ayudar\xE1s a arreglarlo? Creo que ser\xEDa
       lo justo."
     <TextCA>k__BackingField: 
@@ -83,14 +33,16 @@ MonoBehaviour:
       <NodeID>k__BackingField: 2c9ec70d-e1a1-43a8-b5e7-7582a3f50703
     <GroupID>k__BackingField: 
     <DialogueType>k__BackingField: 1
-    <Position>k__BackingField: {x: 1686, y: 341}
-    <AudioClipEN>k__BackingField: {fileID: 0}
-    <AudioClipES>k__BackingField: {fileID: 8300000, guid: 7dc1754be909cfa47998a95bdccd278f, type: 3}
+    <Position>k__BackingField: {x: 1027.2, y: 340.80002}
+    <AudioClipEN>k__BackingField: {fileID: 8300000, guid: 7dc1754be909cfa47998a95bdccd278f,
+      type: 3}
+    <AudioClipES>k__BackingField: {fileID: 8300000, guid: 7dc1754be909cfa47998a95bdccd278f,
+      type: 3}
     <AudioClipCA>k__BackingField: {fileID: 0}
     <EventID>k__BackingField: 0
   - <ID>k__BackingField: 2c9ec70d-e1a1-43a8-b5e7-7582a3f50703
     <Name>k__BackingField: 4B
-    <TextEN>k__BackingField: 
+    <TextEN>k__BackingField: "Pues qu\xE9 mal, \xBFno?"
     <TextES>k__BackingField: "Pues qu\xE9 mal, \xBFno?"
     <TextCA>k__BackingField: 
     <Choices>k__BackingField:
@@ -100,17 +52,76 @@ MonoBehaviour:
       <NodeID>k__BackingField: 
     <GroupID>k__BackingField: 
     <DialogueType>k__BackingField: 0
-    <Position>k__BackingField: {x: 2412, y: 756}
-    <AudioClipEN>k__BackingField: {fileID: 0}
-    <AudioClipES>k__BackingField: {fileID: 8300000, guid: 60de2e2bb9b7a0445bdedbbf5c663794, type: 3}
+    <Position>k__BackingField: {x: 1504.8, y: 763.19995}
+    <AudioClipEN>k__BackingField: {fileID: 8300000, guid: 60de2e2bb9b7a0445bdedbbf5c663794,
+      type: 3}
+    <AudioClipES>k__BackingField: {fileID: 8300000, guid: 60de2e2bb9b7a0445bdedbbf5c663794,
+      type: 3}
     <AudioClipCA>k__BackingField: {fileID: 0}
     <EventID>k__BackingField: 2
+  - <ID>k__BackingField: b830738c-76b5-4b53-b2d8-26fc4cb35bc0
+    <Name>k__BackingField: 1
+    <TextEN>k__BackingField: "\xA1Oye! Pero... \xBFQu\xE9 has hecho con el muro?"
+    <TextES>k__BackingField: "\xA1Oye! Pero... \xBFQu\xE9 has hecho con el muro?"
+    <TextCA>k__BackingField: 
+    <Choices>k__BackingField:
+    - <TextEN>k__BackingField: 
+      <TextES>k__BackingField: 
+      <TextCA>k__BackingField: 
+      <NodeID>k__BackingField: c5d70c3b-4058-4143-9eaf-f6253ad3d27b
+    <GroupID>k__BackingField: 
+    <DialogueType>k__BackingField: 0
+    <Position>k__BackingField: {x: 182.4, y: 340.80002}
+    <AudioClipEN>k__BackingField: {fileID: 8300000, guid: edc9bd8669e165b45aaf5602cb1be2bd,
+      type: 3}
+    <AudioClipES>k__BackingField: {fileID: 8300000, guid: edc9bd8669e165b45aaf5602cb1be2bd,
+      type: 3}
+    <AudioClipCA>k__BackingField: {fileID: 0}
+    <EventID>k__BackingField: 1
+  - <ID>k__BackingField: c5d70c3b-4058-4143-9eaf-f6253ad3d27b
+    <Name>k__BackingField: 2
+    <TextEN>k__BackingField: "\xA1Con lo que nos ha costado construirlo!"
+    <TextES>k__BackingField: "\xA1Con lo que nos ha costado construirlo!"
+    <TextCA>k__BackingField: 
+    <Choices>k__BackingField:
+    - <TextEN>k__BackingField: 
+      <TextES>k__BackingField: 
+      <TextCA>k__BackingField: 
+      <NodeID>k__BackingField: 8dd93a41-0d48-4a3a-813e-a2385e1788cc
+    <GroupID>k__BackingField: 
+    <DialogueType>k__BackingField: 0
+    <Position>k__BackingField: {x: 606.4, y: 322.4}
+    <AudioClipEN>k__BackingField: {fileID: 8300000, guid: c34bd231461e5c64681757fdba5d637d,
+      type: 3}
+    <AudioClipES>k__BackingField: {fileID: 8300000, guid: c34bd231461e5c64681757fdba5d637d,
+      type: 3}
+    <AudioClipCA>k__BackingField: {fileID: 0}
+    <EventID>k__BackingField: 2
+  - <ID>k__BackingField: a0de59c6-da75-4955-b4e0-2b5cfd82a210
+    <Name>k__BackingField: 4A
+    <TextEN>k__BackingField: "\xA1Gracias!"
+    <TextES>k__BackingField: "\xA1Gracias!"
+    <TextCA>k__BackingField: 
+    <Choices>k__BackingField:
+    - <TextEN>k__BackingField: 
+      <TextES>k__BackingField: 
+      <TextCA>k__BackingField: 
+      <NodeID>k__BackingField: 
+    <GroupID>k__BackingField: 
+    <DialogueType>k__BackingField: 0
+    <Position>k__BackingField: {x: 1459.2, y: 276.80002}
+    <AudioClipEN>k__BackingField: {fileID: 8300000, guid: 30086d6fb46bd0e49805af34d556f129,
+      type: 3}
+    <AudioClipES>k__BackingField: {fileID: 8300000, guid: 30086d6fb46bd0e49805af34d556f129,
+      type: 3}
+    <AudioClipCA>k__BackingField: {fileID: 0}
+    <EventID>k__BackingField: 0
   <OldGroupNames>k__BackingField: []
   <OldUngroupedNodeNames>k__BackingField:
-  - 4A
-  - 1
-  - 2
   - 3
   - 4B
+  - 1
+  - 2
+  - 4A
   <OldGroupedNodeNames>k__BackingField:
     list: []

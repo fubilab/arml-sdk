@@ -32,6 +32,8 @@
     href: wiring.md
   - name: Power Reference
     href: power.md
+  - name: Projector Reference
+    href: projector.md
   - name: Peripherals
     href: peripherals.md
 - name: Examples
