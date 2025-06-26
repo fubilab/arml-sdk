@@ -32,6 +32,8 @@ namespace SpectacularAI.DepthAI
         [Tooltip("Smooth pose as pose = prevPose.slerp(predictedPose, alpha). Value 1.0 = no smoothing, decreasing adds delay."), Range(0.001f, 1.0f)]
         public float PoseSmoothAlpha = 1.0f;
 
+        public static bool FrozenMode = false;
+
         public Vector3 rotationOffset;
 
         public bool ReadLauncherSettings;
@@ -140,12 +142,15 @@ namespace SpectacularAI.DepthAI
             _prevSmoothedPosition = Vector3.Lerp(_prevSmoothedPosition, predictedPosition, PoseSmoothAlpha);
             _prevSmoothedOrientation = UnityEngine.Quaternion.Slerp(_prevSmoothedOrientation, predictedOrientation, PoseSmoothAlpha);
 
-            // Pose w.r.t to Origin (after last reset)
-            transform.position = _origin.rotation * _prevSmoothedPosition + _origin.GetPosition();
+            if (!FrozenMode)
+            {
+                // Pose w.r.t to Origin (after last reset)
+                transform.position = _origin.rotation * _prevSmoothedPosition + _origin.GetPosition();
 
-            if (!UseOrientationFromBNO)
-                transform.localRotation = 
-                    _origin.rotation * _prevSmoothedOrientation * UnityEngine.Quaternion.Euler(rotationOffset);
+                if (!UseOrientationFromBNO)
+                    transform.localRotation = 
+                        _origin.rotation * _prevSmoothedOrientation * UnityEngine.Quaternion.Euler(rotationOffset);
+            }
         }
 
         private Matrix4x4 GetPositionAndYaw(Matrix4x4 pose)

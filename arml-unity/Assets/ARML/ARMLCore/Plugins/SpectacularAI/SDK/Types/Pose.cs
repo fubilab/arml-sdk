@@ -29,7 +29,7 @@ namespace SpectacularAI
         /// <summary>
         /// Orientation quaternion in Unity world coordinates
         /// </summary>
-        private Quaternion _orientation;
+        public Quaternion _orientation;
         public UnityEngine.Quaternion Orientation
         {
             get
