@@ -141,7 +141,7 @@ namespace SpectacularAI.DepthAI
             _prevSmoothedOrientation = UnityEngine.Quaternion.Slerp(_prevSmoothedOrientation, predictedOrientation, PoseSmoothAlpha);
 
             // Pose w.r.t to Origin (after last reset)
-            transform.localPosition = _origin.rotation * _prevSmoothedPosition + _origin.GetPosition();
+            transform.position = _origin.rotation * _prevSmoothedPosition + _origin.GetPosition();
 
             if (!UseOrientationFromBNO)
                 transform.localRotation = 
