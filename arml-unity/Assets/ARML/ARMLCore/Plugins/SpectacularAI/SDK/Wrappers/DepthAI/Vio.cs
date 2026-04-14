@@ -95,7 +95,7 @@ namespace SpectacularAI.DepthAI
             }
             else
             {
-                if (SceneController.Instance.LoadedGameScene != null)
+                if (SceneController.Instance.LoadedGameScene.isLoaded)
                 {
                     GameSceneLoaded(SceneController.Instance.LoadedGameScene);
                 }
@@ -134,11 +134,13 @@ namespace SpectacularAI.DepthAI
             {
                 // override tag generation
                 config.AprilTagPath = AprilTagPath;
+                Debug.Log(@"[VIO] StartSession called with " + AprilTagPath + ".");
             }
             else
             {
                 // look for AprilTag JSON in the 
                 AprilTag[] aprilTags = FindObjectsByType<AprilTag>(FindObjectsSortMode.None);
+                Debug.Log(@"[VIO] AprilTags " + aprilTags.Length);
                 if (aprilTags.Length > 0) 
                 {
                     string jsonPath = ARML.AprilTags.Utility.SerializeAprilTags(aprilTags);
