@@ -46,6 +46,9 @@ namespace SpectacularAI.DepthAI
 
         [Tooltip("Use more lightweight parameters.")]
         public bool FastVio = false;
+        
+        [Tooltip("Ignore Y position from the PoseProvider so Camera always stays at the set height.")]
+        public bool IgnoreYPosition = false;
 
         [Tooltip("Native options: 125, 250, 500.")]
         public AccelerometerFrequency AccFrequencyHz = AccelerometerFrequency.Hz500;

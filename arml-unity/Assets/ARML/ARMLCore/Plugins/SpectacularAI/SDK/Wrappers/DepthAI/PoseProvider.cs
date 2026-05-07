@@ -35,6 +35,10 @@ namespace SpectacularAI.DepthAI
         public Vector3 rotationOffset;
 
         public bool ReadLauncherSettings;
+        
+        // References
+        [SerializeField] private Vio vio;
+        
         private SettingsConfiguration launcherSettings;
 
         // Pose reset, pose = target->world * (pose_t0.inverse * pose_t1) = _origin * pose_t1
@@ -141,7 +145,11 @@ namespace SpectacularAI.DepthAI
             _prevSmoothedOrientation = UnityEngine.Quaternion.Slerp(_prevSmoothedOrientation, predictedOrientation, PoseSmoothAlpha);
 
             // Pose w.r.t to Origin (after last reset)
-            transform.position = _origin.rotation * _prevSmoothedPosition + _origin.GetPosition();
+            Vector3 finalPosition = _origin.rotation * _prevSmoothedPosition + _origin.GetPosition();
+            if(vio.IgnoreYPosition)
+                finalPosition.y = transform.position.y;
+
+            transform.position = finalPosition;
 
             if (!UseOrientationFromBNO)
                 transform.localRotation = 
