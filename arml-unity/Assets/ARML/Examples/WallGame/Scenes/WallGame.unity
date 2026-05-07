@@ -60670,6 +60670,9 @@ MonoBehaviour:
         _Z: 0
         _W: 0
         _Object: {fileID: 0}
+    - _Target: {fileID: 2021037801}
+      _MethodName: PlayNextLevel
+      _PersistentArguments: []
   levelFilterEvents: []
   triggerEntered: 0
   angleToCamera: 0
@@ -260747,6 +260750,9 @@ MonoBehaviour:
         _Z: 0
         _W: 0
         _Object: {fileID: 0}
+    - _Target: {fileID: 2021037801}
+      _MethodName: PlayNextLevel
+      _PersistentArguments: []
   levelFilterEvents: []
   triggerEntered: 0
   angleToCamera: 0
@@ -314622,7 +314628,7 @@ PrefabInstance:
     - target: {fileID: 8043407902909091893, guid: 010eec1337a546b4096b40207f1ba304,
         type: 3}
       propertyPath: autoFinishOnTimelineEnd
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8860155675401473423, guid: 010eec1337a546b4096b40207f1ba304,
         type: 3}
@@ -317870,7 +317876,7 @@ MonoBehaviour:
           _Z: 0
           _W: 0
           _Object: {fileID: 0}
-  - levelIndex: 2
+  - levelIndex: 3
     levelEvent:
       _PersistentCalls:
       - _Target: {fileID: 4221344009493123845}
@@ -321152,7 +321158,7 @@ MonoBehaviour:
           _Z: 0
           _W: 0
           _Object: {fileID: 0}
-  - levelIndex: 2
+  - levelIndex: 3
     levelEvent:
       _PersistentCalls:
       - _Target: {fileID: 5850630284876801678}
@@ -321908,7 +321914,7 @@ MonoBehaviour:
           _Z: 0
           _W: 0
           _Object: {fileID: 0}
-  - levelIndex: 2
+  - levelIndex: 3
     levelEvent:
       _PersistentCalls:
       - _Target: {fileID: 6078346598998451653}
@@ -322234,7 +322240,7 @@ MonoBehaviour:
           _Z: 0
           _W: 0
           _Object: {fileID: 0}
-  - levelIndex: 2
+  - levelIndex: 3
     levelEvent:
       _PersistentCalls:
       - _Target: {fileID: 6082146367518837750}
@@ -322579,7 +322585,7 @@ MonoBehaviour:
           _Z: 0
           _W: 0
           _Object: {fileID: 0}
-  - levelIndex: 2
+  - levelIndex: 3
     levelEvent:
       _PersistentCalls:
       - _Target: {fileID: 6091074864673002257}
@@ -323298,7 +323304,7 @@ MonoBehaviour:
           _Z: 0
           _W: 0
           _Object: {fileID: 0}
-  - levelIndex: 2
+  - levelIndex: 3
     levelEvent:
       _PersistentCalls:
       - _Target: {fileID: 6348153560150202461}
@@ -323688,7 +323694,7 @@ MonoBehaviour:
           _Z: 0
           _W: 0
           _Object: {fileID: 0}
-  - levelIndex: 2
+  - levelIndex: 3
     levelEvent:
       _PersistentCalls:
       - _Target: {fileID: 6411898179707305499}
@@ -324437,7 +324443,7 @@ MonoBehaviour:
           _Z: 0
           _W: 0
           _Object: {fileID: 0}
-  - levelIndex: 2
+  - levelIndex: 3
     levelEvent:
       _PersistentCalls:
       - _Target: {fileID: 6685526441282018035}
@@ -325313,7 +325319,7 @@ MonoBehaviour:
           _Z: 0
           _W: 0
           _Object: {fileID: 0}
-  - levelIndex: 2
+  - levelIndex: 3
     levelEvent:
       _PersistentCalls:
       - _Target: {fileID: 7153932936652867558}
@@ -326154,7 +326160,7 @@ MonoBehaviour:
           _Z: 0
           _W: 0
           _Object: {fileID: 0}
-  - levelIndex: 2
+  - levelIndex: 3
     levelEvent:
       _PersistentCalls:
       - _Target: {fileID: 7513966014210165312}
@@ -326499,7 +326505,7 @@ MonoBehaviour:
           _Z: 0
           _W: 0
           _Object: {fileID: 0}
-  - levelIndex: 2
+  - levelIndex: 3
     levelEvent:
       _PersistentCalls:
       - _Target: {fileID: 7516276761398488000}
@@ -326825,7 +326831,7 @@ MonoBehaviour:
           _Z: 0
           _W: 0
           _Object: {fileID: 0}
-  - levelIndex: 2
+  - levelIndex: 3
     levelEvent:
       _PersistentCalls:
       - _Target: {fileID: 7522313523568512536}
@@ -327321,7 +327327,7 @@ MonoBehaviour:
           _Z: 0
           _W: 0
           _Object: {fileID: 0}
-  - levelIndex: 2
+  - levelIndex: 3
     levelEvent:
       _PersistentCalls:
       - _Target: {fileID: 7633837297868155634}
@@ -327740,7 +327746,7 @@ MonoBehaviour:
           _Z: 0
           _W: 0
           _Object: {fileID: 0}
-  - levelIndex: 2
+  - levelIndex: 3
     levelEvent:
       _PersistentCalls:
       - _Target: {fileID: 7766650910500557354}
@@ -328100,7 +328106,7 @@ MonoBehaviour:
           _Z: 0
           _W: 0
           _Object: {fileID: 0}
-  - levelIndex: 2
+  - levelIndex: 3
     levelEvent:
       _PersistentCalls:
       - _Target: {fileID: 7770021448412464088}
@@ -328531,7 +328537,7 @@ MonoBehaviour:
           _Z: 0
           _W: 0
           _Object: {fileID: 0}
-  - levelIndex: 2
+  - levelIndex: 3
     levelEvent:
       _PersistentCalls:
       - _Target: {fileID: 7965615583069501612}
@@ -328929,7 +328935,7 @@ MonoBehaviour:
           _Z: 0
           _W: 0
           _Object: {fileID: 0}
-  - levelIndex: 2
+  - levelIndex: 3
     levelEvent:
       _PersistentCalls:
       - _Target: {fileID: 8033497396052653885}
@@ -329450,7 +329456,7 @@ MonoBehaviour:
           _Z: 0
           _W: 0
           _Object: {fileID: 0}
-  - levelIndex: 2
+  - levelIndex: 3
     levelEvent:
       _PersistentCalls:
       - _Target: {fileID: 8150125457502697814}
@@ -329766,7 +329772,7 @@ MonoBehaviour:
           _Z: 0
           _W: 0
           _Object: {fileID: 0}
-  - levelIndex: 2
+  - levelIndex: 3
     levelEvent:
       _PersistentCalls:
       - _Target: {fileID: 8161249815005783555}
@@ -330289,7 +330295,7 @@ MonoBehaviour:
           _Z: 0
           _W: 0
           _Object: {fileID: 0}
-  - levelIndex: 2
+  - levelIndex: 3
     levelEvent:
       _PersistentCalls:
       - _Target: {fileID: 8209833879602274055}
@@ -330654,7 +330660,7 @@ MonoBehaviour:
           _Z: 0
           _W: 0
           _Object: {fileID: 0}
-  - levelIndex: 2
+  - levelIndex: 3
     levelEvent:
       _PersistentCalls:
       - _Target: {fileID: 8261095204861067331}
@@ -331312,7 +331318,7 @@ MonoBehaviour:
           _Z: 0
           _W: 0
           _Object: {fileID: 0}
-  - levelIndex: 2
+  - levelIndex: 3
     levelEvent:
       _PersistentCalls:
       - _Target: {fileID: 8414375572873949273}
@@ -331657,7 +331663,7 @@ MonoBehaviour:
           _Z: 0
           _W: 0
           _Object: {fileID: 0}
-  - levelIndex: 2
+  - levelIndex: 3
     levelEvent:
       _PersistentCalls:
       - _Target: {fileID: 8429120101314949714}
@@ -332219,7 +332225,7 @@ MonoBehaviour:
           _Z: 0
           _W: 0
           _Object: {fileID: 0}
-  - levelIndex: 2
+  - levelIndex: 3
     levelEvent:
       _PersistentCalls:
       - _Target: {fileID: 8593471219463373757}
@@ -332577,7 +332583,7 @@ MonoBehaviour:
           _Z: 0
           _W: 0
           _Object: {fileID: 0}
-  - levelIndex: 2
+  - levelIndex: 3
     levelEvent:
       _PersistentCalls:
       - _Target: {fileID: 8610661983301788897}
@@ -333176,7 +333182,7 @@ MonoBehaviour:
           _Z: 0
           _W: 0
           _Object: {fileID: 0}
-  - levelIndex: 2
+  - levelIndex: 3
     levelEvent:
       _PersistentCalls:
       - _Target: {fileID: 8834862089142251864}
@@ -333535,7 +333541,7 @@ MonoBehaviour:
           _Z: 0
           _W: 0
           _Object: {fileID: 0}
-  - levelIndex: 2
+  - levelIndex: 3
     levelEvent:
       _PersistentCalls:
       - _Target: {fileID: 8882651042648562240}
@@ -333898,7 +333904,7 @@ MonoBehaviour:
           _Z: 0
           _W: 0
           _Object: {fileID: 0}
-  - levelIndex: 2
+  - levelIndex: 3
     levelEvent:
       _PersistentCalls:
       - _Target: {fileID: 8937371507014900886}
@@ -334287,7 +334293,7 @@ MonoBehaviour:
           _Z: 0
           _W: 0
           _Object: {fileID: 0}
-  - levelIndex: 2
+  - levelIndex: 3
     levelEvent:
       _PersistentCalls:
       - _Target: {fileID: 8985068697295903160}
@@ -334912,7 +334918,7 @@ MonoBehaviour:
           _Z: 0
           _W: 0
           _Object: {fileID: 0}
-  - levelIndex: 2
+  - levelIndex: 3
     levelEvent:
       _PersistentCalls:
       - _Target: {fileID: 9180604663444472460}
@@ -335253,7 +335259,7 @@ MonoBehaviour:
           _Z: 0
           _W: 0
           _Object: {fileID: 0}
-  - levelIndex: 2
+  - levelIndex: 3
     levelEvent:
       _PersistentCalls:
       - _Target: {fileID: 9215643210256371971}
