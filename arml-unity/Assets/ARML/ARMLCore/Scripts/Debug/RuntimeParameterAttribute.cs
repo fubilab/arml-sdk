@@ -6,7 +6,7 @@ namespace ARML.Attributes
     /// <summary>
     /// Scope for runtime tweakable fields.
     /// </summary>
-    public enum TweakableScope
+    public enum ParameterScope
     {
         /// <summary>One slider per object instance</summary>
         PerObject,
@@ -18,15 +18,15 @@ namespace ARML.Attributes
     /// Marks a field as tweakable at runtime via UI sliders.
     /// </summary>
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = false)]
-    public class RuntimeTweakableAttribute : Attribute
+    public class RuntimeParameterAttribute : Attribute
     {
         public float MinValue { get; private set; }
         public float MaxValue { get; private set; }
         public string DisplayName { get; private set; }
         public bool UseLogarithmicScale { get; private set; }
-        public TweakableScope Scope { get; private set; }
+        public ParameterScope Scope { get; private set; }
 
-        public RuntimeTweakableAttribute(float minValue = 0f, float maxValue = 1f, string displayName = null, bool useLogarithmicScale = false, TweakableScope scope = TweakableScope.Global)
+        public RuntimeParameterAttribute(float minValue = 0f, float maxValue = 1f, string displayName = null, bool useLogarithmicScale = false, ParameterScope scope = ParameterScope.Global)
         {
             MinValue = minValue;
             MaxValue = maxValue;

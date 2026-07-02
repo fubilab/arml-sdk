@@ -31,7 +31,7 @@ namespace ARML.DebugTools
         {
             public List<object> targetObjects = new List<object>(); // Multiple objects for global scope
             public FieldInfo fieldInfo;
-            public RuntimeTweakableAttribute attribute;
+            public RuntimeParameterAttribute attribute;
             public Slider slider;
             public TMP_Text valueText;
             public TMP_Text labelText;
@@ -103,15 +103,15 @@ namespace ARML.DebugTools
                 {
                     try
                     {
-                        RuntimeTweakableAttribute attribute = null;
+                        RuntimeParameterAttribute attribute = null;
                         
                         // Extract raw applied attributes to avoid strict runtime assembly translation exceptions
                         object[] customAttributes = field.GetCustomAttributes(true);
                         foreach (object attr in customAttributes)
                         {
-                            if (attr is RuntimeTweakableAttribute || attr.GetType().FullName == "ARML.Attributes.RuntimeTweakableAttribute")
+                            if (attr is RuntimeParameterAttribute || attr.GetType().FullName == "ARML.Attributes.RuntimeTweakableAttribute")
                             {
-                                attribute = attr as RuntimeTweakableAttribute;
+                                attribute = attr as RuntimeParameterAttribute;
                                 break;
                             }
                         }
@@ -121,7 +121,7 @@ namespace ARML.DebugTools
                             attributedFieldsFound++;
                             Debug.Log($"RuntimeTweaker: Found tweakable field: {type.Name}.{field.Name}");
                             
-                            if (attribute.Scope == TweakableScope.Global)
+                            if (attribute.Scope == ParameterScope.Global)
                             {
                                 // Create a unique key for this field type
                                 string key = $"{type.FullName}.{field.Name}";
@@ -256,7 +256,7 @@ namespace ARML.DebugTools
 
             string displayName = tweakable.attribute.DisplayName ?? tweakable.fieldInfo.Name;
             
-            if (tweakable.attribute.Scope == TweakableScope.Global)
+            if (tweakable.attribute.Scope == ParameterScope.Global)
             {
                 Type type = tweakable.targetObjects[0].GetType();
                 tweakable.labelText.text = $"[GLOBAL] {type.Name}.{displayName} ({tweakable.targetObjects.Count})";

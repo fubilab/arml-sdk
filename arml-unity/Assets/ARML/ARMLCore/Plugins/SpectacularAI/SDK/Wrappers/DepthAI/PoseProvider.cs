@@ -31,7 +31,7 @@ namespace SpectacularAI.DepthAI
         public float PosePredictDt = 0f;
 
         [Tooltip("Smooth pose as pose = prevPose.slerp(predictedPose, alpha). Value 1.0 = no smoothing, decreasing adds delay."), Range(0.001f, 1.0f)]
-        [RuntimeTweakable(0.001f, 1.0f, "Pose Smooth Alpha", false, TweakableScope.Global)]
+        [RuntimeParameter(0.001f, 1.0f, "Pose Smooth Alpha", false, ParameterScope.Global)]
         public float PoseSmoothAlpha = 1.0f;
 
         public Vector3 rotationOffset;
