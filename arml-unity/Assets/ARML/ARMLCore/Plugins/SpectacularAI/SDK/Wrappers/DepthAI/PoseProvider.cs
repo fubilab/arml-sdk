@@ -35,7 +35,7 @@ namespace SpectacularAI.DepthAI
         [RuntimeParameter(0.001f, 1.0f, "Pose Smooth Alpha", false, ParameterScope.Global)]
         public float PoseSmoothAlpha = 1.0f;
 
-        [RuntimeParameter(-2.0f, 2.0f, "Camera Y Offset", false, ParameterScope.Global)]
+        [RuntimeParameter(-1.0f, 1.0f, "Camera Y Offset", false, ParameterScope.Global)]
         public float YOffset = 0.0f;
 
         public bool IgnoreYPosition;

@@ -7949,7 +7949,7 @@ MonoBehaviour:
   Origin: {fileID: 0}
   PosePredictDt: 0.18
   PoseSmoothAlpha: 0.2
-  YOffset: 0.4
+  YOffset: 0.8
   IgnoreYPosition: 0
   rotationOffset: {x: 0, y: 0, z: 0}
   ReadLauncherSettings: 1
