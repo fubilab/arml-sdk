@@ -38,7 +38,7 @@ The velcro on the battery can be found on the [Accessories](./peripherals.md#acc
 | Nominal voltage           | 12.6V                 |
 | Quantity of cells         | 6 cells               |
 | Cell specification        | 3.7V 5Ah 21700        |
-| Cell combination          | 1 series / 3 parallel | 
+| Cell combination          | 3s2p                  | 
 | Cell size                 | 140x74x25 mm          |
 | Discharge speed           | 1C                    |
 | BMS current rating        | 40A                   |
