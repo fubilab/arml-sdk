@@ -109,7 +109,7 @@ namespace ARML.SceneManagement
         /// <param name="scene">The name of the scene to load.</param>
         public IEnumerator LoadSceneByName(string scene)
         {
-            // If Game ScenSceneManagere is already loaded, return
+            // If Game SceneManager is already loaded, return
             for (int i = 0; i < SceneManager.sceneCount; i++)
             {
                 if (SceneManager.GetSceneAt(i).name == scene)
@@ -133,11 +133,11 @@ namespace ARML.SceneManagement
             //Networked version
             if (InstanceFinder.NetworkManager != null) 
             {
-                InstanceFinder.SceneManager.LoadGlobalScenes(new FishNet.Managing.Scened.SceneLoadData(scene));
+                InstanceFinder.SceneManager.LoadGlobalScenes(new FishNet.Managing.Scened.SceneLoadData($"{scene}.unity"));
             }
             else
             {
-                SceneManager.LoadScene(scene, LoadSceneMode.Additive);   
+                SceneManager.LoadScene($"{scene}.unity", LoadSceneMode.Additive);   
             }
         }
 
