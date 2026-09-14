@@ -21,6 +21,11 @@ public class TcpClientBehaviour : MonoBehaviour
     
     private TcpClient client;
     private Thread clientThread;
+    private readonly ManualResetEvent _connectionEstablished = new ManualResetEvent(false);
+    private volatile bool _stopConnection;
+
+    private const int ConnectionTimeoutMilliseconds = 10000;
+    private const int ConnectionRetryDelayMilliseconds = 250;
 
     private Texture2D _texture;
     private string _json;
@@ -47,13 +52,21 @@ public class TcpClientBehaviour : MonoBehaviour
         
         client.OnOpen(() =>
         {
+            if (_stopConnection)
+            {
+                client.Close();
+                return;
+            }
+
             Debug.Log("Client connected");
-            client.ToData("DATA");
             _connected = true;
+            _connectionEstablished.Set();
+            client.ToData("DATA");
         });
 
         client.OnClose(() =>
         {
+            _connected = false;
             Debug.Log("Client disconnected");
         });
 
@@ -157,9 +170,68 @@ public class TcpClientBehaviour : MonoBehaviour
     
     public bool InitUB()
     {
-        clientThread = new Thread(() => client.Open(new Host(host, port)));
+        if (_connected)
+        {
+            return true;
+        }
+
+        _stopConnection = false;
+        _connectionEstablished.Reset();
+        clientThread = new Thread(ConnectWithRetry)
+        {
+            IsBackground = true
+        };
         clientThread.Start();
-        return true;
+
+        if (!_connectionEstablished.WaitOne(ConnectionTimeoutMilliseconds))
+        {
+            _stopConnection = true;
+            Debug.LogError("Timed out waiting for the Unity Bridge connection.");
+            return false;
+        }
+
+        return _connected;
+    }
+
+    private void ConnectWithRetry()
+    {
+        DateTime deadline = DateTime.UtcNow.AddMilliseconds(ConnectionTimeoutMilliseconds);
+        int attempt = 0;
+
+        while (!_stopConnection && !_connected && DateTime.UtcNow < deadline)
+        {
+            attempt++;
+
+            try
+            {
+                Debug.Log("Connecting to Unity Bridge (attempt " + attempt + ").");
+                client.Open(new Host(host, port));
+
+                if (_connectionEstablished.WaitOne(ConnectionRetryDelayMilliseconds))
+                {
+                    return;
+                }
+            }
+            catch (SocketException exception)
+            {
+                Debug.LogWarning("Unity Bridge connection attempt failed: " + exception.Message);
+            }
+            catch (InvalidOperationException exception)
+            {
+                Debug.LogWarning("Unity Bridge connection attempt failed: " + exception.Message);
+            }
+
+            if (!_connected)
+            {
+                client.Close();
+                Debug.LogWarning("Unity Bridge is not connected; retrying.");
+            }
+
+            if (!_stopConnection)
+            {
+                Thread.Sleep(ConnectionRetryDelayMilliseconds);
+            }
+        }
     }
     private void Update()
     {
@@ -185,6 +257,10 @@ public class TcpClientBehaviour : MonoBehaviour
 
     public void CloseUB()
     {
+        _stopConnection = true;
+        _connectionEstablished.Set();
+        _connected = false;
+
         // Close the client
         if (client != null)
         {
@@ -198,14 +274,6 @@ public class TcpClientBehaviour : MonoBehaviour
     
     void OnDestroy()
     {
-        // Close the client
-        if (client != null)
-        {
-            client.Close();
-        }
-        if (clientThread != null && clientThread.IsAlive)
-        {
-            clientThread.Abort();
-        }
+        CloseUB();
     }
 }

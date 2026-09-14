@@ -2,6 +2,8 @@ using System;
 using System.Runtime.InteropServices;
 using UnityEngine;
 using SimpleJSON;
+using Process = System.Diagnostics.Process;
+using ProcessStartInfo = System.Diagnostics.ProcessStartInfo;
 
 namespace OAKForUnity
 {
@@ -51,6 +53,111 @@ namespace OAKForUnity
         private Color32[] _colorPixel32;
         private GCHandle _colorPixelHandle;
         private IntPtr _colorPixelPtr;
+        private Process _handTrackingBridgeProcess;
+
+        private const string HandTrackingBridgeDirectory = @"C:\Fran\repos\depthai-unity\unity_bridge";
+        private const string HandTrackingBridgeArguments =
+            @".\depthai_hand_tracking_unity_bridge.py --use_world_landmarks --gest";
+
+        public override void FinishDevice()
+        {
+            try
+            {
+                base.FinishDevice();
+            }
+            finally
+            {
+                StopHandTrackingBridge();
+            }
+        }
+
+        private void OnDestroy()
+        {
+            StopHandTrackingBridge();
+        }
+
+        private bool StartHandTrackingBridge()
+        {
+            if (!useUnityBridge)
+            {
+                return true;
+            }
+
+            if (_handTrackingBridgeProcess != null)
+            {
+                if (!_handTrackingBridgeProcess.HasExited)
+                {
+                    return true;
+                }
+
+                _handTrackingBridgeProcess.Dispose();
+                _handTrackingBridgeProcess = null;
+            }
+
+            try
+            {
+                _handTrackingBridgeProcess = Process.Start(new ProcessStartInfo
+                {
+                    FileName = "python",
+                    Arguments = HandTrackingBridgeArguments,
+                    WorkingDirectory = HandTrackingBridgeDirectory,
+                    UseShellExecute = false,
+                    CreateNoWindow = true
+                });
+
+                if (_handTrackingBridgeProcess == null)
+                {
+                    Debug.LogError("Could not start the hand tracking bridge process.");
+                    return false;
+                }
+
+                return true;
+            }
+            catch (System.ComponentModel.Win32Exception exception)
+            {
+                Debug.LogError("Could not start the hand tracking bridge process: " + exception.Message);
+            }
+            catch (InvalidOperationException exception)
+            {
+                Debug.LogError("Could not start the hand tracking bridge process: " + exception.Message);
+            }
+            catch (System.IO.DirectoryNotFoundException exception)
+            {
+                Debug.LogError("Could not start the hand tracking bridge process: " + exception.Message);
+            }
+
+            return false;
+        }
+
+        private void StopHandTrackingBridge()
+        {
+            if (_handTrackingBridgeProcess == null)
+            {
+                return;
+            }
+
+            try
+            {
+                if (!_handTrackingBridgeProcess.HasExited)
+                {
+                    _handTrackingBridgeProcess.Kill();
+                    _handTrackingBridgeProcess.WaitForExit(2000);
+                }
+            }
+            catch (InvalidOperationException exception)
+            {
+                Debug.LogError("Could not stop the hand tracking bridge process: " + exception.Message);
+            }
+            catch (System.ComponentModel.Win32Exception exception)
+            {
+                Debug.LogError("Could not stop the hand tracking bridge process: " + exception.Message);
+            }
+            finally
+            {
+                _handTrackingBridgeProcess.Dispose();
+                _handTrackingBridgeProcess = null;
+            }
+        }
 
         // Init textures. Each PredefinedBase implementation handles textures. Decoupled from external viz (Canvas, VFX, ...)
         void InitTexture()
@@ -68,6 +175,7 @@ namespace OAKForUnity
         {
             // Init dataPath to load body pose NN model
             _dataPath = Application.dataPath;
+            StartHandTrackingBridge();
             
             InitTexture();
 

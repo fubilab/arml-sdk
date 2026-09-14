@@ -253,7 +253,7 @@ namespace OAKForUnity
         * Called from unity device if start pipeline when play is defined
         * Could be called from start pipeline button on canvas ui (p.eg)
         */
-        public void ConnectDevice()
+        public virtual void ConnectDevice()
         {
             // Set dataPath for loading NN model if need it
             _dataPath = Application.dataPath;
@@ -303,7 +303,7 @@ namespace OAKForUnity
          *
          * It's important call this method to NOT leave the device is bad state
          */
-        public void FinishDevice()
+        public virtual void FinishDevice()
         {
             if (useUnityBridge)
             {
