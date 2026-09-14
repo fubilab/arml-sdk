@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Runtime.InteropServices;
 using UnityEngine;
 using SimpleJSON;
@@ -55,9 +56,13 @@ namespace OAKForUnity
         private IntPtr _colorPixelPtr;
         private Process _handTrackingBridgeProcess;
 
-        private const string HandTrackingBridgeDirectory = @"C:\Fran\repos\depthai-unity\unity_bridge";
+        private string HandTrackingBridgeDirectory
+        {
+            get { return Path.GetFullPath(Path.Combine(Application.dataPath, "..", "unity_bridge")); }
+        }
+
         private const string HandTrackingBridgeArguments =
-            @".\depthai_hand_tracking_unity_bridge.py --use_world_landmarks --gest";
+            @".\depthai_hand_tracking_unity_bridge.py --use_world_landmarks --gest --no-preview";
 
         public override void FinishDevice()
         {
