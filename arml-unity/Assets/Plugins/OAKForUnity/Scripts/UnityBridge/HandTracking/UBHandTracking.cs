@@ -38,6 +38,12 @@ namespace OAKForUnity
         [Tooltip("Per-axis multiplier for the local hand pose. Set an axis to -1 to mirror it.")]
         public Vector3 handLandmarkRemap = new Vector3(1f, -1f, 1f);
 
+        [Header("Gesture Triggers")]
+        public Collider hand0GestureTrigger;
+        public Collider hand1GestureTrigger;
+        public UBHandGesture hand0TriggerGesture = UBHandGesture.Fist;
+        public UBHandGesture hand1TriggerGesture = UBHandGesture.Fist;
+
         [Header("Results")] 
         public Texture2D colorTexture;
         public string ubHandTrackingResults;
@@ -55,6 +61,8 @@ namespace OAKForUnity
         public Vector2[] connections1;
 
         private float _oldRotation;
+        private UBHandGesture _hand0Gesture;
+        private UBHandGesture _hand1Gesture;
         
         // private attributes
         private Color32[] _colorPixel32;
@@ -197,6 +205,9 @@ namespace OAKForUnity
             _oldRotation = 0f;
             landmarks = new Vector3[21];
             landmarks1 = new Vector3[21];
+            _hand0Gesture = UBHandGesture.None;
+            _hand1Gesture = UBHandGesture.None;
+            UpdateGestureTriggers();
         }
 
         // Prepare Pipeline Configuration and call pipeline init implementation
@@ -255,6 +266,80 @@ namespace OAKForUnity
             {
                 ubHandTrackingResults = device.results;
             }
+        }
+
+        public UBHandGesture GetHandGesture(int handIndex)
+        {
+            if (handIndex == 0)
+            {
+                return _hand0Gesture;
+            }
+
+            if (handIndex == 1)
+            {
+                return _hand1Gesture;
+            }
+
+            return UBHandGesture.None;
+        }
+
+        public bool IsHandGesture(int handIndex, UBHandGesture gesture)
+        {
+            return gesture != UBHandGesture.None && GetHandGesture(handIndex) == gesture;
+        }
+
+        public bool TryGetGestureTriggerHand(
+            Collider trigger,
+            UBHandGesture gesture,
+            out int handIndex)
+        {
+            handIndex = -1;
+            if (gesture == UBHandGesture.None)
+            {
+                return false;
+            }
+
+            if (trigger == hand0GestureTrigger && IsHandGesture(0, gesture))
+            {
+                handIndex = 0;
+                return true;
+            }
+
+            if (trigger == hand1GestureTrigger && IsHandGesture(1, gesture))
+            {
+                handIndex = 1;
+                return true;
+            }
+
+            return false;
+        }
+
+        public Vector3[] GetHandLandmarks(int handIndex)
+        {
+            if (handIndex == 0)
+            {
+                return landmarks;
+            }
+
+            if (handIndex == 1)
+            {
+                return landmarks1;
+            }
+
+            return null;
+        }
+
+        public bool TryGetHandPosition(int handIndex, out Vector3 position)
+        {
+            position = Vector3.zero;
+            Vector3[] handLandmarks = GetHandLandmarks(handIndex);
+            if (handLandmarks == null || handLandmarks.Length == 0)
+            {
+                return false;
+            }
+
+            position = handLandmarks[0];
+            return position != Vector3.zero;
         }
         void PlaceConnection(GameObject sp1, GameObject sp2, GameObject cyl)
         {
@@ -409,6 +494,9 @@ namespace OAKForUnity
                 }
             }
 
+            _hand0Gesture = UBHandGesture.None;
+            _hand1Gesture = UBHandGesture.None;
+            UpdateGestureTriggers();
             if (string.IsNullOrEmpty(ubHandTrackingResults)) return;
 
             // EXAMPLE HOW TO PARSE INFO
@@ -454,8 +542,57 @@ namespace OAKForUnity
                 }
             }
 
+            _hand0Gesture = ParseGesture(hand0);
+            _hand1Gesture = ParseGesture(hand1);
+            UpdateGestureTriggers();
+
             ProcessHand(hand0, landmarks, skeleton, cylinders, connections);
             ProcessHand(hand1, landmarks1, skeleton1, cylinders1, connections1);
+        }
+
+        private UBHandGesture ParseGesture(JSONNode hand)
+        {
+            if (hand == null)
+            {
+                return UBHandGesture.None;
+            }
+
+            switch (hand["gesture"].Value)
+            {
+                case "ONE":
+                    return UBHandGesture.One;
+                case "TWO":
+                    return UBHandGesture.Two;
+                case "THREE":
+                    return UBHandGesture.Three;
+                case "FOUR":
+                    return UBHandGesture.Four;
+                case "FIVE":
+                    return UBHandGesture.Five;
+                case "FIST":
+                    return UBHandGesture.Fist;
+                case "OK":
+                    return UBHandGesture.Ok;
+                case "PEACE":
+                    return UBHandGesture.Peace;
+                default:
+                    return UBHandGesture.None;
+            }
+        }
+
+        private void UpdateGestureTriggers()
+        {
+            if (hand0GestureTrigger != null)
+            {
+                hand0GestureTrigger.enabled =
+                    IsHandGesture(0, hand0TriggerGesture);
+            }
+
+            if (hand1GestureTrigger != null)
+            {
+                hand1GestureTrigger.enabled =
+                    IsHandGesture(1, hand1TriggerGesture);
+            }
         }
     }
 }
