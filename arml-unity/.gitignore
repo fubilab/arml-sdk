@@ -73,7 +73,6 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 
 # Non-open source plugins 
-/[Aa]ssets/Plugins/
 /[Pp]ackages/com.kybernetik.ultevents/
 
 # crash dumps
