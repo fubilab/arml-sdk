@@ -8,6 +8,11 @@ namespace OAKForUnity
         [Header("Hand Tracking")]
         public UBHandTracking handTracking;
         public UBHandGesture grabGesture = UBHandGesture.Fist;
+        [Tooltip("Consecutive tracked frames with a different gesture before releasing.")]
+        public int nonGrabGestureFramesToRelease = 3;
+        [Range(0f, 1f)]
+        [Tooltip("Minimum landmark confidence required to grab or release from a different gesture.")]
+        public float minimumLandmarkScore = 0.7f;
 
         [Header("Physics")]
         public Rigidbody targetRigidbody;
@@ -16,6 +21,7 @@ namespace OAKForUnity
         private Vector3 _grabOffset;
         private bool _wasKinematic;
         private bool _usedGravity;
+        private int _nonGrabGestureFrames;
 
         private void Awake()
         {
@@ -32,13 +38,30 @@ namespace OAKForUnity
                 return;
             }
 
-            if (!handTracking.IsHandGesture(_grabbedHand, grabGesture))
+            if (!handTracking.TryGetHandPosition(_grabbedHand, out Vector3 handPosition))
             {
-                Release();
+                _nonGrabGestureFrames = 0;
                 return;
             }
 
-            MoveWithHand(_grabbedHand);
+            float landmarkScore = handTracking.GetHandLandmarkScore(_grabbedHand);
+            UBHandGesture detectedGesture = handTracking.GetHandGesture(_grabbedHand);
+            if (detectedGesture == grabGesture ||
+                detectedGesture == UBHandGesture.None ||
+                landmarkScore < minimumLandmarkScore)
+            {
+                _nonGrabGestureFrames = 0;
+                MoveWithHand(handPosition);
+                return;
+            }
+
+            _nonGrabGestureFrames++;
+            MoveWithHand(handPosition);
+
+            if (_nonGrabGestureFrames >= Mathf.Max(1, nonGrabGestureFramesToRelease))
+            {
+                Release();
+            }
         }
 
         private void OnTriggerEnter(Collider other)
@@ -49,16 +72,6 @@ namespace OAKForUnity
         private void OnTriggerStay(Collider other)
         {
             TryBeginGrab(other);
-        }
-
-        private void OnTriggerExit(Collider other)
-        {
-            if (handTracking != null &&
-                handTracking.TryGetGestureTriggerHand(other, grabGesture, out int handIndex) &&
-                handIndex == _grabbedHand)
-            {
-                Release();
-            }
         }
 
         private void TryBeginGrab(Collider other)
@@ -78,8 +91,14 @@ namespace OAKForUnity
                 return;
             }
 
+            if (handTracking.GetHandLandmarkScore(handIndex) < minimumLandmarkScore)
+            {
+                return;
+            }
+
             _grabbedHand = handIndex;
             _grabOffset = transform.position - handPosition;
+            _nonGrabGestureFrames = 0;
 
             if (targetRigidbody != null)
             {
@@ -90,14 +109,8 @@ namespace OAKForUnity
             }
         }
 
-        private void MoveWithHand(int handIndex)
+        private void MoveWithHand(Vector3 handPosition)
         {
-            if (!handTracking.TryGetHandPosition(handIndex, out Vector3 handPosition))
-            {
-                Release();
-                return;
-            }
-
             Vector3 targetPosition = handPosition + _grabOffset;
             if (targetRigidbody != null)
             {
@@ -118,6 +131,7 @@ namespace OAKForUnity
             }
 
             _grabbedHand = -1;
+            _nonGrabGestureFrames = 0;
         }
 
         private void OnDisable()

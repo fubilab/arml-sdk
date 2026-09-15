@@ -65,12 +65,17 @@ namespace OAKForUnity
         private float _oldRotation;
         private UBHandGesture _hand0Gesture;
         private UBHandGesture _hand1Gesture;
+        private float _hand0PalmScore;
+        private float _hand1PalmScore;
+        private float _hand0LandmarkScore;
+        private float _hand1LandmarkScore;
         
         // private attributes
         private Color32[] _colorPixel32;
         private GCHandle _colorPixelHandle;
         private IntPtr _colorPixelPtr;
         private Process _handTrackingBridgeProcess;
+        private bool _loggedHandTrackingResults;
 
         private string HandTrackingBridgeDirectory
         {
@@ -300,6 +305,36 @@ namespace OAKForUnity
             return gesture != UBHandGesture.None && GetHandGesture(handIndex) == gesture;
         }
 
+        public float GetHandPalmScore(int handIndex)
+        {
+            if (handIndex == 0)
+            {
+                return _hand0PalmScore;
+            }
+
+            if (handIndex == 1)
+            {
+                return _hand1PalmScore;
+            }
+
+            return 0f;
+        }
+
+        public float GetHandLandmarkScore(int handIndex)
+        {
+            if (handIndex == 0)
+            {
+                return _hand0LandmarkScore;
+            }
+
+            if (handIndex == 1)
+            {
+                return _hand1LandmarkScore;
+            }
+
+            return 0f;
+        }
+
         public bool TryGetGestureTriggerHand(
             Collider trigger,
             UBHandGesture gesture,
@@ -515,8 +550,18 @@ namespace OAKForUnity
 
             _hand0Gesture = UBHandGesture.None;
             _hand1Gesture = UBHandGesture.None;
+            _hand0PalmScore = 0f;
+            _hand1PalmScore = 0f;
+            _hand0LandmarkScore = 0f;
+            _hand1LandmarkScore = 0f;
             UpdateGestureTriggers();
             if (string.IsNullOrEmpty(ubHandTrackingResults)) return;
+
+            if (!_loggedHandTrackingResults)
+            {
+                Debug.Log("Unity Bridge hand tracking JSON: " + ubHandTrackingResults);
+                _loggedHandTrackingResults = true;
+            }
 
             // EXAMPLE HOW TO PARSE INFO
             var json = JSON.Parse(ubHandTrackingResults);
@@ -543,6 +588,8 @@ namespace OAKForUnity
 
             if (hand0 != null)
             {
+                _hand0PalmScore = GetHandScore(hand0, "pd_score");
+                _hand0LandmarkScore = GetHandScore(hand0, "lm_score");
                 if (hand0["gesture"] == "FIST")
                 {
                     float rotation = (float) hand0["rotation"];
@@ -553,6 +600,8 @@ namespace OAKForUnity
 
             if (hand1 != null)
             {
+                _hand1PalmScore = GetHandScore(hand1, "pd_score");
+                _hand1LandmarkScore = GetHandScore(hand1, "lm_score");
                 if (hand1["gesture"] == "FIST")
                 {
                     float rotation = (float) hand1["rotation"];
@@ -566,6 +615,17 @@ namespace OAKForUnity
 
             ProcessHand(hand0, landmarks, skeleton, cylinders, connections);
             ProcessHand(hand1, landmarks1, skeleton1, cylinders1, connections1);
+        }
+
+        private float GetHandScore(JSONNode hand, string scoreName)
+        {
+            if (hand == null)
+            {
+                return 0f;
+            }
+
+            JSONNode score = hand[scoreName];
+            return score == null || score.IsNull ? 0f : score.AsFloat;
         }
 
         private UBHandGesture ParseGesture(JSONNode hand)
