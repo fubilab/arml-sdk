@@ -3198,6 +3198,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp-firstpass::OAKForUnity.UBHandGrabbable
   handTracking: {fileID: 1366592995}
   grabGesture: 6
+  nonGrabGestureFramesToRelease: 0
+  minimumLandmarkScore: 0.7
   targetRigidbody: {fileID: 0}
 --- !u!65 &1527977041
 BoxCollider:

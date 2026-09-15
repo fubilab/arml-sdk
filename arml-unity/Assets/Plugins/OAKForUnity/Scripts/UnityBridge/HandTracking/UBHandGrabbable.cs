@@ -45,10 +45,15 @@ namespace OAKForUnity
             }
 
             float landmarkScore = handTracking.GetHandLandmarkScore(_grabbedHand);
+            if (landmarkScore < minimumLandmarkScore)
+            {
+                _nonGrabGestureFrames = 0;
+                return;
+            }
+
             UBHandGesture detectedGesture = handTracking.GetHandGesture(_grabbedHand);
             if (detectedGesture == grabGesture ||
-                detectedGesture == UBHandGesture.None ||
-                landmarkScore < minimumLandmarkScore)
+                detectedGesture == UBHandGesture.None)
             {
                 _nonGrabGestureFrames = 0;
                 MoveWithHand(handPosition);
@@ -126,6 +131,8 @@ namespace OAKForUnity
         {
             if (targetRigidbody != null)
             {
+                targetRigidbody.linearVelocity = Vector3.zero;
+                targetRigidbody.angularVelocity = Vector3.zero;
                 targetRigidbody.isKinematic = _wasKinematic;
                 targetRigidbody.useGravity = _usedGravity;
             }

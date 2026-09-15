@@ -555,7 +555,12 @@ namespace OAKForUnity
             _hand0LandmarkScore = 0f;
             _hand1LandmarkScore = 0f;
             UpdateGestureTriggers();
-            if (string.IsNullOrEmpty(ubHandTrackingResults)) return;
+            if (string.IsNullOrEmpty(ubHandTrackingResults))
+            {
+                ProcessHand(null, landmarks, skeleton, cylinders, connections);
+                ProcessHand(null, landmarks1, skeleton1, cylinders1, connections1);
+                return;
+            }
 
             if (!_loggedHandTrackingResults)
             {
