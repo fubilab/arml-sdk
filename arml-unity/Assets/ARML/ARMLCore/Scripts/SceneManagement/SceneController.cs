@@ -130,14 +130,18 @@ namespace ARML.SceneManagement
             //Load Level
             Debug.Log($"[SceneController] Started loading scene {scene}");
 
+            #if UNITY_EDITOR
+            scene = scene + ".unity";
+            #endif
+            
             //Networked version
             if (InstanceFinder.NetworkManager != null) 
             {
-                InstanceFinder.SceneManager.LoadGlobalScenes(new FishNet.Managing.Scened.SceneLoadData($"{scene}.unity"));
+                InstanceFinder.SceneManager.LoadGlobalScenes(new FishNet.Managing.Scened.SceneLoadData(scene));
             }
             else
             {
-                SceneManager.LoadScene($"{scene}.unity", LoadSceneMode.Additive);   
+                SceneManager.LoadScene(scene, LoadSceneMode.Additive);   
             }
         }
 

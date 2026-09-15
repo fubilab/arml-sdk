@@ -38,6 +38,8 @@ namespace OAKForUnity
         [Tooltip("Per-axis multiplier for the local hand pose. Set an axis to -1 to mirror it.")]
         public Vector3 handLandmarkRemap = new Vector3(1f, -1f, 1f);
 
+        public bool automaticallyAttachToMainCamera = true;
+
         [Header("Gesture Triggers")]
         public Collider hand0GestureTrigger;
         public Collider hand1GestureTrigger;
@@ -75,8 +77,15 @@ namespace OAKForUnity
             get { return Path.GetFullPath(Path.Combine(Application.dataPath, "..", "unity_bridge")); }
         }
 
+#if UNITY_STANDALONE_LINUX && !UNITY_EDITOR
+        private const string HandTrackingBridgePython = "python3";
+        private const string HandTrackingBridgeArguments =
+            "./depthai_hand_tracking_unity_bridge.py --use_world_landmarks --xyz --gest --no-preview";
+#else
+        private const string HandTrackingBridgePython = "python";
         private const string HandTrackingBridgeArguments =
             @".\depthai_hand_tracking_unity_bridge.py --use_world_landmarks --xyz --gest --no-preview";
+#endif
 
         public override void FinishDevice()
         {
@@ -117,7 +126,7 @@ namespace OAKForUnity
             {
                 _handTrackingBridgeProcess = Process.Start(new ProcessStartInfo
                 {
-                    FileName = "python",
+                    FileName = HandTrackingBridgePython,
                     Arguments = HandTrackingBridgeArguments,
                     WorkingDirectory = HandTrackingBridgeDirectory,
                     UseShellExecute = false,
@@ -208,6 +217,9 @@ namespace OAKForUnity
             _hand0Gesture = UBHandGesture.None;
             _hand1Gesture = UBHandGesture.None;
             UpdateGestureTriggers();
+            
+            if(Camera.main != null && automaticallyAttachToMainCamera)
+                this.transform.parent = Camera.main.transform;
         }
 
         // Prepare Pipeline Configuration and call pipeline init implementation
@@ -378,6 +390,11 @@ namespace OAKForUnity
             return true;
         }
 
+        private Vector3 TrackingToWorld(Vector3 trackingPosition)
+        {
+            return transform.TransformPoint(trackingPosition);
+        }
+
         private void ProcessHand(
             JSONNode hand,
             Vector3[] targetLandmarks,
@@ -434,14 +451,16 @@ namespace OAKForUnity
                         modelLandmark.x * sinRotation + modelLandmark.y * cosRotation,
                         modelLandmark.z);
                     Vector3 relativeLandmark = rotatedLandmark - rotatedWrist;
-                    targetLandmarks[i] = wristPosition + Vector3.Scale(relativeLandmark, handLandmarkRemap);
+                    targetLandmarks[i] = TrackingToWorld(
+                        wristPosition + Vector3.Scale(relativeLandmark, handLandmarkRemap));
                 }
             }
             else
             {
                 for (int i = 0; i < landmarkCount; i++)
                 {
-                    targetLandmarks[i] = Vector3.Scale(modelLandmarks[i], handLandmarkRemap);
+                    targetLandmarks[i] = TrackingToWorld(
+                        Vector3.Scale(modelLandmarks[i], handLandmarkRemap));
                 }
             }
 
@@ -528,7 +547,6 @@ namespace OAKForUnity
                 {
                     float rotation = (float) hand0["rotation"];
                     rotation *= 0.1f;
-                    light.transform.Rotate(Vector3.right, rotation);
                 }
 
             }

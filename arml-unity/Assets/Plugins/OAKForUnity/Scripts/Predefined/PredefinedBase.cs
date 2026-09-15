@@ -363,6 +363,12 @@ namespace OAKForUnity
         // For unity thread mode
         void Update()
         {
+            if (Input.GetKeyDown(KeyCode.H))
+            {
+                ConnectDevice();
+            }
+            
+            
             if (deviceRunning)
             {
                 if (processMode == ProcessMode.UnityThread)
