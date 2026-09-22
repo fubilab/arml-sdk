@@ -39,6 +39,12 @@ namespace SpectacularAI.DepthAI
         public bool UseColorStereoCameras = false;
 
         /// <summary>
+        /// Use the color camera in the pose pipeline.
+        /// </summary>
+        [MarshalAs(UnmanagedType.I1)]
+        public bool UseColor = false;
+
+        /// <summary>
         /// SLAM map save path. Supported formats are .bin (internal SLAM map format) and point cloud formats .ply and .csv
         /// </summary>
         [MarshalAs(UnmanagedType.LPStr)]
@@ -103,5 +109,17 @@ namespace SpectacularAI.DepthAI
         /// </summary>
         [MarshalAs(UnmanagedType.I1)]
         public bool LowLatency = false;
+
+        /// <summary>
+        /// Enable the shared RGB frame feed used by native hand tracking.
+        /// </summary>
+        [MarshalAs(UnmanagedType.I1)]
+        public bool EnableHandTracking = false;
+
+        /// <summary>
+        /// Path to the palm-detection DepthAI blob.
+        /// </summary>
+        [MarshalAs(UnmanagedType.LPStr)]
+        public string HandTrackingPalmModelPath = "";
     }
 }

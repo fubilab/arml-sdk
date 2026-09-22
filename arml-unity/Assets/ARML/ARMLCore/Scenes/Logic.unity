@@ -2408,6 +2408,9 @@ MonoBehaviour:
   InternalParameters: []
   readLauncherSettings: 1
   autoStartSession: 0
+  UseColor: 0
+  EnableHandTracking: 0
+  HandTrackingPalmModelPath: 
 --- !u!114 &381384618863297024
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2808,7 +2811,7 @@ GameObject:
   m_Icon: {fileID: -1412012063857583412, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!222 &1032712783401867764
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -7931,7 +7934,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!222 &8139728279944461729
 CanvasRenderer:
   m_ObjectHideFlags: 0

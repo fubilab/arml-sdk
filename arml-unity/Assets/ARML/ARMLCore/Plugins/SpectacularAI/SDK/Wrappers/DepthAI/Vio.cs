@@ -66,8 +66,7 @@ namespace SpectacularAI.DepthAI
         [Tooltip("Path to .bin file with saved SLAM map.")]
         [SerializeField]
         public string MapLoadPath = "";
-
-
+        
         [Tooltip("Internal algorithm parameters")]
         public List<VioParameter> InternalParameters;
 
@@ -81,11 +80,37 @@ namespace SpectacularAI.DepthAI
         [Tooltip("Start VIO Session on component Start, rather than waiting for the game scene to load.\n" + 
             "Do not set this if using AprilTags in your scene.")]
         public bool autoStartSession;
+                
+        [Header("Hand Tracking (Experimental)")]
+        [SerializeField]
+        public bool UseColor = false;
+
+        [SerializeField]
+        public bool EnableHandTracking = false;
+
+        [SerializeField]
+        public string HandTrackingPalmModelPath = "";
 
         /// <summary>
         /// The current vio output.
         /// </summary>
         public static VioOutput Output { get; private set; }
+
+        /// <summary>
+        /// Gets the latest shared RGB frame when hand tracking is enabled.
+        /// </summary>
+        public ColorFrame GetLatestColorFrame()
+        {
+            return _session == null ? null : _session.GetLatestColorFrame();
+        }
+
+        /// <summary>
+        /// Gets the latest native palm detections when hand tracking is enabled.
+        /// </summary>
+        public HandTrackingOutput GetLatestHandTrackingOutput()
+        {
+            return _session == null ? null : _session.GetLatestHandTrackingOutput();
+        }
 
         void Start() 
         {
@@ -120,6 +145,9 @@ namespace SpectacularAI.DepthAI
             }
             Configuration config = new Configuration();
             config.LowLatency = LowLatency;
+            config.UseColor = UseColor;
+            config.EnableHandTracking = EnableHandTracking;
+            config.HandTrackingPalmModelPath = HandTrackingPalmModelPath;
             config.UseStereo = UseStereo;
             config.UseSlam = UseSlam;
             config.UseFeatureTracker = UseFeatureTracker;
@@ -170,9 +198,9 @@ namespace SpectacularAI.DepthAI
                 }
             }
 
-#if UNITY_EDITOR_WIN || UNITY_EDITOR_OSX
-            return;
-#endif
+// #if UNITY_EDITOR_WIN || UNITY_EDITOR_OSX
+//             return;
+// #endif
             Debug.Log("[VIO] StartSession");
             _pipeline = new Pipeline(configuration: config, enableMappingAPI: MappingAPI, internalParameters: InternalParameters.ToArray());
             _session = _pipeline.StartSession();
@@ -180,9 +208,9 @@ namespace SpectacularAI.DepthAI
 
         public void OnDisable()
         {
-#if UNITY_EDITOR_WIN || UNITY_EDITOR_OSX
-            return;
-#endif
+// #if UNITY_EDITOR_WIN || UNITY_EDITOR_OSX
+//             return;
+// #endif
             if (_session != null)
                 _session.Dispose();
             if (_pipeline != null)
@@ -194,9 +222,9 @@ namespace SpectacularAI.DepthAI
 
         private void Update()
         {
-#if UNITY_EDITOR_WIN || UNITY_EDITOR_OSX
-            return;
-#endif
+// #if UNITY_EDITOR_WIN || UNITY_EDITOR_OSX
+//             return;
+// #endif
 
             // Dispose previous vio output
             if (Output != null)

@@ -76,7 +76,8 @@ namespace SpectacularAI.DepthAI
 
         private void Start()
         {
-            RemoteControl.Instance.OnMenuLongPress = ResetPositionAndYaw;
+            if(RemoteControl.Instance != null)
+                RemoteControl.Instance.OnMenuLongPress = ResetPositionAndYaw;
 
             if (UseOrientationFromBNO) 
             {

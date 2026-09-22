@@ -97,6 +97,81 @@ namespace SpectacularAI.DepthAI
         }
 
         /// <summary>
+        /// Gets the latest RGB frame captured by the shared native feed, if one is available.
+        /// </summary>
+        public ColorFrame GetLatestColorFrame()
+        {
+            CheckDisposed();
+            IntPtr colorFrameHandle = ExternApi.sai_depthai_session_get_color_frame(_handle);
+            if (colorFrameHandle == IntPtr.Zero) return null;
+
+            try
+            {
+                int dataSize = checked((int)ExternApi.sai_color_frame_get_data_size(colorFrameHandle));
+                byte[] data = new byte[dataSize];
+                if (dataSize > 0)
+                {
+                    Marshal.Copy(
+                        ExternApi.sai_color_frame_get_data(colorFrameHandle),
+                        data,
+                        0,
+                        dataSize);
+                }
+
+                return new ColorFrame(
+                    (int)ExternApi.sai_color_frame_get_width(colorFrameHandle),
+                    (int)ExternApi.sai_color_frame_get_height(colorFrameHandle),
+                    ExternApi.sai_color_frame_get_sequence_number(colorFrameHandle),
+                    ExternApi.sai_color_frame_get_timestamp(colorFrameHandle),
+                    data);
+            }
+            finally
+            {
+                ExternApi.sai_color_frame_release(colorFrameHandle);
+            }
+        }
+
+        /// <summary>
+        /// Gets the latest decoded palm detections, if one is available.
+        /// </summary>
+        public HandTrackingOutput GetLatestHandTrackingOutput()
+        {
+            CheckDisposed();
+            IntPtr outputHandle = ExternApi.sai_depthai_session_get_hand_tracking_output(_handle);
+            if (outputHandle == IntPtr.Zero) return null;
+
+            try
+            {
+                int count = ExternApi.sai_hand_tracking_output_get_count(outputHandle);
+                HandTrackingDetection[] detections = new HandTrackingDetection[count];
+                for (int detectionIndex = 0; detectionIndex < count; ++detectionIndex)
+                {
+                    float[] box = new float[4];
+                    for (int valueIndex = 0; valueIndex < box.Length; ++valueIndex)
+                    {
+                        box[valueIndex] = ExternApi.sai_hand_tracking_output_get_box_value(
+                            outputHandle,
+                            detectionIndex,
+                            valueIndex);
+                    }
+
+                    detections[detectionIndex] = new HandTrackingDetection(
+                        ExternApi.sai_hand_tracking_output_get_score(outputHandle, detectionIndex),
+                        box);
+                }
+
+                return new HandTrackingOutput(
+                    ExternApi.sai_hand_tracking_output_get_sequence_number(outputHandle),
+                    ExternApi.sai_hand_tracking_output_get_timestamp(outputHandle),
+                    detections);
+            }
+            finally
+            {
+                ExternApi.sai_hand_tracking_output_release(outputHandle);
+            }
+        }
+
+        /// <summary>
         /// Add an external trigger input. Causes additional output corresponding
         /// to a certain timestamp to be generated.
         /// </summary>
@@ -162,6 +237,56 @@ namespace SpectacularAI.DepthAI
 
             [DllImport(ApiConstants.saiNativeApi, CallingConvention = ApiConstants.saiCallingConvention)]
             public static extern IntPtr sai_depthai_session_wait_for_output(IntPtr sessionHandle);
+
+            [DllImport(ApiConstants.saiNativeApi, CallingConvention = ApiConstants.saiCallingConvention)]
+            public static extern IntPtr sai_depthai_session_get_color_frame(IntPtr sessionHandle);
+
+            [DllImport(ApiConstants.saiNativeApi, CallingConvention = ApiConstants.saiCallingConvention)]
+            public static extern uint sai_color_frame_get_width(IntPtr colorFrameHandle);
+
+            [DllImport(ApiConstants.saiNativeApi, CallingConvention = ApiConstants.saiCallingConvention)]
+            public static extern uint sai_color_frame_get_height(IntPtr colorFrameHandle);
+
+            [DllImport(ApiConstants.saiNativeApi, CallingConvention = ApiConstants.saiCallingConvention)]
+            public static extern long sai_color_frame_get_sequence_number(IntPtr colorFrameHandle);
+
+            [DllImport(ApiConstants.saiNativeApi, CallingConvention = ApiConstants.saiCallingConvention)]
+            public static extern double sai_color_frame_get_timestamp(IntPtr colorFrameHandle);
+
+            [DllImport(ApiConstants.saiNativeApi, CallingConvention = ApiConstants.saiCallingConvention)]
+            public static extern IntPtr sai_color_frame_get_data(IntPtr colorFrameHandle);
+
+            [DllImport(ApiConstants.saiNativeApi, CallingConvention = ApiConstants.saiCallingConvention)]
+            public static extern uint sai_color_frame_get_data_size(IntPtr colorFrameHandle);
+
+            [DllImport(ApiConstants.saiNativeApi, CallingConvention = ApiConstants.saiCallingConvention)]
+            public static extern void sai_color_frame_release(IntPtr colorFrameHandle);
+
+            [DllImport(ApiConstants.saiNativeApi, CallingConvention = ApiConstants.saiCallingConvention)]
+            public static extern IntPtr sai_depthai_session_get_hand_tracking_output(IntPtr sessionHandle);
+
+            [DllImport(ApiConstants.saiNativeApi, CallingConvention = ApiConstants.saiCallingConvention)]
+            public static extern int sai_hand_tracking_output_get_count(IntPtr outputHandle);
+
+            [DllImport(ApiConstants.saiNativeApi, CallingConvention = ApiConstants.saiCallingConvention)]
+            public static extern long sai_hand_tracking_output_get_sequence_number(IntPtr outputHandle);
+
+            [DllImport(ApiConstants.saiNativeApi, CallingConvention = ApiConstants.saiCallingConvention)]
+            public static extern double sai_hand_tracking_output_get_timestamp(IntPtr outputHandle);
+
+            [DllImport(ApiConstants.saiNativeApi, CallingConvention = ApiConstants.saiCallingConvention)]
+            public static extern float sai_hand_tracking_output_get_score(
+                IntPtr outputHandle,
+                int detectionIndex);
+
+            [DllImport(ApiConstants.saiNativeApi, CallingConvention = ApiConstants.saiCallingConvention)]
+            public static extern float sai_hand_tracking_output_get_box_value(
+                IntPtr outputHandle,
+                int detectionIndex,
+                int valueIndex);
+
+            [DllImport(ApiConstants.saiNativeApi, CallingConvention = ApiConstants.saiCallingConvention)]
+            public static extern void sai_hand_tracking_output_release(IntPtr outputHandle);
             
             [DllImport(ApiConstants.saiNativeApi, CallingConvention = ApiConstants.saiCallingConvention)]
             public static extern void sai_depthai_session_add_trigger(

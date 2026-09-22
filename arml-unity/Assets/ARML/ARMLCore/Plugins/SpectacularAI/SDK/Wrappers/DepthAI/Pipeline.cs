@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
+using System.Text;
 using SpectacularAI.Native;
 
 namespace SpectacularAI.DepthAI
@@ -42,11 +43,20 @@ namespace SpectacularAI.DepthAI
                 };
             }
 
+            StringBuilder errorMessage = new StringBuilder(1000);
             _handle = ExternApi.sai_depthai_pipeline_build(
                 configuration,
                 internalParameters,
                 internalParameters.Length,
-                _mapperOutputCallback);
+                _mapperOutputCallback,
+                errorMessage);
+            if (_handle == IntPtr.Zero)
+            {
+                throw new InvalidOperationException(
+                    string.IsNullOrEmpty(errorMessage.ToString())
+                        ? "Could not build the native DepthAI pipeline."
+                        : errorMessage.ToString());
+            }
         }
 
         /// <summary>
@@ -90,7 +100,18 @@ namespace SpectacularAI.DepthAI
         public Session StartSession()
         {
             CheckDisposed();
-            IntPtr sessionHandle = ExternApi.sai_depthai_pipeline_start_session(_handle);
+            StringBuilder errorMessage = new StringBuilder(1000);
+            IntPtr sessionHandle = ExternApi.sai_depthai_pipeline_start_session(
+                _handle,
+                errorMessage);
+            if (sessionHandle == IntPtr.Zero)
+            {
+                throw new InvalidOperationException(
+                    string.IsNullOrEmpty(errorMessage.ToString())
+                        ? "Could not start the native DepthAI session."
+                        : errorMessage.ToString());
+            }
+
             return new Session(sessionHandle);
         }
 
@@ -109,10 +130,13 @@ namespace SpectacularAI.DepthAI
                 [In] Configuration configuration,
                 VioParameter[] vioParameters,
                 int internalParametersCount,
-                CallbackDelegate onMapperOutput);
+                CallbackDelegate onMapperOutput,
+                [Out] StringBuilder errorMessage);
 
             [DllImport(ApiConstants.saiNativeApi, CallingConvention = ApiConstants.saiCallingConvention)]
-            public static extern IntPtr sai_depthai_pipeline_start_session(IntPtr pipelineHandle);
+            public static extern IntPtr sai_depthai_pipeline_start_session(
+                IntPtr pipelineHandle,
+                [Out] StringBuilder errorMessage);
 
             [DllImport(ApiConstants.saiNativeApi, CallingConvention = ApiConstants.saiCallingConvention)]
             public static extern void sai_depthai_pipeline_release(IntPtr pipelineHandle);
