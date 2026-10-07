@@ -178,6 +178,18 @@ namespace SpectacularAI.DepthAI
                             valueIndex);
                     }
 
+                    bool hasSpatialXYZ = ExternApi.sai_hand_tracking_output_has_spatial_xyz(
+                        outputHandle,
+                        detectionIndex);
+                    float[] spatialXYZ = new float[3];
+                    for (int valueIndex = 0; valueIndex < spatialXYZ.Length; ++valueIndex)
+                    {
+                        spatialXYZ[valueIndex] = ExternApi.sai_hand_tracking_output_get_spatial_xyz_value(
+                            outputHandle,
+                            detectionIndex,
+                            valueIndex);
+                    }
+
                     detections[detectionIndex] = new HandTrackingDetection(
                         ExternApi.sai_hand_tracking_output_get_score(outputHandle, detectionIndex),
                         box,
@@ -186,7 +198,12 @@ namespace SpectacularAI.DepthAI
                         ExternApi.sai_hand_tracking_output_get_handedness(outputHandle, detectionIndex),
                         ExternApi.sai_hand_tracking_output_get_gesture(outputHandle, detectionIndex),
                         landmarks,
-                        worldLandmarks);
+                        worldLandmarks,
+                        hasSpatialXYZ,
+                        spatialXYZ,
+                        ExternApi.sai_hand_tracking_output_get_rotation_degrees(
+                            outputHandle,
+                            detectionIndex));
                 }
 
                 return new HandTrackingOutput(
@@ -346,6 +363,22 @@ namespace SpectacularAI.DepthAI
                 IntPtr outputHandle,
                 int detectionIndex,
                 int valueIndex);
+
+            [DllImport(ApiConstants.saiNativeApi, CallingConvention = ApiConstants.saiCallingConvention)]
+            public static extern bool sai_hand_tracking_output_has_spatial_xyz(
+                IntPtr outputHandle,
+                int detectionIndex);
+
+            [DllImport(ApiConstants.saiNativeApi, CallingConvention = ApiConstants.saiCallingConvention)]
+            public static extern float sai_hand_tracking_output_get_spatial_xyz_value(
+                IntPtr outputHandle,
+                int detectionIndex,
+                int valueIndex);
+
+            [DllImport(ApiConstants.saiNativeApi, CallingConvention = ApiConstants.saiCallingConvention)]
+            public static extern float sai_hand_tracking_output_get_rotation_degrees(
+                IntPtr outputHandle,
+                int detectionIndex);
 
             [DllImport(ApiConstants.saiNativeApi, CallingConvention = ApiConstants.saiCallingConvention)]
             public static extern void sai_hand_tracking_output_release(IntPtr outputHandle);

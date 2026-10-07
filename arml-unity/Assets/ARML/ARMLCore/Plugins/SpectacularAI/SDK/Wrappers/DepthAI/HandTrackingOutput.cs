@@ -5,7 +5,18 @@ namespace SpectacularAI.DepthAI
     /// </summary>
     public sealed class HandTrackingDetection
     {
-        internal HandTrackingDetection(float score, float[] box, float[] keypoints, float landmarkScore, float handedness, int gesture, float[] landmarks, float[] worldLandmarks)
+        internal HandTrackingDetection(
+            float score,
+            float[] box,
+            float[] keypoints,
+            float landmarkScore,
+            float handedness,
+            int gesture,
+            float[] landmarks,
+            float[] worldLandmarks,
+            bool hasSpatialXYZ,
+            float[] spatialXYZ,
+            float rotationDegrees)
         {
             Score = score;
             Box = box;
@@ -15,6 +26,9 @@ namespace SpectacularAI.DepthAI
             Gesture = gesture;
             Landmarks = landmarks;
             WorldLandmarks = worldLandmarks;
+            HasSpatialXYZ = hasSpatialXYZ;
+            SpatialXYZ = spatialXYZ;
+            RotationDegrees = rotationDegrees;
         }
 
         public float Score { get; }
@@ -25,6 +39,9 @@ namespace SpectacularAI.DepthAI
         public int Gesture { get; }
         public float[] Landmarks { get; }
         public float[] WorldLandmarks { get; }
+        public bool HasSpatialXYZ { get; }
+        public float[] SpatialXYZ { get; }
+        public float RotationDegrees { get; }
     }
 
     /// <summary>

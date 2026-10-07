@@ -44,6 +44,8 @@ namespace OAKForUnity
         [Header("Native SAI VIO")]
         public bool useNativeVio;
         public Vio nativeVio;
+        [Min(0.05f)]
+        public float nativeLandmarkPlaneDepth = 0.5f;
 
         [Header("Native Diagnostics")]
         public bool logNativeDiagnostics = true;
@@ -91,6 +93,7 @@ namespace OAKForUnity
         private byte[] _nativeInterleavedColorData;
         private long _lastNativeColorSequenceNumber = -1;
         private long _lastNativeHandTrackingSequenceNumber = -1;
+        private long _lastLoggedNativeTransformSequenceNumber = -1;
         private int _nativePollCount;
 
         private string HandTrackingBridgeDirectory
@@ -692,20 +695,70 @@ namespace OAKForUnity
                 targetCylinders[i].SetActive(false);
             }
 
-            if (hand == null || hand.WorldLandmarks == null || hand.WorldLandmarks.Length < 3)
+            if (hand == null || hand.Landmarks == null || hand.Landmarks.Length < 63)
             {
                 return;
             }
 
-            int landmarkCount = Mathf.Min(targetLandmarks.Length, hand.WorldLandmarks.Length / 3);
-            for (int i = 0; i < landmarkCount; i++)
+            int landmarkCount = Mathf.Min(targetLandmarks.Length, hand.Landmarks.Length / 3);
+            if (hand.HasSpatialXYZ &&
+                hand.SpatialXYZ != null && hand.SpatialXYZ.Length >= 3 &&
+                hand.WorldLandmarks != null && hand.WorldLandmarks.Length >= 63)
             {
-                Vector3 modelLandmark = new Vector3(
-                    hand.WorldLandmarks[i * 3],
-                    hand.WorldLandmarks[i * 3 + 1],
-                    hand.WorldLandmarks[i * 3 + 2]);
-                targetLandmarks[i] = TrackingToWorld(
-                    Vector3.Scale(modelLandmark, handLandmarkRemap));
+                Vector3 wristPosition = new Vector3(
+                    hand.SpatialXYZ[0],
+                    hand.SpatialXYZ[1],
+                    hand.SpatialXYZ[2]) / 1000.0f;
+                wristPosition = Vector3.Scale(wristPosition, handPositionRemap);
+
+                float rotation = hand.RotationDegrees * Mathf.Deg2Rad;
+                float sinRotation = Mathf.Sin(rotation);
+                float cosRotation = Mathf.Cos(rotation);
+                Vector3 modelWrist = new Vector3(
+                    hand.WorldLandmarks[0],
+                    hand.WorldLandmarks[1],
+                    hand.WorldLandmarks[2]);
+                Vector3 rotatedWrist = new Vector3(
+                    modelWrist.x * cosRotation - modelWrist.y * sinRotation,
+                    modelWrist.x * sinRotation + modelWrist.y * cosRotation,
+                    modelWrist.z);
+
+                for (int landmarkIndex = 0; landmarkIndex < landmarkCount; landmarkIndex++)
+                {
+                    Vector3 modelLandmark = new Vector3(
+                        hand.WorldLandmarks[landmarkIndex * 3],
+                        hand.WorldLandmarks[landmarkIndex * 3 + 1],
+                        hand.WorldLandmarks[landmarkIndex * 3 + 2]);
+                    Vector3 rotatedLandmark = new Vector3(
+                        modelLandmark.x * cosRotation - modelLandmark.y * sinRotation,
+                        modelLandmark.x * sinRotation + modelLandmark.y * cosRotation,
+                        modelLandmark.z);
+                    Vector3 relativeLandmark = rotatedLandmark - rotatedWrist;
+                    targetLandmarks[landmarkIndex] = TrackingToWorld(
+                        wristPosition + Vector3.Scale(relativeLandmark, handLandmarkRemap));
+                }
+            }
+            else
+            {
+                Camera trackingCamera = GetComponentInParent<Camera>();
+                if (trackingCamera == null)
+                {
+                    trackingCamera = Camera.main;
+                }
+
+                if (trackingCamera == null)
+                {
+                    return;
+                }
+
+                for (int landmarkIndex = 0; landmarkIndex < landmarkCount; landmarkIndex++)
+                {
+                    targetLandmarks[landmarkIndex] = trackingCamera.ViewportToWorldPoint(
+                        new Vector3(
+                            hand.Landmarks[landmarkIndex * 3],
+                            1f - hand.Landmarks[landmarkIndex * 3 + 1],
+                            nativeLandmarkPlaneDepth));
+            }
             }
 
             bool hasLandmarks = false;
@@ -785,43 +838,22 @@ namespace OAKForUnity
                 return null;
             }
 
-            int rightHandIndex = -1;
-            int leftHandIndex = -1;
-            for (int index = 0; index < _nativeHandTrackingOutput.Detections.Length; index++)
-            {
-                if (_nativeHandTrackingOutput.Detections[index].Handedness >= 0.5f)
-                {
-                    if (rightHandIndex < 0)
-                    {
-                        rightHandIndex = index;
-                    }
-                }
-                else if (leftHandIndex < 0)
-                {
-                    leftHandIndex = index;
-                }
-            }
-
-            int detectionIndex;
-            if (handIndex == 0)
-            {
-                detectionIndex = rightHandIndex >= 0
-                    ? rightHandIndex
-                    : (_nativeHandTrackingOutput.Detections.Length > 0 ? 0 : -1);
-            }
-            else
-            {
-                detectionIndex = leftHandIndex >= 0
-                    ? leftHandIndex
-                    : (_nativeHandTrackingOutput.Detections.Length > 1 ?
-                        (rightHandIndex == 0 ? 1 : 0) : -1);
-            }
-            if (detectionIndex < 0 || detectionIndex >= _nativeHandTrackingOutput.Detections.Length)
+            if (handIndex != 0 && handIndex != 1)
             {
                 return null;
             }
 
-            return _nativeHandTrackingOutput.Detections[detectionIndex];
+            bool wantRightHand = handIndex == 0;
+            for (int index = 0; index < _nativeHandTrackingOutput.Detections.Length; index++)
+            {
+                HandTrackingDetection detection = _nativeHandTrackingOutput.Detections[index];
+                if ((detection.Handedness > 0.5f) == wantRightHand)
+                {
+                    return detection;
+                }
+            }
+
+            return null;
         }
 
         private static UBHandGesture ParseNativeGesture(int gesture)
@@ -915,6 +947,31 @@ namespace OAKForUnity
                     detection.LandmarkScore,
                     detection.Handedness,
                     detection.Gesture);
+                if (detection.Landmarks != null && detection.Landmarks.Length >= 3)
+                {
+                    description += string.Format(
+                        " imageWrist=({0:0.000},{1:0.000},{2:0.000})",
+                        detection.Landmarks[0],
+                        detection.Landmarks[1],
+                        detection.Landmarks[2]);
+                }
+                if (detection.WorldLandmarks != null && detection.WorldLandmarks.Length >= 3)
+                {
+                    description += string.Format(
+                        " modelWrist=({0:0.000},{1:0.000},{2:0.000})",
+                        detection.WorldLandmarks[0],
+                        detection.WorldLandmarks[1],
+                        detection.WorldLandmarks[2]);
+                }
+                    if (detection.HasSpatialXYZ && detection.SpatialXYZ != null && detection.SpatialXYZ.Length >= 3)
+                    {
+                        description += string.Format(
+                        " spatialXYZ=({0:0},{1:0},{2:0})mm rotation={3:0.0}deg",
+                        detection.SpatialXYZ[0],
+                        detection.SpatialXYZ[1],
+                        detection.SpatialXYZ[2],
+                        detection.RotationDegrees);
+                    }
             }
 
             return description;
@@ -1025,6 +1082,19 @@ namespace OAKForUnity
 
             ProcessHand(hand0, landmarks, skeleton, cylinders, connections);
             ProcessHand(hand1, landmarks1, skeleton1, cylinders1, connections1);
+
+            if (_nativeHandTrackingOutput != null &&
+                _nativeHandTrackingOutput.SequenceNumber != _lastLoggedNativeTransformSequenceNumber)
+            {
+                _lastLoggedNativeTransformSequenceNumber = _nativeHandTrackingOutput.SequenceNumber;
+                if (hand0 != null && landmarks.Length > 0)
+                {
+                    Debug.Log(
+                        "[UBHandTracking] Unity wrist world=" + landmarks[0].ToString("F3") +
+                        ", component=" + transform.position.ToString("F3") +
+                        ", outputSeq=" + _nativeHandTrackingOutput.SequenceNumber);
+                }
+            }
         }
 
         private float GetHandScore(JSONNode hand, string scoreName)

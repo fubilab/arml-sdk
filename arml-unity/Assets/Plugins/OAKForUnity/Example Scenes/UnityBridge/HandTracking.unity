@@ -641,7 +641,7 @@ MonoBehaviour:
   readLauncherSettings: 0
   autoStartSession: 1
   UseColor: 1
-  EnableHandTracking: 0
+  EnableHandTracking: 1
   HandTrackingPalmModelPath: 
   HandTrackingLandmarkModelPath: 
 --- !u!224 &448753736
@@ -2088,7 +2088,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &729677747
 Transform:
   m_ObjectHideFlags: 0
@@ -2890,7 +2890,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1288380371}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c131ea77e9f39d34a80be94e4967afbe, type: 3}
   m_Name: 
@@ -3630,7 +3630,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1663519409
 MonoBehaviour:
   m_ObjectHideFlags: 0
