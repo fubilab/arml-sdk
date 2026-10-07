@@ -643,6 +643,7 @@ MonoBehaviour:
   UseColor: 1
   EnableHandTracking: 0
   HandTrackingPalmModelPath: 
+  HandTrackingLandmarkModelPath: 
 --- !u!224 &448753736
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2962,11 +2963,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   processMode: 0
   deviceRunning: 0
-  useUnityBridge: 1
+  useUnityBridge: 0
   tcpClientBehaviour: {fileID: 1366592994}
   handPositionRemap: {x: 1, y: 1, z: 1}
   handLandmarkRemap: {x: 1, y: -1, z: 1}
   automaticallyAttachToMainCamera: 1
+  useNativeVio: 1
+  nativeVio: {fileID: 448753735}
+  logNativeDiagnostics: 1
+  nativeDiagnosticIntervalFrames: 60
   hand0GestureTrigger: {fileID: 4251602154253544783}
   hand1GestureTrigger: {fileID: 4251602154388224047}
   hand0TriggerGesture: 6

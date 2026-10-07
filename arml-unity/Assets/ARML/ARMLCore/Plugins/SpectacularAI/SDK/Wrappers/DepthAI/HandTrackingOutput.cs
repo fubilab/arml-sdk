@@ -5,14 +5,26 @@ namespace SpectacularAI.DepthAI
     /// </summary>
     public sealed class HandTrackingDetection
     {
-        internal HandTrackingDetection(float score, float[] box)
+        internal HandTrackingDetection(float score, float[] box, float[] keypoints, float landmarkScore, float handedness, int gesture, float[] landmarks, float[] worldLandmarks)
         {
             Score = score;
             Box = box;
+            Keypoints = keypoints;
+            LandmarkScore = landmarkScore;
+            Handedness = handedness;
+            Gesture = gesture;
+            Landmarks = landmarks;
+            WorldLandmarks = worldLandmarks;
         }
 
         public float Score { get; }
         public float[] Box { get; }
+        public float[] Keypoints { get; }
+        public float LandmarkScore { get; }
+        public float Handedness { get; }
+        public int Gesture { get; }
+        public float[] Landmarks { get; }
+        public float[] WorldLandmarks { get; }
     }
 
     /// <summary>

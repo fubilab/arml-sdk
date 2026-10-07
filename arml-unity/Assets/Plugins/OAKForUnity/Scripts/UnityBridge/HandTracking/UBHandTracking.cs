@@ -5,6 +5,7 @@ using UnityEngine;
 using SimpleJSON;
 using Process = System.Diagnostics.Process;
 using ProcessStartInfo = System.Diagnostics.ProcessStartInfo;
+using SpectacularAI.DepthAI;
 
 namespace OAKForUnity
 {
@@ -39,6 +40,15 @@ namespace OAKForUnity
         public Vector3 handLandmarkRemap = new Vector3(1f, -1f, 1f);
 
         public bool automaticallyAttachToMainCamera = true;
+
+        [Header("Native SAI VIO")]
+        public bool useNativeVio;
+        public Vio nativeVio;
+
+        [Header("Native Diagnostics")]
+        public bool logNativeDiagnostics = true;
+        [Min(1)]
+        public int nativeDiagnosticIntervalFrames = 60;
 
         [Header("Gesture Triggers")]
         public Collider hand0GestureTrigger;
@@ -76,6 +86,12 @@ namespace OAKForUnity
         private IntPtr _colorPixelPtr;
         private Process _handTrackingBridgeProcess;
         private bool _loggedHandTrackingResults;
+        private ColorFrame _nativeColorFrame;
+        private HandTrackingOutput _nativeHandTrackingOutput;
+        private byte[] _nativeInterleavedColorData;
+        private long _lastNativeColorSequenceNumber = -1;
+        private long _lastNativeHandTrackingSequenceNumber = -1;
+        private int _nativePollCount;
 
         private string HandTrackingBridgeDirectory
         {
@@ -94,6 +110,13 @@ namespace OAKForUnity
 
         public override void FinishDevice()
         {
+            if (useNativeVio)
+            {
+                deviceRunning = false;
+                StopHandTrackingBridge();
+                return;
+            }
+
             try
             {
                 base.FinishDevice();
@@ -111,7 +134,7 @@ namespace OAKForUnity
 
         private bool StartHandTrackingBridge()
         {
-            if (!useUnityBridge)
+            if (!useUnityBridge || useNativeVio)
             {
                 return true;
             }
@@ -192,6 +215,26 @@ namespace OAKForUnity
             }
         }
 
+        public override void ConnectDevice()
+        {
+            LogNativeDiagnostics(
+                "ConnectDevice called. configuredProcessMode=" + processMode +
+                ", useNativeVio=" + useNativeVio +
+                ", nativeVioAssigned=" + (nativeVio != null));
+            if (useNativeVio)
+            {
+                processMode = ProcessMode.UnityThread;
+                if (!deviceRunning)
+                {
+                    deviceRunning = InitDevice();
+                }
+
+                return;
+            }
+
+            base.ConnectDevice();
+        }
+
         // Init textures. Each PredefinedBase implementation handles textures. Decoupled from external viz (Canvas, VFX, ...)
         void InitTexture()
         {
@@ -206,6 +249,9 @@ namespace OAKForUnity
         // Start. Init textures and frameInfo
         void Start()
         {
+            LogNativeDiagnostics(
+                "UB component Start. useNativeVio=" + useNativeVio +
+                ", useUnityBridge=" + useUnityBridge);
             // Init dataPath to load body pose NN model
             _dataPath = Application.dataPath;
             StartHandTrackingBridge();
@@ -225,11 +271,66 @@ namespace OAKForUnity
             
             if(Camera.main != null && automaticallyAttachToMainCamera)
                 this.transform.parent = Camera.main.transform;
+
+            if (useNativeVio)
+            {
+                LogNativeDiagnostics("UB component Start completed. Starting native Vio connection.");
+                ConnectDevice();
+            }
         }
 
         // Prepare Pipeline Configuration and call pipeline init implementation
         protected override bool InitDevice()
         {
+            LogNativeDiagnostics("InitDevice entered.");
+            if (useNativeVio)
+            {
+                if (nativeVio == null)
+                {
+                    nativeVio = FindFirstObjectByType<Vio>();
+                }
+
+                if (nativeVio == null)
+                {
+                    Debug.LogError("Native SAI VIO hand tracking requires a Vio component.");
+                    return false;
+                }
+
+                try
+                {
+                    if (nativeVio.IsSessionStarted)
+                    {
+                        if (!nativeVio.UseColor || !nativeVio.EnableHandTracking)
+                        {
+                            Debug.LogError(
+                                "The native Vio session started before UBHandTracking and does not have color and hand tracking enabled.");
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        nativeVio.UseColor = true;
+                        nativeVio.EnableHandTracking = true;
+                        nativeVio.StartSession();
+                    }
+
+                    deviceRunning = true;
+                    LogNativeDiagnostics(
+                        "Native Vio ready. " +
+                        "sessionStarted=" + nativeVio.IsSessionStarted +
+                        ", useColor=" + nativeVio.UseColor +
+                        ", enableHandTracking=" + nativeVio.EnableHandTracking +
+                        ", processMode=" + processMode);
+                    return true;
+                }
+                catch (Exception exception)
+                {
+                    Debug.LogError("Could not initialize native SAI VIO hand tracking: " + exception.Message);
+                    deviceRunning = false;
+                    return false;
+                }
+            }
+
             // For future compatibility between UB and standard C++ plugin
 
             // Color camera
@@ -262,6 +363,56 @@ namespace OAKForUnity
         // Get results from pipeline
         protected override void GetResults()
         {
+            if (useNativeVio)
+            {
+                if (nativeVio == null)
+                {
+                    return;
+                }
+
+                _nativePollCount++;
+                bool logPoll = ShouldLogNativePoll();
+                if (logPoll)
+                {
+                    Debug.Log("[UBHandTracking] Native poll begin #" + _nativePollCount);
+                }
+
+                float colorPollStart = Time.realtimeSinceStartup;
+                _nativeColorFrame = nativeVio.GetLatestColorFrame();
+                if (logPoll || (_nativeColorFrame != null &&
+                    _nativeColorFrame.SequenceNumber != _lastNativeColorSequenceNumber))
+                {
+                    Debug.Log(
+                        "[UBHandTracking] Color poll completed in " +
+                        ((Time.realtimeSinceStartup - colorPollStart) * 1000f).ToString("0") +
+                        " ms; frame=" + DescribeNativeColorFrame(_nativeColorFrame));
+                }
+
+                if (logPoll)
+                {
+                    Debug.Log("[UBHandTracking] Hand poll begin #" + _nativePollCount);
+                }
+
+                float handPollStart = Time.realtimeSinceStartup;
+                HandTrackingOutput output = nativeVio.GetLatestHandTrackingOutput();
+                if (logPoll || output != null &&
+                    output.SequenceNumber != _lastNativeHandTrackingSequenceNumber)
+                {
+                    Debug.Log(
+                        "[UBHandTracking] Hand poll completed in " +
+                        ((Time.realtimeSinceStartup - handPollStart) * 1000f).ToString("0") +
+                        " ms; output=" + DescribeNativeHandOutput(output));
+                }
+
+                if (output != null && output.SequenceNumber != _lastNativeHandTrackingSequenceNumber)
+                {
+                    _nativeHandTrackingOutput = output;
+                    _lastNativeHandTrackingSequenceNumber = output.SequenceNumber;
+                }
+
+                return;
+            }
+
             // if not doing replay
             if (!device.replayResults)
             {
@@ -527,9 +678,263 @@ namespace OAKForUnity
             }
         }
 
+        private void ProcessHand(
+            HandTrackingDetection hand,
+            Vector3[] targetLandmarks,
+            GameObject[] targetSkeleton,
+            GameObject[] targetCylinders,
+            Vector2[] targetConnections)
+        {
+            for (int i = 0; i < targetLandmarks.Length; i++)
+            {
+                targetLandmarks[i] = Vector3.zero;
+                targetSkeleton[i].SetActive(false);
+                targetCylinders[i].SetActive(false);
+            }
+
+            if (hand == null || hand.WorldLandmarks == null || hand.WorldLandmarks.Length < 3)
+            {
+                return;
+            }
+
+            int landmarkCount = Mathf.Min(targetLandmarks.Length, hand.WorldLandmarks.Length / 3);
+            for (int i = 0; i < landmarkCount; i++)
+            {
+                Vector3 modelLandmark = new Vector3(
+                    hand.WorldLandmarks[i * 3],
+                    hand.WorldLandmarks[i * 3 + 1],
+                    hand.WorldLandmarks[i * 3 + 2]);
+                targetLandmarks[i] = TrackingToWorld(
+                    Vector3.Scale(modelLandmark, handLandmarkRemap));
+            }
+
+            bool hasLandmarks = false;
+            for (int i = 0; i < targetLandmarks.Length; i++)
+            {
+                if (targetLandmarks[i] != Vector3.zero)
+                {
+                    hasLandmarks = true;
+                    targetSkeleton[i].SetActive(true);
+                    targetSkeleton[i].transform.position = targetLandmarks[i];
+                }
+            }
+
+            if (!hasLandmarks)
+            {
+                return;
+            }
+
+            for (int i = 0; i < targetConnections.Length; i++)
+            {
+                int start = (int)targetConnections[i].x;
+                int end = (int)targetConnections[i].y;
+                if (targetLandmarks[start] != Vector3.zero && targetLandmarks[end] != Vector3.zero)
+                {
+                    targetCylinders[i].SetActive(true);
+                    PlaceConnection(targetSkeleton[start], targetSkeleton[end], targetCylinders[i]);
+                }
+            }
+        }
+
+        private void UpdateNativeColorTexture(ColorFrame frame)
+        {
+            if (frame == null || frame.Width <= 0 || frame.Height <= 0)
+            {
+                return;
+            }
+
+            int pixelCount = checked(frame.Width * frame.Height);
+            if (frame.Data == null || frame.Data.Length < pixelCount * 3)
+            {
+                return;
+            }
+
+            if (colorTexture == null || colorTexture.width != frame.Width || colorTexture.height != frame.Height)
+            {
+                if (colorTexture != null)
+                {
+                    Destroy(colorTexture);
+                }
+
+                colorTexture = new Texture2D(frame.Width, frame.Height, TextureFormat.RGB24, false);
+                colorTexture.wrapMode = TextureWrapMode.Clamp;
+                colorTexture.filterMode = FilterMode.Bilinear;
+            }
+
+            int dataSize = pixelCount * 3;
+            if (_nativeInterleavedColorData == null || _nativeInterleavedColorData.Length != dataSize)
+            {
+                _nativeInterleavedColorData = new byte[dataSize];
+            }
+
+            for (int pixelIndex = 0; pixelIndex < pixelCount; pixelIndex++)
+            {
+                _nativeInterleavedColorData[pixelIndex * 3] = frame.Data[pixelIndex];
+                _nativeInterleavedColorData[pixelIndex * 3 + 1] = frame.Data[pixelCount + pixelIndex];
+                _nativeInterleavedColorData[pixelIndex * 3 + 2] = frame.Data[pixelCount * 2 + pixelIndex];
+            }
+
+            colorTexture.LoadRawTextureData(_nativeInterleavedColorData);
+            colorTexture.Apply(false, false);
+        }
+
+        private HandTrackingDetection GetNativeDetection(int handIndex)
+        {
+            if (_nativeHandTrackingOutput == null || _nativeHandTrackingOutput.Detections == null)
+            {
+                return null;
+            }
+
+            int rightHandIndex = -1;
+            int leftHandIndex = -1;
+            for (int index = 0; index < _nativeHandTrackingOutput.Detections.Length; index++)
+            {
+                if (_nativeHandTrackingOutput.Detections[index].Handedness >= 0.5f)
+                {
+                    if (rightHandIndex < 0)
+                    {
+                        rightHandIndex = index;
+                    }
+                }
+                else if (leftHandIndex < 0)
+                {
+                    leftHandIndex = index;
+                }
+            }
+
+            int detectionIndex;
+            if (handIndex == 0)
+            {
+                detectionIndex = rightHandIndex >= 0
+                    ? rightHandIndex
+                    : (_nativeHandTrackingOutput.Detections.Length > 0 ? 0 : -1);
+            }
+            else
+            {
+                detectionIndex = leftHandIndex >= 0
+                    ? leftHandIndex
+                    : (_nativeHandTrackingOutput.Detections.Length > 1 ?
+                        (rightHandIndex == 0 ? 1 : 0) : -1);
+            }
+            if (detectionIndex < 0 || detectionIndex >= _nativeHandTrackingOutput.Detections.Length)
+            {
+                return null;
+            }
+
+            return _nativeHandTrackingOutput.Detections[detectionIndex];
+        }
+
+        private static UBHandGesture ParseNativeGesture(int gesture)
+        {
+            return gesture >= (int)UBHandGesture.None && gesture <= (int)UBHandGesture.Peace
+                ? (UBHandGesture)gesture
+                : UBHandGesture.None;
+        }
+
+        private void ProcessNativeResults()
+        {
+            if (_nativeColorFrame != null &&
+                _nativeColorFrame.SequenceNumber != _lastNativeColorSequenceNumber)
+            {
+                UpdateNativeColorTexture(_nativeColorFrame);
+                _lastNativeColorSequenceNumber = _nativeColorFrame.SequenceNumber;
+            }
+
+            HandTrackingDetection hand0 = GetNativeDetection(0);
+            HandTrackingDetection hand1 = GetNativeDetection(1);
+            _hand0PalmScore = hand0 == null ? 0f : hand0.Score;
+            _hand1PalmScore = hand1 == null ? 0f : hand1.Score;
+            _hand0LandmarkScore = hand0 == null ? 0f : hand0.LandmarkScore;
+            _hand1LandmarkScore = hand1 == null ? 0f : hand1.LandmarkScore;
+            _hand0Gesture = hand0 == null ? UBHandGesture.None : ParseNativeGesture(hand0.Gesture);
+            _hand1Gesture = hand1 == null ? UBHandGesture.None : ParseNativeGesture(hand1.Gesture);
+            ubHandTrackingResults = string.Format(
+                "Native SAI hand tracking: {0} hand(s)",
+                _nativeHandTrackingOutput == null || _nativeHandTrackingOutput.Detections == null
+                    ? 0
+                    : _nativeHandTrackingOutput.Detections.Length);
+            UpdateGestureTriggers();
+
+            ProcessHand(hand0, landmarks, skeleton, cylinders, connections);
+            ProcessHand(hand1, landmarks1, skeleton1, cylinders1, connections1);
+        }
+
+        private bool ShouldLogNativePoll()
+        {
+            return logNativeDiagnostics &&
+                (_nativePollCount == 1 ||
+                 _nativePollCount % Mathf.Max(1, nativeDiagnosticIntervalFrames) == 0);
+        }
+
+        private void LogNativeDiagnostics(string message)
+        {
+            if (logNativeDiagnostics)
+            {
+                Debug.Log("[UBHandTracking] " + message);
+            }
+        }
+
+        private static string DescribeNativeColorFrame(ColorFrame frame)
+        {
+            if (frame == null)
+            {
+                return "null";
+            }
+
+            return string.Format(
+                "seq={0}, size={1}x{2}, bytes={3}",
+                frame.SequenceNumber,
+                frame.Width,
+                frame.Height,
+                frame.Data == null ? 0 : frame.Data.Length);
+        }
+
+        private static string DescribeNativeHandOutput(HandTrackingOutput output)
+        {
+            if (output == null)
+            {
+                return "null";
+            }
+
+            string description = string.Format(
+                "seq={0}, detections={1}",
+                output.SequenceNumber,
+                output.Detections == null ? 0 : output.Detections.Length);
+            if (output.Detections == null)
+            {
+                return description;
+            }
+
+            for (int index = 0; index < output.Detections.Length; index++)
+            {
+                HandTrackingDetection detection = output.Detections[index];
+                description += string.Format(
+                    " [#{0} palm={1:0.000} landmark={2:0.000} handedness={3:0.000} gesture={4}]",
+                    index,
+                    detection.Score,
+                    detection.LandmarkScore,
+                    detection.Handedness,
+                    detection.Gesture);
+            }
+
+            return description;
+        }
+
         // Process results from pipeline
         protected override void ProcessResults()
         {
+            if (useNativeVio)
+            {
+                _hand0Gesture = UBHandGesture.None;
+                _hand1Gesture = UBHandGesture.None;
+                _hand0PalmScore = 0f;
+                _hand1PalmScore = 0f;
+                _hand0LandmarkScore = 0f;
+                _hand1LandmarkScore = 0f;
+                ProcessNativeResults();
+                return;
+            }
+
             // If not replaying data
             if (!device.replayResults)
             {
@@ -557,8 +962,8 @@ namespace OAKForUnity
             UpdateGestureTriggers();
             if (string.IsNullOrEmpty(ubHandTrackingResults))
             {
-                ProcessHand(null, landmarks, skeleton, cylinders, connections);
-                ProcessHand(null, landmarks1, skeleton1, cylinders1, connections1);
+                ProcessHand((JSONNode)null, landmarks, skeleton, cylinders, connections);
+                ProcessHand((JSONNode)null, landmarks1, skeleton1, cylinders1, connections1);
                 return;
             }
 

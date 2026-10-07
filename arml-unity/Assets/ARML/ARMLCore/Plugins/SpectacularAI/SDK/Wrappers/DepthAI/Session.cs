@@ -155,9 +155,38 @@ namespace SpectacularAI.DepthAI
                             valueIndex);
                     }
 
+                    float[] keypoints = new float[14];
+                    for (int valueIndex = 0; valueIndex < keypoints.Length; ++valueIndex)
+                    {
+                        keypoints[valueIndex] = ExternApi.sai_hand_tracking_output_get_keypoint_value(
+                            outputHandle,
+                            detectionIndex,
+                            valueIndex);
+                    }
+
+                    float[] landmarks = new float[63];
+                    float[] worldLandmarks = new float[63];
+                    for (int valueIndex = 0; valueIndex < landmarks.Length; ++valueIndex)
+                    {
+                        landmarks[valueIndex] = ExternApi.sai_hand_tracking_output_get_landmark_value(
+                            outputHandle,
+                            detectionIndex,
+                            valueIndex);
+                        worldLandmarks[valueIndex] = ExternApi.sai_hand_tracking_output_get_world_landmark_value(
+                            outputHandle,
+                            detectionIndex,
+                            valueIndex);
+                    }
+
                     detections[detectionIndex] = new HandTrackingDetection(
                         ExternApi.sai_hand_tracking_output_get_score(outputHandle, detectionIndex),
-                        box);
+                        box,
+                        keypoints,
+                        ExternApi.sai_hand_tracking_output_get_landmark_score(outputHandle, detectionIndex),
+                        ExternApi.sai_hand_tracking_output_get_handedness(outputHandle, detectionIndex),
+                        ExternApi.sai_hand_tracking_output_get_gesture(outputHandle, detectionIndex),
+                        landmarks,
+                        worldLandmarks);
                 }
 
                 return new HandTrackingOutput(
@@ -281,6 +310,39 @@ namespace SpectacularAI.DepthAI
 
             [DllImport(ApiConstants.saiNativeApi, CallingConvention = ApiConstants.saiCallingConvention)]
             public static extern float sai_hand_tracking_output_get_box_value(
+                IntPtr outputHandle,
+                int detectionIndex,
+                int valueIndex);
+
+            [DllImport(ApiConstants.saiNativeApi, CallingConvention = ApiConstants.saiCallingConvention)]
+            public static extern float sai_hand_tracking_output_get_keypoint_value(
+                IntPtr outputHandle,
+                int detectionIndex,
+                int valueIndex);
+
+            [DllImport(ApiConstants.saiNativeApi, CallingConvention = ApiConstants.saiCallingConvention)]
+            public static extern float sai_hand_tracking_output_get_landmark_score(
+                IntPtr outputHandle,
+                int detectionIndex);
+
+            [DllImport(ApiConstants.saiNativeApi, CallingConvention = ApiConstants.saiCallingConvention)]
+            public static extern float sai_hand_tracking_output_get_handedness(
+                IntPtr outputHandle,
+                int detectionIndex);
+
+            [DllImport(ApiConstants.saiNativeApi, CallingConvention = ApiConstants.saiCallingConvention)]
+            public static extern int sai_hand_tracking_output_get_gesture(
+                IntPtr outputHandle,
+                int detectionIndex);
+
+            [DllImport(ApiConstants.saiNativeApi, CallingConvention = ApiConstants.saiCallingConvention)]
+            public static extern float sai_hand_tracking_output_get_landmark_value(
+                IntPtr outputHandle,
+                int detectionIndex,
+                int valueIndex);
+
+            [DllImport(ApiConstants.saiNativeApi, CallingConvention = ApiConstants.saiCallingConvention)]
+            public static extern float sai_hand_tracking_output_get_world_landmark_value(
                 IntPtr outputHandle,
                 int detectionIndex,
                 int valueIndex);

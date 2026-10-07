@@ -64,7 +64,10 @@ namespace SpectacularAI.DepthAI
             }
 
             _loggedMissingFrame = false;
-            if (frame.SequenceNumber == _lastSequenceNumber) return;
+            if (frame.SequenceNumber == _lastSequenceNumber)
+            {
+                return;
+            }
 
             int pixelCount = checked(frame.Width * frame.Height);
             if (frame.Width <= 0 || frame.Height <= 0 || frame.Data.Length < pixelCount * 3)

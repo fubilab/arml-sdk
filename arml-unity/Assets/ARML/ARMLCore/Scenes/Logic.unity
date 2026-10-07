@@ -2407,10 +2407,11 @@ MonoBehaviour:
   MapLoadPath: 
   InternalParameters: []
   readLauncherSettings: 1
-  autoStartSession: 0
+  autoStartSession: 1
   UseColor: 0
   EnableHandTracking: 0
   HandTrackingPalmModelPath: 
+  HandTrackingLandmarkModelPath: 
 --- !u!114 &381384618863297024
 MonoBehaviour:
   m_ObjectHideFlags: 0

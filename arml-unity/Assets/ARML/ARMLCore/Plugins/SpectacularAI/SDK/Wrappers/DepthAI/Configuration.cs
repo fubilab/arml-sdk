@@ -121,5 +121,8 @@ namespace SpectacularAI.DepthAI
         /// </summary>
         [MarshalAs(UnmanagedType.LPStr)]
         public string HandTrackingPalmModelPath = "";
+
+        [MarshalAs(UnmanagedType.LPStr)]
+        public string HandTrackingLandmarkModelPath = "";
     }
 }

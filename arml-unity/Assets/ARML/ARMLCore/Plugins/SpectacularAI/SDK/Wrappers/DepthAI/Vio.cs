@@ -80,6 +80,11 @@ namespace SpectacularAI.DepthAI
         [Tooltip("Start VIO Session on component Start, rather than waiting for the game scene to load.\n" + 
             "Do not set this if using AprilTags in your scene.")]
         public bool autoStartSession;
+
+        public bool IsSessionStarted
+        {
+            get { return _session != null; }
+        }
                 
         [Header("Hand Tracking (Experimental)")]
         [SerializeField]
@@ -90,6 +95,9 @@ namespace SpectacularAI.DepthAI
 
         [SerializeField]
         public string HandTrackingPalmModelPath = "";
+
+        [SerializeField]
+        public string HandTrackingLandmarkModelPath = "";
 
         /// <summary>
         /// The current vio output.
@@ -114,6 +122,10 @@ namespace SpectacularAI.DepthAI
 
         void Start() 
         {
+            Debug.Log(
+                "[VIO] Component Start. autoStartSession=" + autoStartSession +
+                ", useColor=" + UseColor +
+                ", enableHandTracking=" + EnableHandTracking);
             if (autoStartSession) 
             {
                 StartSession();
@@ -138,6 +150,9 @@ namespace SpectacularAI.DepthAI
 
         public void StartSession()
         {
+            Debug.Log(
+                "[VIO] StartSession entered. useColor=" +
+                UseColor + ", enableHandTracking=" + EnableHandTracking);
             if (_session != null)
             {
                 Debug.LogWarning("[VIO] StartSession called when session already started, skipping.");
@@ -147,7 +162,12 @@ namespace SpectacularAI.DepthAI
             config.LowLatency = LowLatency;
             config.UseColor = UseColor;
             config.EnableHandTracking = EnableHandTracking;
-            config.HandTrackingPalmModelPath = HandTrackingPalmModelPath;
+            config.HandTrackingPalmModelPath = ResolveHandTrackingModelPath(
+                HandTrackingPalmModelPath,
+                "palm_detection_sh4.blob");
+            config.HandTrackingLandmarkModelPath = ResolveHandTrackingModelPath(
+                HandTrackingLandmarkModelPath,
+                "hand_landmark_lite_sh4.blob");
             config.UseStereo = UseStereo;
             config.UseSlam = UseSlam;
             config.UseFeatureTracker = UseFeatureTracker;
@@ -201,9 +221,27 @@ namespace SpectacularAI.DepthAI
 // #if UNITY_EDITOR_WIN || UNITY_EDITOR_OSX
 //             return;
 // #endif
-            Debug.Log("[VIO] StartSession");
+            Debug.Log(
+                "[VIO] Creating native Pipeline. palmModel=" +
+                config.HandTrackingPalmModelPath +
+                ", landmarkModel=" + config.HandTrackingLandmarkModelPath);
             _pipeline = new Pipeline(configuration: config, enableMappingAPI: MappingAPI, internalParameters: InternalParameters.ToArray());
+            Debug.Log("[VIO] Native Pipeline created. Calling Pipeline.StartSession().");
             _session = _pipeline.StartSession();
+            Debug.Log("[VIO] Pipeline.StartSession() returned. sessionStarted=" + (_session != null));
+        }
+
+        private static string ResolveHandTrackingModelPath(string configuredPath, string defaultFileName)
+        {
+            if (!String.IsNullOrEmpty(configuredPath))
+            {
+                return configuredPath;
+            }
+
+            return Path.Combine(
+                Application.streamingAssetsPath,
+                "SpectacularAI",
+                defaultFileName);
         }
 
         public void OnDisable()
