@@ -149,8 +149,7 @@ namespace ARML.SceneManagement
         public IEnumerator LoadSceneByIndex(int index)
         {
             string scenePath = SceneUtility.GetScenePathByBuildIndex(index);
-            print($"scenePath: {scenePath}");
-            string sceneName = scenePath.Split(System.IO.Path.DirectorySeparatorChar).Last().Replace(".unity", "");
+            string sceneName = System.IO.Path.GetFileNameWithoutExtension(scenePath);
             print($"sceneName {sceneName}");
             return LoadSceneByName(sceneName);
         }

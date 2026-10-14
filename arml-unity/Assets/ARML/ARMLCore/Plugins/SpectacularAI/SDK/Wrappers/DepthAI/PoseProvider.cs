@@ -1,6 +1,7 @@
 using System;
 using System.Drawing.Drawing2D;
 using ARML.Arduino;
+using ARML.Attributes;
 using ARML.Saving;
 using ARML.SceneManagement;
 using UnityEngine;
@@ -27,14 +28,22 @@ namespace SpectacularAI.DepthAI
         public Transform Origin;
 
         [Tooltip("Pose is predicted assuming constant linear/angular velocity"), Range(0, 0.2f)]
+        [RuntimeParameter(0.001f, 0.2f, "Pose Smooth Alpha", false, ParameterScope.Global)]
         public float PosePredictDt = 0f;
 
         [Tooltip("Smooth pose as pose = prevPose.slerp(predictedPose, alpha). Value 1.0 = no smoothing, decreasing adds delay."), Range(0.001f, 1.0f)]
+        [RuntimeParameter(0.001f, 1.0f, "Pose Smooth Alpha", false, ParameterScope.Global)]
         public float PoseSmoothAlpha = 1.0f;
+
+        [RuntimeParameter(-1.0f, 1.0f, "Camera Y Offset", false, ParameterScope.Global)]
+        public float YOffset = 0.0f;
+
+        public bool IgnoreYPosition;
 
         public Vector3 rotationOffset;
 
         public bool ReadLauncherSettings;
+        
         private SettingsConfiguration launcherSettings;
 
         // Pose reset, pose = target->world * (pose_t0.inverse * pose_t1) = _origin * pose_t1
@@ -141,18 +150,29 @@ namespace SpectacularAI.DepthAI
             _prevSmoothedOrientation = UnityEngine.Quaternion.Slerp(_prevSmoothedOrientation, predictedOrientation, PoseSmoothAlpha);
 
             // Pose w.r.t to Origin (after last reset)
-            transform.position = _origin.rotation * _prevSmoothedPosition + _origin.GetPosition();
+            Vector3 finalPosition = _origin.rotation * _prevSmoothedPosition + _origin.GetPosition();
+            if(IgnoreYPosition)
+                finalPosition.y = _origin.GetPosition().y;
+
+            transform.position = finalPosition;
 
             if (!UseOrientationFromBNO)
                 transform.localRotation = 
                     _origin.rotation * _prevSmoothedOrientation * UnityEngine.Quaternion.Euler(rotationOffset);
         }
 
-        private Matrix4x4 GetPositionAndYaw(Matrix4x4 pose)
+        private Matrix4x4 GetPose(Matrix4x4 pose)
         {
+            var position = pose.GetPosition();
+            position.y += YOffset;
+            
             return Matrix4x4.TRS(
-               pose.GetPosition(),
-               UnityEngine.Quaternion.Euler(0, pose.rotation.eulerAngles.y, 0),
+               position,
+               UnityEngine.Quaternion.Euler(
+                  pose.rotation.eulerAngles.x, 
+                  pose.rotation.eulerAngles.y, 
+                  pose.rotation.eulerAngles.z
+               ),
                Vector3.one);
         }
 
@@ -161,8 +181,8 @@ namespace SpectacularAI.DepthAI
             if (UseVIO)
             {
                 Matrix4x4 localToWorld = _currentPose.AsMatrix();
-                Matrix4x4 worldToLocalYaw = GetPositionAndYaw(localToWorld.inverse);
-                Matrix4x4 originToWorldYaw = Origin ? GetPositionAndYaw(Origin.localToWorldMatrix) : Matrix4x4.identity;
+                Matrix4x4 worldToLocalYaw = GetPose(localToWorld.inverse);
+                Matrix4x4 originToWorldYaw = Origin ? GetPose(Origin.localToWorldMatrix) : Matrix4x4.identity;
                 _origin = originToWorldYaw * worldToLocalYaw;
             }
             if (UseOrientationFromBNO)

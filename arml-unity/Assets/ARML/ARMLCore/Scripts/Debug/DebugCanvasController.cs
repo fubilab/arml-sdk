@@ -2,7 +2,6 @@ using AClockworkBerry;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using ARML.Interaction;
-using UnityEngine.UI;
 
 namespace ARML.DebugTools
 {
@@ -12,6 +11,7 @@ namespace ARML.DebugTools
     public class DebugCanvasController : MonoBehaviour
     {
         [SerializeField] GameObject debugPanel;
+        [SerializeField] SettingsPanel settingsPanel;
         [SerializeField] GameObject trackingText;
         [SerializeField] GameObject micInputText;
         [SerializeField] CameraParentController camParentController;
@@ -19,6 +19,14 @@ namespace ARML.DebugTools
 
         private ToggleMapRenderer mapRenderer;
         private EventSystem eventSystem;
+        private MenuState _currentMenuState = MenuState.DEBUG;
+
+        private enum MenuState
+        {
+            NONE,
+            DEBUG,
+            PARAMETERS
+        }
 
         /// <summary>
         /// Initializes the DebugCanvasController. In builds outside of the Unity editor, it automatically hides the debug elements.
@@ -28,50 +36,33 @@ namespace ARML.DebugTools
             // bind remote control menu button to debug canvas
             RemoteControl.Instance.OnMenuPress = ToggleAllDebug;
 
-            // focus debug canvas initially
+            // Get event system reference
             eventSystem = FindObjectOfType<EventSystem>();
 
-            if (debugPanel.gameObject.activeInHierarchy)
-            {
-                eventSystem.SetSelectedGameObject(debugPanel.transform.GetChild(0).gameObject);
-            }
-
-            camParentController.allowMove = !debugPanel.gameObject.activeInHierarchy;
-
 #if !UNITY_EDITOR
-        //Cursor.lockState = CursorLockMode.Locked;
+            SetDebugPanel();
 #endif
 
 #if UNITY_EDITOR
-            ToggleAllDebug();
+            ClosePanels();
 #endif
         }
 
-        /// <summary>
-        /// Called once per frame. Checks for input to toggle the visibility of debug elements.
-        /// </summary>
-        // void Update()
-        // {
-        //     // Toggle Debug Panel
-        //     if (Input.GetKeyDown(KeyCode.Q))
-        //     {
-        //         ToggleAllDebug();
-        //     }
-        // }
-
         public void ToggleAllDebug()
         {
-            debugPanel.SetActive(!debugPanel.gameObject.activeInHierarchy);
-            trackingText.SetActive(!trackingText.gameObject.activeInHierarchy);
-            micInputText.SetActive(!micInputText.activeInHierarchy);
-            fpsText.SetActive(!fpsText.activeInHierarchy);
-
-            if (debugPanel.gameObject.activeInHierarchy)
+        
+            switch(_currentMenuState)
             {
-                eventSystem.SetSelectedGameObject(debugPanel.transform.GetChild(0).gameObject);
+                case MenuState.NONE:
+                    SetDebugPanel();
+                    break;
+                case MenuState.DEBUG:
+                    ClosePanels();
+                    break;
+                case MenuState.PARAMETERS:
+                    ClosePanels();
+                    break;
             }
-
-            camParentController.allowMove = !debugPanel.gameObject.activeInHierarchy;
 
 #if !UNITY_EDITOR
         Cursor.lockState = CursorLockMode.Locked;
@@ -96,18 +87,61 @@ namespace ARML.DebugTools
 
         public void ToggleMapRenderer()
         {
-            if (mapRenderer == null)
-                mapRenderer = FindObjectOfType<ToggleMapRenderer>();
-
-            mapRenderer.Toggle();
+            foreach(var m in FindObjectsByType<ToggleMapRenderer>(FindObjectsSortMode.None))
+                m.Toggle();
         }
 
         public void SetMapRenderer(bool state)
         {
-            if (mapRenderer == null)
-                mapRenderer = FindObjectOfType<ToggleMapRenderer>();
+            foreach(var renderer in FindObjectsByType<ToggleMapRenderer>(FindObjectsSortMode.None))
+                renderer.SetRenderer(state);
+        }
+        
+        public void SetParametersPanel()
+        {
+            _currentMenuState = MenuState.PARAMETERS;
+            
+            settingsPanel.SetPanelVisibility(true);
+            
+            debugPanel.SetActive(false);
+            trackingText.SetActive(true);
+            micInputText.SetActive(true);
+            fpsText.SetActive(true);
+            
+            camParentController.allowMove = false;
+        }
+        
+        public void SetDebugPanel()
+        {
+            _currentMenuState = MenuState.DEBUG;
+            
+            settingsPanel.SetPanelVisibility(false);
+            
+            debugPanel.SetActive(true);
+            trackingText.SetActive(true);
+            micInputText.SetActive(true);
+            fpsText.SetActive(true);
+            
+            camParentController.allowMove = false;
+            
+            if (debugPanel.gameObject.activeInHierarchy)
+            {
+                eventSystem.SetSelectedGameObject(debugPanel.transform.GetChild(0).gameObject);
+            }
+        }
 
-            mapRenderer?.SetRenderer(state);
+        public void ClosePanels()
+        {
+            _currentMenuState = MenuState.NONE;
+            
+            settingsPanel.SetPanelVisibility(false);
+            
+            debugPanel.SetActive(false);
+            trackingText.SetActive(false);
+            micInputText.SetActive(false);
+            fpsText.SetActive(false);
+            
+            camParentController.allowMove = true;
         }
     }
 }
