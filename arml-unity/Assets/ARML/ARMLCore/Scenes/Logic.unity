@@ -8570,10 +8570,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   LongPressTime: 1
-  MenuKey: 319
+  MenuKey: 127
   MenuKey2: 281
   ResetKey: 8
-  ReadLauncherSettings: 1
+  ReadLauncherSettings: 0
 --- !u!224 &8102770034209180602
 RectTransform:
   m_ObjectHideFlags: 0
