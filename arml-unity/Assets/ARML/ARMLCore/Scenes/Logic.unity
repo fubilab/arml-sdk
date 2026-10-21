@@ -2289,7 +2289,7 @@ MonoBehaviour:
   allowMove: 0
   moveUpDown: 0
   speed: 40
-  isMouse: 0
+  isMouse: 1
   hideCursor: 1
   vectorText: {fileID: 2109273363739899624}
 --- !u!1001 &1629254603
@@ -8573,7 +8573,7 @@ MonoBehaviour:
   MenuKey: 127
   MenuKey2: 281
   ResetKey: 8
-  ReadLauncherSettings: 0
+  ReadLauncherSettings: 1
 --- !u!224 &8102770034209180602
 RectTransform:
   m_ObjectHideFlags: 0
