@@ -12,7 +12,7 @@ using UnityEngine.Serialization;
 namespace ARML.DebugTools
 {
     /// <summary>
-    /// Automatically generates runtime UI sliders for fields marked with [RuntimeTweakable] attribute.
+    /// Automatically generates runtime UI controls for fields marked with [RuntimeTweakable] attribute.
     /// </summary>
     public class SettingsPanel : MonoBehaviour
     {
@@ -116,7 +116,7 @@ namespace ARML.DebugTools
                             }
                         }
                         
-                        if (attribute != null && field.FieldType == typeof(float))
+                        if (attribute != null && (field.FieldType == typeof(float) || field.FieldType == typeof(bool)))
                         {
                             attributedFieldsFound++;
                             Debug.Log($"RuntimeTweaker: Found tweakable field: {type.Name}.{field.Name}");
@@ -161,7 +161,7 @@ namespace ARML.DebugTools
 
             Debug.Log($"RuntimeTweaker: Scanned {totalFieldsScanned} fields in {allMonoBehaviours.Length} MonoBehaviours");
             Debug.Log($"RuntimeTweaker: Found {attributedFieldsFound} fields with [RuntimeTweakable]");
-            Debug.Log($"RuntimeTweaker: Created {tweakableFields.Count} sliders ({globalFields.Count} global, {tweakableFields.Count - globalFields.Count} per-object)");
+            Debug.Log($"RuntimeTweaker: Created {tweakableFields.Count} controls ({globalFields.Count} global, {tweakableFields.Count - globalFields.Count} per-object)");
         }
 
         private void GenerateUI()
@@ -207,14 +207,15 @@ namespace ARML.DebugTools
                     isFirst = false;
                 }
 
-                // Setup slider
-                slider.minValue = tweakable.attribute.MinValue;
-                slider.maxValue = tweakable.attribute.MaxValue;
-                
-                // Get current value from first object
-                float currentValue = (float)tweakable.fieldInfo.GetValue(tweakable.targetObjects[0]);
-                
-                if (tweakable.attribute.UseLogarithmicScale)
+                bool isBoolean = tweakable.fieldInfo.FieldType == typeof(bool);
+                slider.wholeNumbers = isBoolean;
+                slider.minValue = isBoolean ? 0f : tweakable.attribute.MinValue;
+                slider.maxValue = isBoolean ? 1f : tweakable.attribute.MaxValue;
+
+                object fieldValue = tweakable.fieldInfo.GetValue(tweakable.targetObjects[0]);
+                float currentValue = isBoolean ? ((bool)fieldValue ? 1f : 0f) : (float)fieldValue;
+
+                if (!isBoolean && tweakable.attribute.UseLogarithmicScale)
                 {
                     slider.value = LinearToLogarithmic(currentValue, slider.minValue, slider.maxValue);
                 }
@@ -234,7 +235,14 @@ namespace ARML.DebugTools
                 if (valueText != null)
                 {
                     tweakable.valueText = valueText;
-                    UpdateValueText(tweakable, currentValue);
+                    if (isBoolean)
+                    {
+                        UpdateValueText(tweakable, currentValue >= 0.5f);
+                    }
+                    else
+                    {
+                        UpdateValueText(tweakable, currentValue);
+                    }
                 }
 
                 // Store references
@@ -296,8 +304,21 @@ namespace ARML.DebugTools
         /// </summary>
         private void OnSliderValueChanged(TweakableField tweakable, float sliderValue)
         {
+            bool isBoolean = tweakable.fieldInfo.FieldType == typeof(bool);
             float actualValue = sliderValue;
-            
+
+            if (isBoolean)
+            {
+                bool boolValue = sliderValue >= 0.5f;
+                foreach (object targetObject in tweakable.targetObjects)
+                {
+                    tweakable.fieldInfo.SetValue(targetObject, boolValue);
+                }
+
+                UpdateValueText(tweakable, boolValue);
+                return;
+            }
+
             if (tweakable.attribute.UseLogarithmicScale)
             {
                 actualValue = LogarithmicToLinear(sliderValue, tweakable.attribute.MinValue, tweakable.attribute.MaxValue);
@@ -329,6 +350,14 @@ namespace ARML.DebugTools
                     tweakable.valueText.text = value.ToString("F2");
                 else
                     tweakable.valueText.text = value.ToString("F0");
+            }
+        }
+
+        private void UpdateValueText(TweakableField tweakable, bool value)
+        {
+            if (tweakable.valueText != null)
+            {
+                tweakable.valueText.text = value ? "On" : "Off";
             }
         }
         
