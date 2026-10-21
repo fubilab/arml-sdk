@@ -2289,7 +2289,7 @@ MonoBehaviour:
   allowMove: 0
   moveUpDown: 0
   speed: 40
-  isMouse: 1
+  isMouse: 0
   hideCursor: 1
   vectorText: {fileID: 2109273363739899624}
 --- !u!1001 &1629254603
