@@ -209,13 +209,13 @@ namespace ARML.DebugTools
 
                 bool isBoolean = tweakable.fieldInfo.FieldType == typeof(bool);
                 slider.wholeNumbers = isBoolean;
-                slider.minValue = isBoolean ? 0f : tweakable.attribute.MinValue;
-                slider.maxValue = isBoolean ? 1f : tweakable.attribute.MaxValue;
+                slider.minValue = isBoolean ? 0f : tweakable.attribute.Min;
+                slider.maxValue = isBoolean ? 1f : tweakable.attribute.Max;
 
                 object fieldValue = tweakable.fieldInfo.GetValue(tweakable.targetObjects[0]);
                 float currentValue = isBoolean ? ((bool)fieldValue ? 1f : 0f) : (float)fieldValue;
 
-                if (!isBoolean && tweakable.attribute.UseLogarithmicScale)
+                if (!isBoolean && tweakable.attribute.UseLogScale)
                 {
                     slider.value = LinearToLogarithmic(currentValue, slider.minValue, slider.maxValue);
                 }
@@ -262,7 +262,7 @@ namespace ARML.DebugTools
         {
             if (tweakable.labelText == null) return;
 
-            string displayName = tweakable.attribute.DisplayName ?? tweakable.fieldInfo.Name;
+            string displayName = tweakable.attribute.Label ?? tweakable.fieldInfo.Name;
             
             if (tweakable.attribute.Scope == ParameterScope.Global)
             {
@@ -319,9 +319,9 @@ namespace ARML.DebugTools
                 return;
             }
 
-            if (tweakable.attribute.UseLogarithmicScale)
+            if (tweakable.attribute.UseLogScale)
             {
-                actualValue = LogarithmicToLinear(sliderValue, tweakable.attribute.MinValue, tweakable.attribute.MaxValue);
+                actualValue = LogarithmicToLinear(sliderValue, tweakable.attribute.Min, tweakable.attribute.Max);
             }
 
             // Set the value on ALL target objects (for global, this updates all instances)

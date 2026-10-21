@@ -1,8 +1,5 @@
-using System;
-using System.Drawing.Drawing2D;
 using ARML.Arduino;
 using ARML.Attributes;
-using ARML.Saving;
 using ARML.SceneManagement;
 using UnityEngine;
 
@@ -28,14 +25,14 @@ namespace SpectacularAI.DepthAI
         public Transform Origin;
 
         [Tooltip("Pose is predicted assuming constant linear/angular velocity"), Range(0, 0.2f)]
-        [RuntimeParameter(0.001f, 0.2f, "Pose Smooth Alpha", false, ParameterScope.Global)]
+        [RuntimeParameter(Min = 0.001f, Max = 0.2f, Label = "Pose Predict Dt", UseLogScale = false, Scope = ParameterScope.Global)]
         public float PosePredictDt = 0f;
 
         [Tooltip("Smooth pose as pose = prevPose.slerp(predictedPose, alpha). Value 1.0 = no smoothing, decreasing adds delay."), Range(0.001f, 1.0f)]
-        [RuntimeParameter(0.001f, 1.0f, "Pose Smooth Alpha", false, ParameterScope.Global)]
+        [RuntimeParameter(Min = 0.001f, Max = 1.0f, Label = "Pose Smooth Alpha", UseLogScale = false, Scope = ParameterScope.Global)]
         public float PoseSmoothAlpha = 1.0f;
 
-        [RuntimeParameter(-1.0f, 1.0f, "Camera Y Offset", false, ParameterScope.Global)]
+        [RuntimeParameter(Min = -1.0f, Max = 1.0f, Label = "Camera Y Offset", UseLogScale = false, Scope = ParameterScope.Global)]
         public float YOffset = 0.0f;
 
         public bool IgnoreYPosition;

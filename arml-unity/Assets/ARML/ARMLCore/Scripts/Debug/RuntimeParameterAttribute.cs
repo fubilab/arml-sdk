@@ -20,18 +20,18 @@ namespace ARML.Attributes
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = false)]
     public class RuntimeParameterAttribute : Attribute
     {
-        public float MinValue { get; private set; }
-        public float MaxValue { get; private set; }
-        public string DisplayName { get; private set; }
-        public bool UseLogarithmicScale { get; private set; }
-        public ParameterScope Scope { get; private set; }
+        public float Min { get; set; }
+        public float Max { get; set; }
+        public string Label { get; set; }
+        public bool UseLogScale { get; set; }
+        public ParameterScope Scope { get; set; }
 
-        public RuntimeParameterAttribute(float minValue = 0f, float maxValue = 1f, string displayName = null, bool useLogarithmicScale = false, ParameterScope scope = ParameterScope.Global)
+        public RuntimeParameterAttribute(float min = 0f, float max = 1f, string label = null, bool useLogScale = false, ParameterScope scope = ParameterScope.Global)
         {
-            MinValue = minValue;
-            MaxValue = maxValue;
-            DisplayName = displayName;
-            UseLogarithmicScale = useLogarithmicScale;
+            Min = min;
+            Max = max;
+            Label = label;
+            UseLogScale = useLogScale;
             Scope = scope;
         }
     }
