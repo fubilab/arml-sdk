@@ -2714,7 +2714,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   iTimer: {fileID: 1142675145}
-  interactionType: 0
+  interactionType: 1
   requiredInteractionTime: 1.5
   voiceCommandKeywords: []
   model: {fileID: 0}
@@ -2976,7 +2976,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   iTimer: {fileID: 2073377730}
-  interactionType: 0
+  interactionType: 1
   requiredInteractionTime: 3
   voiceCommandKeywords:
   - language: 0
@@ -4106,7 +4106,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   iTimer: {fileID: 1011826865}
-  interactionType: 0
+  interactionType: 1
   requiredInteractionTime: 1.5
   voiceCommandKeywords: []
   model: {fileID: 0}
@@ -4254,7 +4254,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   iTimer: {fileID: 899165847}
-  interactionType: 0
+  interactionType: 1
   requiredInteractionTime: 1.5
   voiceCommandKeywords:
   - language: 0
@@ -6991,7 +6991,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   iTimer: {fileID: 27703262}
-  interactionType: 0
+  interactionType: 1
   requiredInteractionTime: 1.5
   voiceCommandKeywords: []
   model: {fileID: 1075280980}
@@ -20810,7 +20810,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   iTimer: {fileID: 678134040}
-  interactionType: 0
+  interactionType: 1
   requiredInteractionTime: 1.5
   voiceCommandKeywords: []
   model: {fileID: 1557267413}
@@ -24919,7 +24919,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   iTimer: {fileID: 273990576}
-  interactionType: 0
+  interactionType: 1
   requiredInteractionTime: 1.5
   voiceCommandKeywords: []
   model: {fileID: 1062194727}
@@ -25781,7 +25781,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   iTimer: {fileID: 868924617}
-  interactionType: 0
+  interactionType: 1
   requiredInteractionTime: 1.5
   voiceCommandKeywords: []
   model: {fileID: 0}
