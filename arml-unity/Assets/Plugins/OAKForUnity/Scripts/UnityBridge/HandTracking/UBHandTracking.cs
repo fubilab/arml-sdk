@@ -88,6 +88,7 @@ namespace OAKForUnity
         private IntPtr _colorPixelPtr;
         private Process _handTrackingBridgeProcess;
         private bool _loggedHandTrackingResults;
+        private bool _loggedProcessResultsEntry;
         private ColorFrame _nativeColorFrame;
         private HandTrackingOutput _nativeHandTrackingOutput;
         private byte[] _nativeInterleavedColorData;
@@ -104,11 +105,11 @@ namespace OAKForUnity
 #if UNITY_STANDALONE_LINUX && !UNITY_EDITOR
         private const string HandTrackingBridgePython = "python3";
         private const string HandTrackingBridgeArguments =
-            "./depthai_hand_tracking_unity_bridge.py --use_world_landmarks --xyz --gest --no-preview";
+            "-u ./depthai_hand_tracking_unity_bridge.py --use_world_landmarks --xyz --gest --no-preview";
 #else
         private const string HandTrackingBridgePython = "python";
         private const string HandTrackingBridgeArguments =
-            @".\depthai_hand_tracking_unity_bridge.py --use_world_landmarks --xyz --gest --no-preview";
+            @"-u .\depthai_hand_tracking_unity_bridge.py --use_world_landmarks --xyz --gest --no-preview";
 #endif
 
         public override void FinishDevice()
@@ -155,20 +156,45 @@ namespace OAKForUnity
 
             try
             {
-                _handTrackingBridgeProcess = Process.Start(new ProcessStartInfo
+                Process process = new Process
                 {
-                    FileName = HandTrackingBridgePython,
-                    Arguments = HandTrackingBridgeArguments,
-                    WorkingDirectory = HandTrackingBridgeDirectory,
-                    UseShellExecute = false,
-                    CreateNoWindow = true
-                });
+                    StartInfo = new ProcessStartInfo
+                    {
+                        FileName = HandTrackingBridgePython,
+                        Arguments = HandTrackingBridgeArguments,
+                        WorkingDirectory = HandTrackingBridgeDirectory,
+                        UseShellExecute = false,
+                        CreateNoWindow = true,
+                        RedirectStandardOutput = true,
+                        RedirectStandardError = true
+                    }
+                };
 
-                if (_handTrackingBridgeProcess == null)
+                process.OutputDataReceived += (sender, eventArgs) =>
+                {
+                    if (!string.IsNullOrEmpty(eventArgs.Data))
+                    {
+                        Debug.Log("[UnityBridge Python] " + eventArgs.Data);
+                    }
+                };
+                process.ErrorDataReceived += (sender, eventArgs) =>
+                {
+                    if (!string.IsNullOrEmpty(eventArgs.Data))
+                    {
+                        Debug.LogError("[UnityBridge Python] " + eventArgs.Data);
+                    }
+                };
+
+                if (!process.Start())
                 {
                     Debug.LogError("Could not start the hand tracking bridge process.");
+                    process.Dispose();
                     return false;
                 }
+
+                _handTrackingBridgeProcess = process;
+                process.BeginOutputReadLine();
+                process.BeginErrorReadLine();
 
                 return true;
             }
@@ -279,6 +305,10 @@ namespace OAKForUnity
             {
                 LogNativeDiagnostics("UB component Start completed. Starting native Vio connection.");
                 ConnectDevice();
+            }
+            else
+            {
+                Invoke(nameof(ConnectDevice), 3f);
             }
         }
 
@@ -980,6 +1010,14 @@ namespace OAKForUnity
         // Process results from pipeline
         protected override void ProcessResults()
         {
+            if (!_loggedProcessResultsEntry)
+            {
+                Debug.Log(
+                    "[UBHandTracking] ProcessResults entered; useUnityBridge=" +
+                    useUnityBridge + ", useNativeVio=" + useNativeVio + ".");
+                _loggedProcessResultsEntry = true;
+            }
+
             if (useNativeVio)
             {
                 _hand0Gesture = UBHandGesture.None;

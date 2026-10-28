@@ -3,6 +3,7 @@ import json
 import cv2
 import _thread as thread
 import time
+import threading
 import numpy as np
 
 class UnityBridge:
@@ -16,6 +17,8 @@ class UnityBridge:
         self.configs = None
         self.data = None
         self.count = 0
+        self._frame_lock = threading.Lock()
+        self._frame_ready = threading.Event()
 
     def start(self):
         """ Start the networking thread. """
@@ -28,14 +31,25 @@ class UnityBridge:
         thread.start_new_thread(self._run, ())
 
     def send(self, image, names, objects, configs):
-        self.image = image
-        self.names = names
-        self.objects = objects
-        self.configs = configs
+        with self._frame_lock:
+            self.image = image
+            self.names = names
+            self.objects = objects
+            self.configs = configs
+            frame_ready = (
+                image is not None
+                and names is not None
+                and objects is not None
+                and configs is not None
+            )
+
+        if frame_ready:
+            self._frame_ready.set()
 
     def close(self):
         """ Close the socket connection. """
         self.running = False
+        self._frame_ready.set()
         if self.socket:
             self.socket.close()
 
@@ -66,7 +80,7 @@ class UnityBridge:
 
 
     def client(self,conn, addr):
-        while True:
+        while self.running:
 
             # Wait for DATA command
 
@@ -81,17 +95,47 @@ class UnityBridge:
 
                     data.extend(packet)
 
-            except:
+            except OSError as exception:
+                print(f"[UnityBridge] Error receiving request from {addr}: {exception}", flush=True)
                 self._error(conn, addr)
                 break
 
-            if not data.decode('utf-8'):
+            if not data:
+                break
+
+            command = data.decode('utf-8', errors='replace')
+            if command != "DATA":
+                print(f"[UnityBridge] Ignoring unexpected request {bytes(data)!r} from {addr}.", flush=True)
                 continue
 
-            # Received DATA command
+            if self.count < 5 or self.count % 100 == 0:
+                with self._frame_lock:
+                    image_available = self.image is not None
+                print(
+                    f"[UnityBridge] Received request #{self.count + 1}: "
+                    f"{bytes(data)!r}; image available={image_available}",
+                    flush=True,
+                )
 
-            self.data = self._serialize_objects(self.names, self.objects,self.configs)
-            self._send_data(conn, self.image,self.data)
+            while self.running and not self._frame_ready.wait(timeout=0.1):
+                pass
+            if not self.running:
+                break
+
+            with self._frame_lock:
+                image = self.image
+                names = self.names
+                objects = self.objects
+                configs = self.configs
+
+            try:
+                self.data = self._serialize_objects(names, objects, configs)
+            except (TypeError, ValueError) as exception:
+                print(f"[UnityBridge] Could not serialize frame data: {exception}", flush=True)
+                break
+
+            if not self._send_data(conn, image, self.data):
+                break
 
             time.sleep(0.05) 
 
@@ -118,20 +162,42 @@ class UnityBridge:
 
     def _send_data(self, conn, image, data):
         """ Send the image and serialized data over the socket. """
-        ret, encoded_image = cv2.imencode('.jpg', image)
+        if image is None:
+            print("[UnityBridge] Cannot answer DATA request: no image is available yet.", flush=True)
+            return False
+
+        try:
+            ret, encoded_image = cv2.imencode('.jpg', image)
+        except cv2.error as e:
+            print(f"[UnityBridge] Image encoding failed: {e}", flush=True)
+            return False
+
         if not ret:
-            print("Could not encode image")
-            return
+            print("[UnityBridge] Could not encode image.", flush=True)
+            return False
 
         image_data = encoded_image.tobytes()
         json_data = json.dumps(data).encode('utf-8')
 
         try:
+            frame_number = self.count + 1
+            log_frame = frame_number <= 5 or frame_number % 100 == 0
+            if log_frame:
+                print(
+                    f"[UnityBridge] Sending frame #{frame_number}: "
+                    f"JSON={len(json_data)} bytes, image={len(image_data)} bytes.",
+                    flush=True,
+                )
             conn.sendall(json_data+b'<<END_OF_JSON>>')
             conn.sendall(image_data+b'<<END>>')
             self.count = self.count + 1
+            if log_frame:
+                print(f"[UnityBridge] Frame #{frame_number} sent.", flush=True)
         except socket.error as e:
-            print(f"Error sending data: {e}")
+            print(f"[UnityBridge] Error sending frame: {e}", flush=True)
+            return False
+
+        return True
 
 
 class TestObject:

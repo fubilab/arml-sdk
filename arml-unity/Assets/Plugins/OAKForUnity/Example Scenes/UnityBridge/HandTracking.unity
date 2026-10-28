@@ -212,8 +212,8 @@ Canvas:
   m_GameObject: {fileID: 34947478}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 1
-  m_Camera: {fileID: 1288380373}
+  m_RenderMode: 0
+  m_Camera: {fileID: 0}
   m_PlaneDistance: 5.14
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
@@ -597,7 +597,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &448753732
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -641,7 +641,7 @@ MonoBehaviour:
   readLauncherSettings: 0
   autoStartSession: 1
   UseColor: 1
-  EnableHandTracking: 1
+  EnableHandTracking: 0
   HandTrackingPalmModelPath: 
   HandTrackingLandmarkModelPath: 
 --- !u!224 &448753736
@@ -983,7 +983,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &497569727
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1272,7 +1272,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: -1
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -1629,7 +1629,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -1777,7 +1777,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -2764,7 +2764,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!81 &1288380372
 AudioListener:
   m_ObjectHideFlags: 0
@@ -2782,16 +2782,16 @@ Camera:
   m_GameObject: {fileID: 1288380371}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
+  m_ClearFlags: 2
   m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
-  m_projectionMatrixMode: 1
-  m_GateFitMode: 2
+  m_projectionMatrixMode: 2
+  m_GateFitMode: 1
   m_FOVAxisMode: 0
   m_Iso: 200
   m_ShutterSpeed: 0.005
   m_Aperture: 16
   m_FocusDistance: 10
-  m_FocalLength: 50
+  m_FocalLength: 51.110306
   m_BladeCount: 5
   m_Curvature: {x: 2, y: 11}
   m_BarrelClipping: 0.25
@@ -2804,9 +2804,9 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.04
-  far clip plane: 1000
-  field of view: 60
+  near clip plane: 0.3
+  far clip plane: 2064
+  field of view: 26.425894
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -2890,7 +2890,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1288380371}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c131ea77e9f39d34a80be94e4967afbe, type: 3}
   m_Name: 
@@ -2963,13 +2963,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   processMode: 0
   deviceRunning: 0
-  useUnityBridge: 0
+  useUnityBridge: 1
   tcpClientBehaviour: {fileID: 1366592994}
   handPositionRemap: {x: 1, y: 1, z: 1}
   handLandmarkRemap: {x: 1, y: -1, z: 1}
   automaticallyAttachToMainCamera: 1
-  useNativeVio: 1
+  useNativeVio: 0
   nativeVio: {fileID: 448753735}
+  nativeLandmarkPlaneDepth: 0.5
   logNativeDiagnostics: 1
   nativeDiagnosticIntervalFrames: 60
   hand0GestureTrigger: {fileID: 4251602154253544783}
@@ -3467,7 +3468,7 @@ Transform:
   m_GameObject: {fileID: 1527977039}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.059, z: 0.516}
+  m_LocalPosition: {x: 0, y: -0.059, z: 1.494}
   m_LocalScale: {x: 0.15177886, y: 0.15177886, z: 0.15177886}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7136,7 +7137,6 @@ GameObject:
   - component: {fileID: 4251602154388224045}
   - component: {fileID: 4251602154388224046}
   - component: {fileID: 4251602154388224047}
-  - component: {fileID: 4251602154388224048}
   m_Layer: 0
   m_Name: lm5
   m_TagString: Untagged
@@ -7221,29 +7221,6 @@ SphereCollider:
   m_Enabled: 1
   serializedVersion: 3
   m_Radius: 3
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!136 &4251602154388224048
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4251602154388224033}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 1
-  m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &4251602154406489792
 GameObject:

@@ -29,18 +29,24 @@ public class TcpClientBehaviour : MonoBehaviour
 
     private Texture2D _texture;
     private string _json;
-    private byte[] _pendingImageData = null;
-    private byte[] _pendingJsonData = null;
-   
+    private byte[] _pendingImageData;
+    private byte[] _pendingJsonData;
     private bool _connected;
-    
-    int bytesRead;
-    MemoryStream jsonMemoryStream = new MemoryStream();
-    MemoryStream memoryStream = new MemoryStream();
 
-    private int _getJson = 1;
+    private readonly object _receiveLock = new object();
+    private readonly MemoryStream _receiveStream = new MemoryStream();
+    private bool _receivingImage;
+    private bool _hasPendingFrame;
+    private int _requestCount;
+    private int _receivedChunkCount;
+    private int _completedFrameCount;
+    private int _processedFrameCount;
+    private int _loggedWaitingForFirstJson;
     private const string DELIMITER = "<<END_OF_JSON>>";
     private const string DELIMITER_END = "<<END>>";
+    private static readonly byte[] JsonDelimiterBytes = Encoding.ASCII.GetBytes(DELIMITER);
+    private static readonly byte[] ImageDelimiterBytes = Encoding.ASCII.GetBytes(DELIMITER_END);
+
     void Start()
     {
         _connected = false;
@@ -58,15 +64,18 @@ public class TcpClientBehaviour : MonoBehaviour
                 return;
             }
 
-            Debug.Log("Client connected");
+            Debug.Log("[UnityBridge TCP] Client connected to " + host + ":" + port + ".");
             _connected = true;
+            ResetReceiveState();
+            Interlocked.Exchange(ref _loggedWaitingForFirstJson, 0);
             _connectionEstablished.Set();
-            client.ToData("DATA");
+            RequestFrame("initial connection");
         });
 
         client.OnClose(() =>
         {
             _connected = false;
+            ResetReceiveState();
             Debug.Log("Client disconnected");
         });
 
@@ -77,64 +86,92 @@ public class TcpClientBehaviour : MonoBehaviour
 
         client.OnData((byte[] data) =>
         {
-            // Handle incoming data
-            // Remember to marshal this call back to the main thread if you're updating Unity objects
-            //Debug.Log("GET JSON: "+_getJson);
-            //Debug.Log("DATA: "+data.Length+" 0:"+data[0]);
-            
-            byte[] delimiterBytes = Encoding.ASCII.GetBytes(DELIMITER); 
-            byte[] delimiterEndBytes = Encoding.ASCII.GetBytes(DELIMITER_END);
-            
-            if (data == delimiterBytes) 
+            if (data == null || data.Length == 0)
             {
-            	_getJson=2;
+                Debug.LogWarning("[UnityBridge TCP] Received an empty data callback.");
+                return;
             }
-            
-            if (_getJson == 1)
-			{
-			    jsonMemoryStream.Write(data, 0, data.Length);
 
-			    // Check if the delimiter is in the received data
-			    int delimiterIndex = FindDelimiterIndex(jsonMemoryStream.ToArray(), delimiterBytes);
-			    if (delimiterIndex >= 0) // Delimiter found
-			    {
-					// Split the data at the delimiter
-					int jsonPartLength = delimiterIndex;
-					int imagePartStartIndex = delimiterIndex + delimiterBytes.Length;
+            int chunkNumber = Interlocked.Increment(ref _receivedChunkCount);
+            bool logChunk = chunkNumber <= 10 || chunkNumber % 100 == 0;
+            bool jsonDelimiterFound = false;
+            int jsonPayloadLength = 0;
+            int completedFrameNumber = 0;
+            int completedJsonLength = 0;
+            int completedImageLength = 0;
+            int bufferedLengthAfterParsing;
+            string parserStageAfterParsing;
 
-					// Extract JSON data
-					_pendingJsonData = new byte[jsonPartLength];
-					Array.Copy(jsonMemoryStream.ToArray(), 0, _pendingJsonData, 0, jsonPartLength);
-					// Prepare for image data reception
-					jsonMemoryStream.SetLength(0); // Reset the JSON memory stream
-					jsonMemoryStream.Position = 0;
+            lock (_receiveLock)
+            {
+                _receiveStream.Position = _receiveStream.Length;
+                _receiveStream.Write(data, 0, data.Length);
 
-					if (data.Length > imagePartStartIndex) // If there's image data following the delimiter
-					{
-					    // Write the initial part of the image data to the memoryStream
-					    memoryStream.Write(data, imagePartStartIndex, data.Length - imagePartStartIndex);
-					}
+                while (true)
+                {
+                    int bufferedLength = (int)_receiveStream.Length;
+                    byte[] bufferedData = _receiveStream.GetBuffer();
+                    byte[] delimiter = _receivingImage ? ImageDelimiterBytes : JsonDelimiterBytes;
+                    int delimiterIndex = FindDelimiterIndex(bufferedData, bufferedLength, delimiter);
+                    if (delimiterIndex < 0)
+                    {
+                        break;
+                    }
 
-					_getJson = 2; // Move to image parsing state
-			    }
-			}
-			else if (_getJson == 2)
-			{
-			    // Parse image
-			    memoryStream.Write(data, 0, data.Length);
-                
-                int delimiterEndIndex = FindDelimiterIndex(memoryStream.ToArray(), delimiterEndBytes);
-                if (delimiterEndIndex >= 0) // Delimiter found
-			    {
-                    byte[] totalData = memoryStream.ToArray();
-					_pendingImageData = new byte[totalData.Length];
-					Array.Copy(totalData, 0, _pendingImageData, 0, _pendingImageData.Length-delimiterEndBytes.Length);
+                    byte[] payload = new byte[delimiterIndex];
+                    Array.Copy(bufferedData, 0, payload, 0, payload.Length);
 
-					memoryStream.SetLength(0);
-					memoryStream.Position = 0;
-					_getJson = 0; // Reset or move to the next state as needed
-			    }
-			}        
+                    int consumedLength = delimiterIndex + delimiter.Length;
+                    int remainingLength = bufferedLength - consumedLength;
+                    Array.Copy(bufferedData, consumedLength, bufferedData, 0, remainingLength);
+                    _receiveStream.SetLength(remainingLength);
+                    _receiveStream.Position = remainingLength;
+
+                    if (!_receivingImage)
+                    {
+                        _pendingJsonData = payload;
+                        _receivingImage = true;
+                        jsonDelimiterFound = true;
+                        jsonPayloadLength = payload.Length;
+                        continue;
+                    }
+
+                    _pendingImageData = payload;
+                    _receivingImage = false;
+                    _hasPendingFrame = true;
+                    completedFrameNumber = ++_completedFrameCount;
+                    completedJsonLength = _pendingJsonData == null ? 0 : _pendingJsonData.Length;
+                    completedImageLength = payload.Length;
+                    break;
+                }
+
+                bufferedLengthAfterParsing = (int)_receiveStream.Length;
+                parserStageAfterParsing = _receivingImage ? "image" : "JSON";
+            }
+
+            if (logChunk)
+            {
+                Debug.Log(
+                    "[UnityBridge TCP] Received chunk #" + chunkNumber + ": " + data.Length +
+                    " bytes; parser waiting for " + parserStageAfterParsing +
+                    "; buffered=" + bufferedLengthAfterParsing + " bytes.");
+            }
+
+            if (jsonDelimiterFound)
+            {
+                Debug.Log(
+                    "[UnityBridge TCP] JSON delimiter found; JSON payload=" +
+                    jsonPayloadLength + " bytes. Waiting for image delimiter.");
+            }
+
+            if (completedFrameNumber > 0 &&
+                (completedFrameNumber <= 5 || completedFrameNumber % 100 == 0))
+            {
+                Debug.Log(
+                    "[UnityBridge TCP] Frame #" + completedFrameNumber +
+                    " fully received; JSON=" + completedJsonLength +
+                    " bytes, image=" + completedImageLength + " bytes.");
+            }
         });
 
         client.OnEvent((string name, byte[] data) =>
@@ -150,9 +187,9 @@ public class TcpClientBehaviour : MonoBehaviour
     }
 
     // Helper method to find the delimiter in the data
-    int FindDelimiterIndex(byte[] data, byte[] delimiter)
+    private static int FindDelimiterIndex(byte[] data, int dataLength, byte[] delimiter)
     {
-        for (int i = 0; i < data.Length - delimiter.Length+1; i++)
+        for (int i = 0; i <= dataLength - delimiter.Length; i++)
         {
             bool match = true;
             for (int j = 0; j < delimiter.Length; j++)
@@ -166,6 +203,29 @@ public class TcpClientBehaviour : MonoBehaviour
             if (match) return i;
         }
         return -1; // Delimiter not found
+    }
+
+    private void RequestFrame(string reason)
+    {
+        int requestNumber = Interlocked.Increment(ref _requestCount);
+        Debug.Log(
+            "[UnityBridge TCP] Sending DATA request #" + requestNumber +
+            " (" + reason + ").");
+        client.ToData("DATA");
+        Debug.Log("[UnityBridge TCP] DATA request #" + requestNumber + " queued.");
+    }
+
+    private void ResetReceiveState()
+    {
+        lock (_receiveLock)
+        {
+            _receiveStream.SetLength(0);
+            _receiveStream.Position = 0;
+            _receivingImage = false;
+            _hasPendingFrame = false;
+            _pendingImageData = null;
+            _pendingJsonData = null;
+        }
     }
     
     public bool InitUB()
@@ -235,23 +295,54 @@ public class TcpClientBehaviour : MonoBehaviour
     }
     private void Update()
     {
-        if (_pendingImageData != null && _getJson == 0)
+        byte[] imageData;
+        byte[] jsonData;
+        lock (_receiveLock)
         {
-            if (!_texture.LoadImage(_pendingImageData))
+            if (!_hasPendingFrame)
             {
-                Debug.LogError("Failed to create texture from received image data");
+                return;
             }
-            _json = System.Text.Encoding.UTF8.GetString(_pendingJsonData);
+
+            imageData = _pendingImageData;
+            jsonData = _pendingJsonData;
             _pendingImageData = null; // Clear the data after processing
             _pendingJsonData = null;
-            _getJson = 1;
-            client.ToData("DATA");
+            _hasPendingFrame = false;
         }
+
+        bool imageLoaded = _texture.LoadImage(imageData);
+        if (!imageLoaded)
+        {
+            Debug.LogError(
+                "[UnityBridge TCP] Failed to decode image payload (" +
+                imageData.Length + " bytes).");
+        }
+        _json = Encoding.UTF8.GetString(jsonData);
+
+        int processedFrameNumber = Interlocked.Increment(ref _processedFrameCount);
+        if (processedFrameNumber <= 5 || processedFrameNumber % 100 == 0)
+        {
+            Debug.Log(
+                "[UnityBridge TCP] Frame #" + processedFrameNumber +
+                " delivered on Unity thread; JSON=" + jsonData.Length +
+                " bytes (" + _json.Length + " chars), image decoded=" +
+                imageLoaded + ".");
+        }
+
+        RequestFrame("previous frame processed");
     }
 
     public string GetResults(out Texture2D texture)
     {
         texture = _texture;
+        if (string.IsNullOrEmpty(_json) &&
+            Interlocked.Exchange(ref _loggedWaitingForFirstJson, 1) == 0)
+        {
+            Debug.Log(
+                "[UnityBridge TCP] GetResults is being polled, but no complete JSON/image frame has been processed yet.");
+        }
+
         return _json;
     }
 
