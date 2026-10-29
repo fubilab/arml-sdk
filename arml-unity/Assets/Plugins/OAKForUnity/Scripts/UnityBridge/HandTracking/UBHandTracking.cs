@@ -6,6 +6,7 @@ using SimpleJSON;
 using Process = System.Diagnostics.Process;
 using ProcessStartInfo = System.Diagnostics.ProcessStartInfo;
 using SpectacularAI.DepthAI;
+using UnityEngine.Serialization;
 
 namespace OAKForUnity
 {
@@ -33,12 +34,13 @@ namespace OAKForUnity
         */    
         //private static extern IntPtr UBTestResults(out FrameInfo frameInfo, bool getPreview, int width, int height,  ...., int deviceNum);
 
+        [Header("Display Settings")] public bool hideHandGameObjects;
+
         [Header("Coordinate Remapping")]
         [Tooltip("Per-axis multiplier for global wrist movement. Set an axis to -1 to invert it.")]
         public Vector3 handPositionRemap = new Vector3(1f, 1f, 1f);
         [Tooltip("Per-axis multiplier for the local hand pose. Set an axis to -1 to mirror it.")]
         public Vector3 handLandmarkRemap = new Vector3(1f, -1f, 1f);
-
         public bool automaticallyAttachToMainCamera = true;
 
         [Header("Native SAI VIO")]
@@ -55,8 +57,6 @@ namespace OAKForUnity
         [Header("Gesture Triggers")]
         public Collider hand0GestureTrigger;
         public Collider hand1GestureTrigger;
-        public UBHandGesture hand0TriggerGesture = UBHandGesture.Fist;
-        public UBHandGesture hand1TriggerGesture = UBHandGesture.Fist;
 
         [Header("Results")] 
         public Texture2D colorTexture;
@@ -174,14 +174,14 @@ namespace OAKForUnity
                 {
                     if (!string.IsNullOrEmpty(eventArgs.Data))
                     {
-                        Debug.Log("[UnityBridge Python] " + eventArgs.Data);
+                        //Debug.Log("[UnityBridge Python] " + eventArgs.Data);
                     }
                 };
                 process.ErrorDataReceived += (sender, eventArgs) =>
                 {
                     if (!string.IsNullOrEmpty(eventArgs.Data))
                     {
-                        Debug.LogError("[UnityBridge Python] " + eventArgs.Data);
+                        //Debug.LogError("[UnityBridge Python] " + eventArgs.Data);
                     }
                 };
 
@@ -309,6 +309,30 @@ namespace OAKForUnity
             else
             {
                 Invoke(nameof(ConnectDevice), 3f);
+            }
+
+            foreach (GameObject go in cylinders)
+            {
+                Renderer renderer = go.GetComponent<Renderer>();
+                renderer.enabled = !hideHandGameObjects;
+            }
+
+            foreach (GameObject go in skeleton)
+            {
+                Renderer renderer = go.GetComponent<Renderer>();
+                renderer.enabled = !hideHandGameObjects;
+            }
+
+            foreach (GameObject go in cylinders1)
+            {
+                Renderer renderer = go.GetComponent<Renderer>();
+                renderer.enabled = !hideHandGameObjects;
+            }
+
+            foreach (GameObject go in skeleton1)
+            {
+                Renderer renderer = go.GetComponent<Renderer>();
+                renderer.enabled = !hideHandGameObjects;
             }
         }
 
@@ -1180,14 +1204,12 @@ namespace OAKForUnity
         {
             if (hand0GestureTrigger != null)
             {
-                hand0GestureTrigger.enabled =
-                    IsHandGesture(0, hand0TriggerGesture);
+                hand0GestureTrigger.enabled = true;
             }
 
             if (hand1GestureTrigger != null)
             {
-                hand1GestureTrigger.enabled =
-                    IsHandGesture(1, hand1TriggerGesture);
+                hand1GestureTrigger.enabled = true;
             }
         }
     }

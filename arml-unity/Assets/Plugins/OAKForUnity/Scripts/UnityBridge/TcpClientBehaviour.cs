@@ -148,30 +148,7 @@ public class TcpClientBehaviour : MonoBehaviour
                 bufferedLengthAfterParsing = (int)_receiveStream.Length;
                 parserStageAfterParsing = _receivingImage ? "image" : "JSON";
             }
-
-            if (logChunk)
-            {
-                Debug.Log(
-                    "[UnityBridge TCP] Received chunk #" + chunkNumber + ": " + data.Length +
-                    " bytes; parser waiting for " + parserStageAfterParsing +
-                    "; buffered=" + bufferedLengthAfterParsing + " bytes.");
-            }
-
-            if (jsonDelimiterFound)
-            {
-                Debug.Log(
-                    "[UnityBridge TCP] JSON delimiter found; JSON payload=" +
-                    jsonPayloadLength + " bytes. Waiting for image delimiter.");
-            }
-
-            if (completedFrameNumber > 0 &&
-                (completedFrameNumber <= 5 || completedFrameNumber % 100 == 0))
-            {
-                Debug.Log(
-                    "[UnityBridge TCP] Frame #" + completedFrameNumber +
-                    " fully received; JSON=" + completedJsonLength +
-                    " bytes, image=" + completedImageLength + " bytes.");
-            }
+            
         });
 
         client.OnEvent((string name, byte[] data) =>
@@ -208,11 +185,7 @@ public class TcpClientBehaviour : MonoBehaviour
     private void RequestFrame(string reason)
     {
         int requestNumber = Interlocked.Increment(ref _requestCount);
-        Debug.Log(
-            "[UnityBridge TCP] Sending DATA request #" + requestNumber +
-            " (" + reason + ").");
         client.ToData("DATA");
-        Debug.Log("[UnityBridge TCP] DATA request #" + requestNumber + " queued.");
     }
 
     private void ResetReceiveState()
@@ -319,16 +292,6 @@ public class TcpClientBehaviour : MonoBehaviour
                 imageData.Length + " bytes).");
         }
         _json = Encoding.UTF8.GetString(jsonData);
-
-        int processedFrameNumber = Interlocked.Increment(ref _processedFrameCount);
-        if (processedFrameNumber <= 5 || processedFrameNumber % 100 == 0)
-        {
-            Debug.Log(
-                "[UnityBridge TCP] Frame #" + processedFrameNumber +
-                " delivered on Unity thread; JSON=" + jsonData.Length +
-                " bytes (" + _json.Length + " chars), image decoded=" +
-                imageLoaded + ".");
-        }
 
         RequestFrame("previous frame processed");
     }

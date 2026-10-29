@@ -17,7 +17,7 @@ namespace OAKForUnity
         public UBHandTracking pipeline;
         
         [Header("UI Binding")] 
-        public Image colorCameraImage;
+        public RawImage colorCameraImage;
         public TMPro.TextMeshProUGUI ubHandTrackingResults;
         
         private bool _init = false;
@@ -31,7 +31,7 @@ namespace OAKForUnity
         private void Init()
         {
             // Texture2D binding
-            colorCameraImage.material.mainTexture = pipeline.colorTexture;
+            colorCameraImage.texture = pipeline.colorTexture;
             _init = true;
         }
 
