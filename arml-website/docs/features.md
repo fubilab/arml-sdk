@@ -53,3 +53,26 @@ Another voice interaction feature available in the SDK is Voice Dialogue Control
 
 ##	Timeline
 The SDK extends the Unity timeline API to provide the user a way of sequencing actions within their game/application. Using an interface familiar from non-linear editing software such as Adobe Premiere Pro, users can add visual blocks to the timeline to control the sequence of gameplay elements such as animation, dialogue, audio cues, game object activation, etc.
+
+
+## Runtime Parameters and OSC Remote Control
+Fields marked with the `[RuntimeParameter]` attribute can be tweaked while the application is running, without rebuilding. They appear as controls in the in-game settings panel and, if an OSC server is present, on a phone or tablet running the OSC remote app.
+
+```csharp
+using ARML.Attributes;
+
+[RuntimeParameter(Min = 0f, Max = 2f, Label = "Speed", Scope = ParameterScope.Global)]
+public float speed = 1f;
+```
+
+`Scope = Global` creates one control that drives every instance of the component, `PerObject` creates one control per object. The settings panel supports `float` and `bool` fields; the OSC remote additionally supports `int`, enums, `Vector2` (shown as a min/max pair), `Color` and `Gradient`. `UseLogScale` is only honoured by the settings panel.
+
+To control an ARML application from a phone:
+1. Add the **OSCServer** prefab (`ARML/ARMLCore/Prefabs`) to the scene that runs on the ARML. It listens for discovery broadcasts on UDP port 8888 and for OSC messages on port 9000, and exposes every `[RuntimeParameter]` field automatically.
+2. To expose members that have no attribute, add an `OSCExposedMembers` component, pick a component and a field, property or method name, and it becomes a control. For full control, derive from `OscParameterSource` and register parameters in `Register`.
+3. Build the **OSCRemoteClient** scene (`ARML/ARMLCore/Scenes`) for Android. On Android, set *Internet Access* to *Require* in the Player settings.
+4. Connect the phone to the same Wi-Fi network as the ARML and open the app. Every ARML found on the network is listed and the first one is joined automatically. Tap another entry to switch to it, or enter an IP address manually.
+
+The top of the phone app also has the ARML's remote control, so the phone can do everything the hardware remote does: **Menu** (open/close the debug menu), **Reset pose**, and **Up / Down / Left / Right / Select**, which behave like the arrow keys and Enter. With the menu open they navigate it (Left/Right change the selected slider); with the menu closed they move the camera, so you can offset its position. Hold an arrow to keep moving. They call the same code as the physical keys (`RemoteControl`), and can be turned off with *Expose Remote Control* on the OSCServer.
+
+The phone app knows nothing about specific parameters: the ARML sends it a description of every control, so adding or changing parameters never requires rebuilding the phone app. If you use IL2CPP code stripping, make sure the exposed members are preserved (e.g. with `[UnityEngine.Scripting.Preserve]`).
