@@ -73,4 +73,6 @@ To control an ARML application from a phone:
 3. Build the **OSCRemoteClient** scene (`ARML/ARMLCore/Scenes`) for Android. On Android, set *Internet Access* to *Require* in the Player settings.
 4. Connect the phone to the same Wi-Fi network as the ARML and open the app. Every ARML found on the network is listed and the first one is joined automatically. Tap another entry to switch to it, or enter an IP address manually.
 
+The top of the phone app also has the ARML's remote control, so the phone can do everything the hardware remote does: **Menu** (open/close the debug menu), **Reset pose**, and **Up / Down / Left / Right / Select**, which behave like the arrow keys and Enter. With the menu open they navigate it (Left/Right change the selected slider); with the menu closed they move the camera, so you can offset its position. Hold an arrow to keep moving. They call the same code as the physical keys (`RemoteControl`), and can be turned off with *Expose Remote Control* on the OSCServer.
+
 The phone app knows nothing about specific parameters: the ARML sends it a description of every control, so adding or changing parameters never requires rebuilding the phone app. If you use IL2CPP code stripping, make sure the exposed members are preserved (e.g. with `[UnityEngine.Scripting.Preserve]`).

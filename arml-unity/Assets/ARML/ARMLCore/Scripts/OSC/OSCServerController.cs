@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -29,6 +30,9 @@ public class OSCServerController : MonoBehaviour
     private float subscriberTimeout = 15f;
     [SerializeField, Tooltip("How often (seconds) game-side value changes are pushed to the phones")]
     private float stateInterval = 0.1f;
+
+    [SerializeField, Tooltip("Adds Menu, Reset and arrow-key controls (what the ARML's hardware remote does) to the phone")]
+    private bool exposeRemoteControl = true;
 
     [SerializeField] private bool logMessages;
 
@@ -76,6 +80,10 @@ public class OSCServerController : MonoBehaviour
         // Fields marked [RuntimeParameter] are exposed without any setup.
         if (FindFirstObjectByType<OSCRuntimeParameterSource>() == null)
             gameObject.AddComponent<OSCRuntimeParameterSource>();
+
+        // Menu / reset / arrow keys, like the hardware remote.
+        if (exposeRemoteControl && FindFirstObjectByType<OSCRemoteControlSource>() == null)
+            gameObject.AddComponent<OSCRemoteControlSource>();
     }
 
     private void OnEnable()
@@ -121,7 +129,9 @@ public class OSCServerController : MonoBehaviour
         _sourcesDirty = false;
         _registry.Clear();
 
-        var sources = FindObjectsByType<OscParameterSource>(FindObjectsSortMode.InstanceID);
+        // OrderBy is stable, so sources with the same Order keep their instance-id order.
+        OscParameterSource[] sources = FindObjectsByType<OscParameterSource>(FindObjectsSortMode.InstanceID)
+            .OrderBy(s => s.Order).ToArray();
         foreach (OscParameterSource source in sources)
         {
             if (!source.isActiveAndEnabled) continue;

@@ -5144,6 +5144,7 @@ GameObject:
   - component: {fileID: 2464372682278860805}
   - component: {fileID: 2243222983979392266}
   - component: {fileID: 8095580418421002482}
+  - component: {fileID: 8095580418421002483}
   m_Layer: 0
   m_Name: GameControllers
   m_TagString: Untagged
@@ -8607,6 +8608,25 @@ MonoBehaviour:
   MenuKey2: 281
   ResetKey: 8
   ReadLauncherSettings: 1
+--- !u!114 &8095580418421002483
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3974967119435825975}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e43e11010b0cdcb4ba438cf659ebd7d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ARMLCore::OSCServerController
+  discoveryPort: 8888
+  oscPort: 9000
+  deviceName: 
+  subscriberTimeout: 15
+  stateInterval: 0.1
+  exposeRemoteControl: 1
+  logMessages: 0
 --- !u!224 &8102770034209180602
 RectTransform:
   m_ObjectHideFlags: 0

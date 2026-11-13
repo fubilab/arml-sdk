@@ -26,6 +26,18 @@ public static class OscAddresses
     // Parameter value messages (both directions) are sent to the parameter's own address.
     // Default address prefix for parameters registered with a relative id.
     public const string ParamPrefix = "/param/";
+
+    // The ARML's own remote control (menu button, reset, arrow keys). The server registers these as
+    // ordinary triggers; a phone that knows these addresses draws a proper pad instead of plain buttons.
+    public const string RemoteGroup = "Remote control";
+    public const string RemotePrefix = "/remote/";
+    public const string RemoteMenu = "/remote/menu";     // short press of the menu button
+    public const string RemoteReset = "/remote/reset";   // reset key / long press of the menu button
+    public const string RemoteUp = "/remote/up";
+    public const string RemoteDown = "/remote/down";
+    public const string RemoteLeft = "/remote/left";
+    public const string RemoteRight = "/remote/right";
+    public const string RemoteSelect = "/remote/select"; // activates the selected UI element (Enter)
 }
 
 public readonly struct OscMessage

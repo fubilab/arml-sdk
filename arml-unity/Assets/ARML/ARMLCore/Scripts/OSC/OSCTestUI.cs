@@ -239,8 +239,22 @@ public class OSCTestUI : MonoBehaviour
         _dynamic = holder;
 
         string group = null;
+        bool remotePadBuilt = false;
         foreach (OscParamInfo p in client.Params)
         {
+            // The ARML's remote control (menu, reset, arrows) is drawn as one pad, built at the first of its triggers.
+            if (p.Type == OscParamType.Trigger && p.Address.StartsWith(OscAddresses.RemotePrefix))
+            {
+                if (remotePadBuilt) continue;
+                remotePadBuilt = true;
+
+                string padGroup = p.Group ?? "";
+                if (padGroup.Length > 0 && padGroup != group) AddHeader(holder, padGroup);
+                if (padGroup.Length > 0) group = padGroup;
+                BuildRemotePad(holder);
+                continue;
+            }
+
             string g = p.Group ?? "";
             if (g.Length > 0 && g != group) AddHeader(holder, g);
             if (g.Length > 0) group = g;
@@ -340,6 +354,67 @@ public class OSCTestUI : MonoBehaviour
 
     private void BuildTrigger(Transform parent, OscParamInfo p) =>
         AddButton(parent, p.Label, Accent, () => Edited(p), 0, 90);
+
+    // ---------------------------------------------------------------- remote control pad
+
+    private OscParamInfo FindParam(string address)
+    {
+        foreach (OscParamInfo p in client.Params)
+            if (p.Address == address) return p;
+        return null;
+    }
+
+    // Menu / Reset on top, then arrow keys around a Select button. Whatever the server did not
+    // advertise is simply left out.
+    private void BuildRemotePad(Transform parent)
+    {
+        RectTransform top = AddRow(parent, 110);
+        AddRemoteButton(top, OscAddresses.RemoteMenu, "Menu", Accent);
+        AddRemoteButton(top, OscAddresses.RemoteReset, "Reset pose", Accent);
+
+        RectTransform pad = NewRect("Pad", parent);
+        var layout = pad.gameObject.AddComponent<GridLayoutGroup>();
+        layout.cellSize = new Vector2(320, 120);
+        layout.spacing = new Vector2(14, 14);
+        layout.childAlignment = TextAnchor.UpperCenter;
+        layout.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
+        layout.constraintCount = 3;
+        pad.gameObject.AddComponent<ContentSizeFitter>().verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+
+        NewRect("Gap", pad);
+        AddRemoteButton(pad, OscAddresses.RemoteUp, "Up", Muted, true);
+        NewRect("Gap", pad);
+        AddRemoteButton(pad, OscAddresses.RemoteLeft, "Left", Muted, true);
+        AddRemoteButton(pad, OscAddresses.RemoteSelect, "Select", Accent);
+        AddRemoteButton(pad, OscAddresses.RemoteRight, "Right", Muted, true);
+        NewRect("Gap", pad);
+        AddRemoteButton(pad, OscAddresses.RemoteDown, "Down", Muted, true);
+        NewRect("Gap", pad);
+    }
+
+    // held: acts like a held key. It sends on press and keeps sending while held, which is what moves the
+    // camera continuously (and repeats menu navigation / drags a slider with Left/Right on the server).
+    private void AddRemoteButton(Transform parent, string address, string label, Color colour, bool held = false)
+    {
+        OscParamInfo p = FindParam(address);
+        if (p == null)
+        {
+            if (parent.GetComponent<GridLayoutGroup>() != null) NewRect("Gap", parent); // keep the grid shape
+            return;
+        }
+
+        if (!held)
+        {
+            AddButton(parent, label, colour, () => Edited(p), 0, 0, 38);
+            return;
+        }
+
+        // The press/repeat handlers do the sending; the button's own click (on release) must not add another.
+        Button button = AddButton(parent, label, colour, () => { }, 0, 0, 38);
+        var hold = button.gameObject.AddComponent<OSCHoldRepeat>();
+        hold.OnPress = () => Edited(p);
+        hold.OnRepeat = () => Edited(p);
+    }
 
     private void BuildColor(Transform parent, OscParamInfo p)
     {

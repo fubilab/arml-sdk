@@ -187,6 +187,9 @@ public abstract class OscParameterSource : MonoBehaviour
 {
     public abstract void Register(OscParameterRegistry registry);
 
+    /// <summary>Sources register in ascending order, which decides the order of the controls on the phone.</summary>
+    public virtual int Order => 0;
+
     protected virtual void OnEnable() => OSCServerController.NotifySourcesChanged();
     protected virtual void OnDisable() => OSCServerController.NotifySourcesChanged();
 }
