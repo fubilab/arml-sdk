@@ -95,7 +95,7 @@ namespace ARML.Interaction
                 direction += v;
             }
             // Apply movement
-            transform.Translate(direction * moveSpeed * Time.deltaTime, Space.World);
+            transform.Translate(direction * moveSpeed * Time.deltaTime, Space.Self);
             
             float rotationX = 0f;
             float rotationY = 0f;
