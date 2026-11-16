@@ -289,8 +289,8 @@ namespace ARML.HandTracking
             if (hand.RawGesture != hand.Gesture) _text.Append(" (now ").Append(hand.RawGesture.DisplayName()).Append(")");
             _text.Append("  conf ").Append(hand.Confidence.ToString("0.00"))
                 .Append(" wrist (").Append(w.x.ToString("0.00")).Append(", ").Append(w.y.ToString("0.00"))
-                .Append(", ").Append(w.z.ToString("0.00")).Append(") pinch ")
-                .Append((hand.PinchDistance * 100f).ToString("0.0")).Append(" cm")
+                .Append(", ").Append(w.z.ToString("0.00")).Append(")  pinch ratio ")
+                .Append(hand.PinchRatio.ToString("0.00")).Append(" (strength ").Append(hand.PinchStrength.ToString("0.00")).Append(")")
                 .Append(hand.DepthCalibrated ? " [stereo]" : " [size prior]");
         }
 

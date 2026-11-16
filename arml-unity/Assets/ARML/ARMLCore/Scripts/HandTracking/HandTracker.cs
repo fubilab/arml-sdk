@@ -71,7 +71,25 @@ namespace ARML.HandTracking
             }
         }
 
-        /// <summary>Distance between thumb tip and index finger tip in meters</summary>
+        /// <summary>
+        /// Distance across the image between thumb tip and index finger tip relative to the size of the hand (wrist to
+        /// the base of the middle finger). 0.6 or more for an open hand, about 0.2 for a fist and 0.02 to 0.14 for a
+        /// pinch. It does not depend on the hand size calibration, unlike <see cref="PinchDistance"/>.
+        /// </summary>
+        public float PinchRatio { get; internal set; }
+
+        /// <summary>0..1: 1 when the tips of thumb and index finger touch, 0 when they are far apart. For analog use.</summary>
+        public float PinchStrength { get; internal set; }
+
+        /// <summary>The point between thumb tip and index tip in world coordinates, where to grab</summary>
+        public Vector3 PinchPoint
+        {
+            get { return (Joints[(int)HandJoint.ThumbTip] + Joints[(int)HandJoint.IndexTip]) * 0.5f; }
+        }
+
+        internal bool Pinching;
+
+        /// <summary>Distance between thumb tip and index finger tip in meters. Includes the depth, which is noisy.</summary>
         public float PinchDistance
         {
             get { return Vector3.Distance(Joints[(int)HandJoint.ThumbTip], Joints[(int)HandJoint.IndexTip]); }
@@ -121,6 +139,15 @@ namespace ARML.HandTracking
         [Tooltip("A new gesture is reported after it was seen in this many hand tracking results in a row. Higher values " +
             "flicker less but react later (a result takes about 70 ms)."), Range(1, 10)]
         public int gestureConfirmResults = 3;
+
+        [Tooltip("A pinch starts when the distance between thumb tip and index tip across the image, relative to the size " +
+            "of the hand, is below this (0.02 to 0.14 when pinching, about 0.2 for a fist, 0.6 or more for an open hand)."),
+            Range(0.05f, 0.4f)]
+        public float pinchEnterRatio = 0.14f;
+
+        [Tooltip("A pinch ends when that ratio is above this. Higher than the start value so that it does not flicker."),
+            Range(0.1f, 0.6f)]
+        public float pinchExitRatio = 0.2f;
 
         [Header("Filtering (One Euro filter)")]
         public bool smooth = true;
@@ -183,6 +210,9 @@ namespace ARML.HandTracking
             pose.RawGesture = HandGesture.None;
             pose.GestureCandidate = HandGesture.None;
             pose.GestureCandidateCount = 0;
+            pose.Pinching = false;
+            pose.PinchRatio = 1f;
+            pose.PinchStrength = 0f;
             SetGesture(pose, HandGesture.None);
         }
 
@@ -192,6 +222,25 @@ namespace ARML.HandTracking
             HandGesture previous = pose.Gesture;
             pose.Gesture = gesture;
             GestureChanged?.Invoke(pose, previous);
+        }
+
+        // Thumb tip to index tip distance relative to the hand size, with hysteresis. Measured on the metric camera
+        // landmarks of the result, not on the smoothed joints, which lag. Only the distance across the image (camera x
+        // and y) counts: the depth difference of the two tips is not reliable (about half a palm length apart in depth
+        // while touching, on a recording of pinches), so with it a pinch could not be told from other poses.
+        private void UpdatePinch(TrackedHandPose pose, HandData hand, bool newHand)
+        {
+            if (newHand) pose.Pinching = false;
+            float palmLength = Vector3.Distance(
+                hand.CameraLandmarks[(int)HandJoint.Wrist], hand.CameraLandmarks[(int)HandJoint.MiddleMcp]);
+            Vector3 tips = hand.CameraLandmarks[(int)HandJoint.ThumbTip] - hand.CameraLandmarks[(int)HandJoint.IndexTip];
+            float ratio = palmLength > 0.01f ? new Vector2(tips.x, tips.y).magnitude / palmLength : 1f;
+            pose.PinchRatio = ratio;
+            pose.PinchStrength = Mathf.Clamp01(Mathf.InverseLerp(pinchExitRatio * 2f, pinchEnterRatio, ratio));
+
+            float exit = Mathf.Max(pinchExitRatio, pinchEnterRatio);
+            if (!pose.Pinching && ratio < pinchEnterRatio) pose.Pinching = true;
+            else if (pose.Pinching && ratio > exit) pose.Pinching = false;
         }
 
         // Switches the stable gesture only after the same new gesture was seen in several results in a row
@@ -306,7 +355,9 @@ namespace ARML.HandTracking
                 }
 
                 pose.Tracked = true;
-                UpdateGesture(pose, hand.Gesture, restart);
+                UpdatePinch(pose, hand, restart);
+                // a pinch otherwise reads as a fist, a one or no gesture
+                UpdateGesture(pose, pose.Pinching ? HandGesture.Pinch : hand.Gesture, restart);
                 pose.Confidence = hand.LandmarkScore;
                 pose.DepthCalibrated = hand.StereoDepth > 0f;
                 pose.StereoDepth = hand.StereoDepth;

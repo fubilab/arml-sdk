@@ -40,7 +40,12 @@ namespace SpectacularAI.DepthAI
         /// <summary>Thumb out, the other four fingers closed. The orientation of the hand is not checked.</summary>
         ThumbsUp = 7,
         /// <summary>Index and middle finger open, the others closed</summary>
-        Peace = 8
+        Peace = 8,
+        /// <summary>
+        /// Tips of thumb and index finger together. Recognized by HandTracker from the joints, not by the native
+        /// plugin, and it takes priority over the other gestures.
+        /// </summary>
+        Pinch = 9
     }
 
     public static class HandGestureExtensions
@@ -58,6 +63,7 @@ namespace SpectacularAI.DepthAI
                 case HandGesture.Fist: return "Fist";
                 case HandGesture.ThumbsUp: return "Thumbs up";
                 case HandGesture.Peace: return "Peace";
+                case HandGesture.Pinch: return "Pinch";
                 default: return "-";
             }
         }

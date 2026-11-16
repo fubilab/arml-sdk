@@ -34,6 +34,19 @@ the UI name). They use the rules of depthai_hand_tracker on the landmarks:
 | Two | thumb and index |
 | Three | thumb, index and middle |
 | Four | index, middle, ring and little, thumb closed |
+| Pinch | tips of thumb and index finger together (see below) |
+
+Pinch is recognized by `HandTracker` from the joints and takes priority over the other gestures. It uses the distance
+across the image between thumb tip and index tip relative to the size of the hand (`PinchRatio`: 0.6 or more for an
+open hand, about 0.2 for a fist, 0.02 to 0.14 for a pinch), so it does not depend on the hand size calibration. The
+depth difference of the two tips is left out on purpose: the hand model estimates it badly (the tips of a pinch were
+about half a palm length apart in depth), so with it a pinch could not be told from other poses. A pinch starts below
+`pinchEnterRatio` (0.14) and ends above `pinchExitRatio` (0.2). `PinchStrength` (0..1) is the analog value and
+`PinchPoint` the world position between the two tips, where to grab (its depth is as noisy as the tips' depth).
+The thresholds come from one guided recording of one person (pinch with both hands, from the back, from the side,
+near, far, moving, against open hand, fist, thumbs up and a thumb and index with a small gap): all pinch poses were
+detected and none of the others, but a pinch seen from the side (thumb side facing the camera) is close to the limit.
+The overlay shows the live ratio, in case another hand needs different values.
 
 Anything else is `None`. The gesture is stable: it only changes after the new gesture was seen in
 `HandTracker.gestureConfirmResults` (3) results in a row, `RawGesture` is the unfiltered value of the latest result.
