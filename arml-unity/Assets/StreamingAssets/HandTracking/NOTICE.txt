@@ -1,0 +1,16 @@
+Hand tracking models (OpenVINO blobs for the Luxonis OAK-D, Myriad X, 4 SHAVEs)
+
+Files
+  palm_detection_sh4.blob       palm detection
+  hand_landmark_full_sh4.blob   hand landmarks, most accurate, used by default
+  hand_landmark_lite_sh4.blob   hand landmarks, faster and less accurate (not versioned in git, copy it from
+                                depthai_hand_tracker/models if you want to use it)
+
+Origin
+  Converted from the Google MediaPipe palm detection and hand landmark models
+  (Apache License 2.0, https://github.com/google/mediapipe, text in LICENSE-mediapipe-Apache-2.0.txt)
+  by https://github.com/geaxgx/depthai_hand_tracker
+  (MIT License, Copyright (c) 2021 geax, text in LICENSE-depthai_hand_tracker-MIT.txt).
+
+The pre- and post-processing of these models (anchors, ROI computation, landmark decoding) in the native
+spectacularAI_unity plugin is a port of the host mode of depthai_hand_tracker.

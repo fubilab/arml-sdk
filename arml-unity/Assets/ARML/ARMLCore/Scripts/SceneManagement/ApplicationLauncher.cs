@@ -221,6 +221,7 @@ namespace ARML.SceneManagement
         [DefaultValue(TrackingMode.VioOnly)] public TrackingMode trackingMode;
         [DefaultValue(ImuOrientation.XBackward)] public ImuOrientation imuOrientation;
         [DefaultValue(false)] public bool useSlam;
+        [DefaultValue(false)] public bool useHandTracking;
         [DefaultValue(KeyCode.Menu)] public KeyCode menuKey;
         [DefaultValue(KeyCode.PageDown)] public KeyCode menuKey2;
         [DefaultValue(KeyCode.Backspace)] public KeyCode resetKey;

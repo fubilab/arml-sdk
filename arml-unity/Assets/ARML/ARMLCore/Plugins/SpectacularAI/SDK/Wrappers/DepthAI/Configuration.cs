@@ -39,6 +39,13 @@ namespace SpectacularAI.DepthAI
         public bool UseColorStereoCameras = false;
 
         /// <summary>
+        /// Enable the color camera. Always enabled when hand tracking is enabled.
+        /// NOTE: this field must stay in this position, the layout must match ConfigurationWrapper in the native plugin.
+        /// </summary>
+        [MarshalAs(UnmanagedType.I1)]
+        public bool UseColor = false;
+
+        /// <summary>
         /// SLAM map save path. Supported formats are .bin (internal SLAM map format) and point cloud formats .ply and .csv
         /// </summary>
         [MarshalAs(UnmanagedType.LPStr)]
@@ -103,5 +110,47 @@ namespace SpectacularAI.DepthAI
         /// </summary>
         [MarshalAs(UnmanagedType.I1)]
         public bool LowLatency = false;
+
+        /// <summary>
+        /// Run MediaPipe hand tracking on the OAK-D next to the VIO. Requires the palm detection and hand landmark
+        /// models (blob files, see HandTrackingPalmModelPath). Results are read with Session.GetHandFrame.
+        /// </summary>
+        [MarshalAs(UnmanagedType.I1)]
+        public bool EnableHandTracking = false;
+
+        /// <summary>
+        /// Path to palm_detection_sh4.blob
+        /// </summary>
+        [MarshalAs(UnmanagedType.LPStr)]
+        public string HandTrackingPalmModelPath = "";
+
+        /// <summary>
+        /// Path to hand_landmark_full_sh4.blob (or the lite / sparse variant)
+        /// </summary>
+        [MarshalAs(UnmanagedType.LPStr)]
+        public string HandTrackingLandmarkModelPath = "";
+
+        /// <summary>
+        /// Use stereo depth to calibrate the user's hand size, making hand positions metric. The right camera of the
+        /// device only sees IR light, so this only works with the IR dot projector enabled.
+        /// </summary>
+        [MarshalAs(UnmanagedType.I1)]
+        public bool HandTrackingUseDepth = true;
+
+        /// <summary>
+        /// IR dot projector intensity, 0 = off, 1 = maximum. Only used when HandTrackingUseDepth is set.
+        /// </summary>
+        public float HandTrackingIrProjectorIntensity = 0.0f;
+
+        /// <summary>
+        /// Maximum number of hands, 1 or 2
+        /// </summary>
+        public int HandTrackingMaxHands = 2;
+
+        /// <summary>
+        /// Frame rate of the color camera when hand tracking is enabled, 0 = unchanged. A lower rate makes the
+        /// camera cooler and the neural networks faster.
+        /// </summary>
+        public int HandTrackingColorFps = 0;
     }
 }

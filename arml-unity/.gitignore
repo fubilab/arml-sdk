@@ -78,6 +78,10 @@ crashlytics-build.properties
 
 # crash dumps
 *.blob
+# Hand tracking models for the OAK-D (palm detection and full landmark) are versioned, the lite model stays local
+!/[Aa]ssets/[Ss]treamingAssets/HandTracking/palm_detection_sh4.blob
+!/[Aa]ssets/[Ss]treamingAssets/HandTracking/hand_landmark_full_sh4.blob
+/[Aa]ssets/[Ss]treamingAssets/HandTracking/hand_landmark_lite_sh4.blob.meta
 
 # idea editor
 .idea

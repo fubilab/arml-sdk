@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
+using System.Text;
 using SpectacularAI.Native;
 
 namespace SpectacularAI.DepthAI
@@ -47,6 +48,24 @@ namespace SpectacularAI.DepthAI
                 internalParameters,
                 internalParameters.Length,
                 _mapperOutputCallback);
+            if (_handle == IntPtr.Zero)
+            {
+                throw new Exception(GetLastNativeError("Could not create the pipeline"));
+            }
+        }
+
+        private static string GetLastNativeError(string fallback)
+        {
+            try
+            {
+                var buffer = new StringBuilder(1000);
+                ExternApi.sai_depthai_get_last_error(buffer, buffer.Capacity);
+                return buffer.Length > 0 ? buffer.ToString() : fallback;
+            }
+            catch (EntryPointNotFoundException)
+            {
+                return fallback; // older native plugin
+            }
         }
 
         /// <summary>
@@ -90,7 +109,12 @@ namespace SpectacularAI.DepthAI
         public Session StartSession()
         {
             CheckDisposed();
-            IntPtr sessionHandle = ExternApi.sai_depthai_pipeline_start_session(_handle);
+            var errorMessage = new StringBuilder(1000);
+            IntPtr sessionHandle = ExternApi.sai_depthai_pipeline_start_session(_handle, errorMessage);
+            if (sessionHandle == IntPtr.Zero)
+            {
+                throw new Exception(errorMessage.Length > 0 ? errorMessage.ToString() : "Could not start the session");
+            }
             return new Session(sessionHandle);
         }
 
@@ -112,7 +136,10 @@ namespace SpectacularAI.DepthAI
                 CallbackDelegate onMapperOutput);
 
             [DllImport(ApiConstants.saiNativeApi, CallingConvention = ApiConstants.saiCallingConvention)]
-            public static extern IntPtr sai_depthai_pipeline_start_session(IntPtr pipelineHandle);
+            public static extern IntPtr sai_depthai_pipeline_start_session(IntPtr pipelineHandle, StringBuilder errorMsg);
+
+            [DllImport(ApiConstants.saiNativeApi, CallingConvention = ApiConstants.saiCallingConvention)]
+            public static extern int sai_depthai_get_last_error(StringBuilder buffer, int bufferSize);
 
             [DllImport(ApiConstants.saiNativeApi, CallingConvention = ApiConstants.saiCallingConvention)]
             public static extern void sai_depthai_pipeline_release(IntPtr pipelineHandle);

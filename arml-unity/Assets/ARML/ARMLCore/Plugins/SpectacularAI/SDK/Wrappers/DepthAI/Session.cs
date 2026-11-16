@@ -1,6 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 using SpectacularAI.Native;
+using UnityEngine;
 
 namespace SpectacularAI.DepthAI
 {
@@ -144,6 +145,66 @@ namespace SpectacularAI.DepthAI
             return new CameraPose(cameraPoseHandle);
         }
 
+        private float[] _handBuffer;
+        private int _handStride;
+        private long _lastHandSequence = -1;
+
+        /// <summary>
+        /// Latest hand tracking result, when it is new since the last call. Never blocks.
+        /// Hand tracking must be enabled in the Configuration (EnableHandTracking).
+        /// </summary>
+        /// <returns>The result, or null when there is no new result</returns>
+        public HandFrame GetHandFrame()
+        {
+            CheckDisposed();
+            if (_handBuffer == null)
+            {
+                _handStride = ExternApi.sai_hand_tracking_float_stride();
+                _handBuffer = new float[_handStride * 2];
+            }
+            int count = ExternApi.sai_depthai_session_get_hand_frame(
+                _handle, _lastHandSequence, out long sequence, out double timestamp, out double latencyMs,
+                _handBuffer, _handBuffer.Length);
+            if (count < 0) return null;
+            _lastHandSequence = sequence;
+            return HandFrame.Parse(sequence, timestamp, latencyMs, _handBuffer, count, _handStride);
+        }
+
+        /// <summary>
+        /// Intrinsics (fx, fy, cx, cy in pixels) and size of the color image of the hand tracking.
+        /// </summary>
+        public bool TryGetHandTrackingInfo(out Vector4 intrinsics, out Vector2Int imageSize)
+        {
+            CheckDisposed();
+            var k = new float[4];
+            bool ok = ExternApi.sai_depthai_session_get_hand_info(_handle, k, out int width, out int height);
+            intrinsics = new Vector4(k[0], k[1], k[2], k[3]);
+            imageSize = new Vector2Int(width, height);
+            return ok;
+        }
+
+        /// <summary>
+        /// The latest frame of the color camera, null when there is none. Needs the color camera, which hand
+        /// tracking enables. Dispose the frame after use.
+        /// </summary>
+        public ColorFrame GetColorFrame()
+        {
+            CheckDisposed();
+            IntPtr handle = ExternApi.sai_depthai_session_get_color_frame(_handle);
+            return handle == IntPtr.Zero ? null : new ColorFrame(handle);
+        }
+
+        /// <summary>
+        /// Health of the hand tracking: chip temperature of the camera in Celsius, work reduction level
+        /// (0 = full speed, 1..3 = the camera is hot and the tracking is slowed down), and whether the neural
+        /// networks stopped answering.
+        /// </summary>
+        public bool TryGetHandTrackingStatus(out float chipTemperature, out int throttleLevel, out bool stalled)
+        {
+            CheckDisposed();
+            return ExternApi.sai_depthai_session_get_hand_status(_handle, out chipTemperature, out throttleLevel, out stalled);
+        }
+
         private void CheckDisposed()
         {
             if (_disposed)
@@ -180,6 +241,38 @@ namespace SpectacularAI.DepthAI
             public static extern IntPtr sai_depthai_session_get_rgb_camera_pose(
                 IntPtr sessionHandle,
                 IntPtr vioOutputHandle);
+
+            [DllImport(ApiConstants.saiNativeApi, CallingConvention = ApiConstants.saiCallingConvention)]
+            public static extern IntPtr sai_depthai_session_get_color_frame(IntPtr sessionHandle);
+
+            [DllImport(ApiConstants.saiNativeApi, CallingConvention = ApiConstants.saiCallingConvention)]
+            [return: MarshalAs(UnmanagedType.I1)]
+            public static extern bool sai_depthai_session_get_hand_status(
+                IntPtr sessionHandle,
+                out float chipTemperature,
+                out int throttleLevel,
+                [MarshalAs(UnmanagedType.I1)] out bool stalled);
+
+            [DllImport(ApiConstants.saiNativeApi, CallingConvention = ApiConstants.saiCallingConvention)]
+            public static extern int sai_hand_tracking_float_stride();
+
+            [DllImport(ApiConstants.saiNativeApi, CallingConvention = ApiConstants.saiCallingConvention)]
+            public static extern int sai_depthai_session_get_hand_frame(
+                IntPtr sessionHandle,
+                long afterSequence,
+                out long sequence,
+                out double deviceTimestamp,
+                out double latencyMs,
+                [Out] float[] buffer,
+                int bufferFloats);
+
+            [DllImport(ApiConstants.saiNativeApi, CallingConvention = ApiConstants.saiCallingConvention)]
+            [return: MarshalAs(UnmanagedType.I1)]
+            public static extern bool sai_depthai_session_get_hand_info(
+                IntPtr sessionHandle,
+                [Out] float[] intrinsics,
+                out int width,
+                out int height);
 
             [DllImport(ApiConstants.saiNativeApi, CallingConvention = ApiConstants.saiCallingConvention)]
             public static extern void sai_depthai_session_release(IntPtr sessionHandle);
