@@ -7,8 +7,20 @@ using UnityEngine;
 
 namespace ARML.HandTracking
 {
+    /// <summary>How the camera image is fitted to the view</summary>
+    public enum CameraViewFit
+    {
+        /// <summary>Covers the whole view, the image is cropped when the aspect ratios differ</summary>
+        Fill,
+        /// <summary>Shows the whole image, with empty bars when the aspect ratios differ</summary>
+        Fit,
+        /// <summary>Fills the whole view, the image is distorted when the aspect ratios differ</summary>
+        Stretch
+    }
+
     /// <summary>
-    /// On screen diagnostics of the VIO and the hand tracking. F1 toggles it.
+    /// On screen diagnostics of the VIO and the hand tracking, and the image of the OAK color camera as the
+    /// background of the whole view, behind the 3D scene. F1 toggles the text, F2 the camera image.
     /// </summary>
     public class HandTrackingDebugOverlay : MonoBehaviour
     {
@@ -17,13 +29,17 @@ namespace ARML.HandTracking
         public bool visible = true;
 
         [Header("Camera view")]
-        [Tooltip("Show the image of the OAK color camera in the corner of the screen. F2 toggles it.")]
+        [Tooltip("Show the image of the OAK color camera as the background of the whole view, behind the 3D scene. F2 toggles it.")]
         public bool showCameraView = true;
 
         public KeyCode cameraViewToggleKey = KeyCode.F2;
 
-        [Tooltip("Width of the camera view as a fraction of the screen width"), Range(0.1f, 0.9f)]
-        public float cameraViewWidth = 0.4f;
+        [Tooltip("Fill covers the whole view (crops the image when the aspect ratios differ), Fit shows the whole image, " +
+            "Stretch distorts the image to the view.")]
+        public CameraViewFit cameraViewFit = CameraViewFit.Fill;
+
+        [Tooltip("The camera that renders the scene. Defaults to the camera of the HandTracker's camera object, or the main camera.")]
+        public Camera viewCamera;
 
         [Tooltip("Optional: write a CSV log of the tracked hands (wrist and palm in world coordinates, camera pose)")]
         public string csvPath;
@@ -38,6 +54,11 @@ namespace ARML.HandTracking
         private Texture2D _cameraTexture;
         private byte[] _cameraPixels;
         private long _cameraSequence = -1;
+        private GameObject _backgroundQuad;
+        private Material _backgroundMaterial;
+        private bool _oakFovKnown;
+        private float _oakFovHorizontal;
+        private float _oakFovVertical;
 
         private void Start()
         {
@@ -53,6 +74,8 @@ namespace ARML.HandTracking
 
         private void OnDestroy()
         {
+            if (_backgroundQuad != null) Destroy(_backgroundQuad);
+            if (_backgroundMaterial != null) Destroy(_backgroundMaterial);
             if (_cameraTexture != null) Destroy(_cameraTexture);
             if (tracker != null) tracker.Updated -= LogHands;
             if (_csv != null)
@@ -121,11 +144,14 @@ namespace ARML.HandTracking
                         if (_cameraTexture != null) Destroy(_cameraTexture);
                         _cameraTexture = new Texture2D(frame.Width, frame.Height, TextureFormat.RGBA32, false);
                         _cameraPixels = new byte[frame.Width * frame.Height * 4];
+                        if (_backgroundMaterial != null) _backgroundMaterial.mainTexture = _cameraTexture;
                     }
                     if (!frame.CopyToRgba(_cameraPixels)) return;
                     _cameraTexture.SetPixelData(_cameraPixels, 0);
                     _cameraTexture.Apply(false);
                     _cameraSequence = frame.SequenceNumber;
+                    if (_backgroundQuad == null) CreateBackground();
+                    if (!_oakFovKnown) ReadOakFieldOfView(session);
                 }
             }
             catch (EntryPointNotFoundException)
@@ -133,6 +159,75 @@ namespace ARML.HandTracking
                 Debug.LogWarning("[HandTracking] The native plugin cannot provide the camera image, camera view disabled.");
                 showCameraView = false;
             }
+        }
+
+        // The field of view of the OAK color camera, to compare with the field of view of the Unity camera
+        private void ReadOakFieldOfView(Session session)
+        {
+            if (!session.TryGetHandTrackingInfo(out Vector4 intrinsics, out Vector2Int size)) return;
+            if (size.x <= 0 || size.y <= 0 || intrinsics.x <= 0f || intrinsics.y <= 0f) return;
+            _oakFovHorizontal = 2f * Mathf.Atan(size.x / (2f * intrinsics.x)) * Mathf.Rad2Deg;
+            _oakFovVertical = 2f * Mathf.Atan(size.y / (2f * intrinsics.y)) * Mathf.Rad2Deg;
+            _oakFovKnown = true;
+        }
+
+        private Camera ResolveViewCamera()
+        {
+            if (viewCamera != null) return viewCamera;
+            Transform cameraObject = tracker != null ? tracker.CameraObject : null;
+            Camera camera = cameraObject != null ? cameraObject.GetComponent<Camera>() : null;
+            return camera != null ? camera : Camera.main;
+        }
+
+        // A quad in front of the camera that covers the view. It is drawn first, so the 3D scene is in front of it.
+        private void CreateBackground()
+        {
+            Shader shader = Shader.Find("Sprites/Default");
+            if (shader == null) shader = Shader.Find("UI/Default");
+            if (shader == null)
+            {
+                Debug.LogWarning("[HandTracking] No shader for the camera view, camera view disabled.");
+                showCameraView = false;
+                return;
+            }
+            _backgroundQuad = GameObject.CreatePrimitive(PrimitiveType.Quad);
+            _backgroundQuad.name = "OAK camera feed";
+            Destroy(_backgroundQuad.GetComponent<Collider>());
+            _backgroundMaterial = new Material(shader) { mainTexture = _cameraTexture };
+            _backgroundMaterial.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Background;
+            var meshRenderer = _backgroundQuad.GetComponent<MeshRenderer>();
+            meshRenderer.sharedMaterial = _backgroundMaterial;
+            meshRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+            meshRenderer.receiveShadows = false;
+            _backgroundQuad.SetActive(false);
+        }
+
+        private void LateUpdate()
+        {
+            if (_backgroundQuad == null) return;
+            Camera camera = ResolveViewCamera();
+            bool show = showCameraView && _cameraTexture != null && camera != null;
+            if (_backgroundQuad.activeSelf != show) _backgroundQuad.SetActive(show);
+            if (!show) return;
+
+            if (_backgroundQuad.transform.parent != camera.transform) _backgroundQuad.transform.SetParent(camera.transform, false);
+
+            // size of the view at the distance of the quad
+            float distance = Mathf.Min(camera.farClipPlane * 0.5f, 100f);
+            float height = 2f * distance * Mathf.Tan(camera.fieldOfView * 0.5f * Mathf.Deg2Rad);
+            float width = height * camera.aspect;
+            var size = new Vector2(width, height);
+            if (cameraViewFit != CameraViewFit.Stretch)
+            {
+                float imageAspect = (float)_cameraTexture.width / _cameraTexture.height;
+                bool viewIsWider = camera.aspect > imageAspect;
+                bool matchWidth = cameraViewFit == CameraViewFit.Fill ? viewIsWider : !viewIsWider;
+                size = matchWidth ? new Vector2(width, width / imageAspect) : new Vector2(height * imageAspect, height);
+            }
+            Transform quad = _backgroundQuad.transform;
+            quad.localPosition = new Vector3(0f, 0f, distance);
+            quad.localRotation = UnityEngine.Quaternion.identity;
+            quad.localScale = new Vector3(size.x, size.y, 1f);
         }
 
         private string Describe(bool multiline)
@@ -148,6 +243,20 @@ namespace ARML.HandTracking
             _text.Append(sep).Append("hand tracking ").Append(tracker.Active ? "ON" : "OFF")
                 .Append("  ").Append(tracker.ResultsPerSecond.ToString("0.0")).Append(" results/s")
                 .Append("  latency ").Append(tracker.LatencyMs.ToString("0")).Append(" ms");
+            if (_oakFovKnown)
+            {
+                // to line up the 3D skeleton with the camera image, set the vertical field of view of the Unity camera
+                // to the one of the OAK
+                _text.Append(sep).Append("field of view (h x v): OAK ")
+                    .Append(_oakFovHorizontal.ToString("0.0")).Append(" x ").Append(_oakFovVertical.ToString("0.0"));
+                Camera camera = ResolveViewCamera();
+                if (camera != null)
+                {
+                    _text.Append(" deg, Unity camera ")
+                        .Append(Camera.VerticalToHorizontalFieldOfView(camera.fieldOfView, camera.aspect).ToString("0.0"))
+                        .Append(" x ").Append(camera.fieldOfView.ToString("0.0")).Append(" deg");
+                }
+            }
             _text.Append(sep).Append("camera ").Append(tracker.DeviceTemperature.ToString("0")).Append(" C");
             if (tracker.ThrottleLevel > 0) _text.Append("  SLOWED DOWN (level ").Append(tracker.ThrottleLevel).Append(")");
             if (tracker.Stalled) _text.Append("  STALLED - camera not answering");
@@ -180,13 +289,17 @@ namespace ARML.HandTracking
                 _style = new GUIStyle(GUI.skin.label) { fontSize = 18, richText = false };
                 _style.normal.textColor = Color.white;
             }
-            if (showCameraView && _cameraTexture != null)
+            string text = Describe(true);
+            Vector2 textSize = _style.CalcSize(new GUIContent(text));
+            if (showCameraView)
             {
-                float width = Screen.width * cameraViewWidth;
-                float height = width * _cameraTexture.height / _cameraTexture.width;
-                GUI.DrawTexture(new Rect(Screen.width - width - 12, 12, width, height), _cameraTexture, ScaleMode.StretchToFill, false);
+                // keep the text readable over the camera image
+                Color previous = GUI.color;
+                GUI.color = new Color(0f, 0f, 0f, 0.6f);
+                GUI.DrawTexture(new Rect(8, 4, textSize.x + 16, textSize.y + 12), Texture2D.whiteTexture);
+                GUI.color = previous;
             }
-            GUI.Label(new Rect(12, 8, Screen.width - 24, Screen.height - 16), Describe(true), _style);
+            GUI.Label(new Rect(12, 8, textSize.x + 8, textSize.y + 4), text, _style);
         }
     }
 }

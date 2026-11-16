@@ -13,7 +13,7 @@ second process and no conflict over the camera.
    `PinchDistance`.
 3. Optional: **HandSkeletonVisualizer** draws the joints, **HandTrackingDebugOverlay** shows rates and latency (F1).
 
-`Assets/ARML/Examples/HandTracking/Scenes/HandTrackingExample.unity` is the example scene (VIO, PoseProvider, hand tracking, skeleton, overlay). The overlay shows the OAK camera image in the corner (F2 toggles it, F1 hides the whole overlay).
+`Assets/ARML/Examples/HandTracking/Scenes/HandTrackingExample.unity` is the example scene (VIO, PoseProvider, hand tracking, skeleton, overlay). The overlay shows the OAK camera image as the background of the whole view, behind the 3D hands (F2 toggles it, F1 hides the text), to line the hands up with the real image and the projection. `Camera View Fit` chooses between filling the view (crops), fitting the whole image, or stretching. The overlay also prints the field of view of the OAK next to the one of the Unity camera: set the vertical field of view of the Unity camera to the OAK one for the 3D skeleton to line up with the image.
 It also runs in the Unity Editor (Play) when the OAK-D is connected and not used by another program (`Run In Editor`
 on the `Vio` component, on by default). The Editor keeps the native plugin loaded, so `spectacularAI_unity.dll` can
 only be replaced after closing the Editor. If the camera cannot be opened, the `Vio` component logs the reason instead
