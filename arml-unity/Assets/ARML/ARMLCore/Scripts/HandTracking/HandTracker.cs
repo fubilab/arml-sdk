@@ -23,7 +23,17 @@ namespace ARML.HandTracking
         /// <summary>The 21 joints in Unity world coordinates, indexed by <see cref="HandJoint"/></summary>
         public readonly Vector3[] Joints = new Vector3[HandData.JointCount];
 
+        /// <summary>
+        /// The recognized gesture. It is stable: it only changes after the new gesture was seen in several results in a
+        /// row (<see cref="HandTracker.gestureConfirmResults"/>). None when the hand is not tracked.
+        /// </summary>
         public HandGesture Gesture { get; internal set; }
+
+        /// <summary>Gesture of the latest result before stabilization. It can flicker between results.</summary>
+        public HandGesture RawGesture { get; internal set; }
+
+        internal HandGesture GestureCandidate;
+        internal int GestureCandidateCount;
 
         /// <summary>Confidence of the landmark model, 0..1</summary>
         public float Confidence { get; internal set; }
@@ -107,6 +117,11 @@ namespace ARML.HandTracking
         [Tooltip("A hand is reported as not tracked when it was not seen for this long (seconds).")]
         public float lostTimeout = 0.3f;
 
+        [Header("Gestures")]
+        [Tooltip("A new gesture is reported after it was seen in this many hand tracking results in a row. Higher values " +
+            "flicker less but react later (a result takes about 70 ms)."), Range(1, 10)]
+        public int gestureConfirmResults = 3;
+
         [Header("Filtering (One Euro filter)")]
         public bool smooth = true;
 
@@ -140,6 +155,12 @@ namespace ARML.HandTracking
         /// <summary>Raised after a new hand tracking result was processed</summary>
         public event Action<HandTracker> Updated;
 
+        /// <summary>
+        /// Raised when the stable gesture of a hand changes: the hand and its previous gesture (the new one is
+        /// <see cref="TrackedHandPose.Gesture"/>). A hand that is lost changes to None.
+        /// </summary>
+        public event Action<TrackedHandPose, HandGesture> GestureChanged;
+
         private int _resultsInWindow;
         private float _windowStart;
 
@@ -152,8 +173,53 @@ namespace ARML.HandTracking
         private void OnDisable()
         {
             if (Instance == this) Instance = null;
-            Left.Tracked = false;
-            Right.Tracked = false;
+            LoseHand(Left);
+            LoseHand(Right);
+        }
+
+        private void LoseHand(TrackedHandPose pose)
+        {
+            pose.Tracked = false;
+            pose.RawGesture = HandGesture.None;
+            pose.GestureCandidate = HandGesture.None;
+            pose.GestureCandidateCount = 0;
+            SetGesture(pose, HandGesture.None);
+        }
+
+        private void SetGesture(TrackedHandPose pose, HandGesture gesture)
+        {
+            if (pose.Gesture == gesture) return;
+            HandGesture previous = pose.Gesture;
+            pose.Gesture = gesture;
+            GestureChanged?.Invoke(pose, previous);
+        }
+
+        // Switches the stable gesture only after the same new gesture was seen in several results in a row
+        private void UpdateGesture(TrackedHandPose pose, HandGesture raw, bool newHand)
+        {
+            pose.RawGesture = raw;
+            if (newHand)
+            {
+                pose.GestureCandidate = raw;
+                pose.GestureCandidateCount = 0;
+            }
+            if (raw == pose.Gesture)
+            {
+                pose.GestureCandidate = raw;
+                pose.GestureCandidateCount = 0;
+                return;
+            }
+            if (raw == pose.GestureCandidate) pose.GestureCandidateCount++;
+            else
+            {
+                pose.GestureCandidate = raw;
+                pose.GestureCandidateCount = 1;
+            }
+            if (pose.GestureCandidateCount >= Mathf.Max(1, gestureConfirmResults))
+            {
+                pose.GestureCandidateCount = 0;
+                SetGesture(pose, raw);
+            }
         }
 
         private void Update()
@@ -174,8 +240,8 @@ namespace ARML.HandTracking
                 _windowStart = now;
             }
 
-            if (Left.Tracked && now - Left.LastUpdateTime > lostTimeout) Left.Tracked = false;
-            if (Right.Tracked && now - Right.LastUpdateTime > lostTimeout) Right.Tracked = false;
+            if (Left.Tracked && now - Left.LastUpdateTime > lostTimeout) LoseHand(Left);
+            if (Right.Tracked && now - Right.LastUpdateTime > lostTimeout) LoseHand(Right);
         }
 
         /// <summary>The camera transform used to place the hands in the world</summary>
@@ -240,7 +306,7 @@ namespace ARML.HandTracking
                 }
 
                 pose.Tracked = true;
-                pose.Gesture = hand.Gesture;
+                UpdateGesture(pose, hand.Gesture, restart);
                 pose.Confidence = hand.LandmarkScore;
                 pose.DepthCalibrated = hand.StereoDepth > 0f;
                 pose.StereoDepth = hand.StereoDepth;

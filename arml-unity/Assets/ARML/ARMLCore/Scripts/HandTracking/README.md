@@ -19,6 +19,27 @@ on the `Vio` component, on by default). The Editor keeps the native plugin loade
 only be replaced after closing the Editor. If the camera cannot be opened, the `Vio` component logs the reason instead
 of throwing. `ARMLCore.Editor.HandTrackingPlayTest.Run` runs the scene in Play mode in batch mode (see the file).
 
+## Gestures
+
+Each hand has a recognized gesture, `HandTracker.Left.Gesture` / `Right.Gesture` (`HandGesture`, `DisplayName()` gives
+the UI name). They use the rules of depthai_hand_tracker on the landmarks:
+
+| Gesture | Fingers |
+| --- | --- |
+| Open hand (`Five`) | all five open |
+| Fist | all closed |
+| Thumbs up | thumb out, the other four closed (the hand orientation is not checked) |
+| Peace | index and middle open, the others closed |
+| One | index only |
+| Two | thumb and index |
+| Three | thumb, index and middle |
+| Four | index, middle, ring and little, thumb closed |
+
+Anything else is `None`. The gesture is stable: it only changes after the new gesture was seen in
+`HandTracker.gestureConfirmResults` (3) results in a row, `RawGesture` is the unfiltered value of the latest result.
+`HandTracker.GestureChanged` fires when a stable gesture changes (a lost hand changes to `None`). The example scene
+shows a readout per hand at the bottom of the screen and a label at each hand (`Show Gestures` on the overlay).
+
 ## Models
 
 The OpenVINO blobs live in `Assets/StreamingAssets/HandTracking` (see `NOTICE.txt` and the licence files there).

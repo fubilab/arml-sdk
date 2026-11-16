@@ -41,6 +41,17 @@ namespace ARML.HandTracking
         [Tooltip("The camera that renders the scene. Defaults to the camera of the HandTracker's camera object, or the main camera.")]
         public Camera viewCamera;
 
+        [Header("Gestures")]
+        [Tooltip("Show the recognized gesture of each hand: a large readout at the bottom of the screen and a label at each hand.")]
+        public bool showGestures = true;
+
+        // same colors as HandSkeletonVisualizer
+        private static readonly Color LeftColor = new Color(1f, 0.65f, 0f);
+        private static readonly Color RightColor = new Color(0.1f, 0.9f, 0.3f);
+        private GUIStyle _captionStyle;
+        private GUIStyle _gestureStyle;
+        private GUIStyle _handLabelStyle;
+
         [Tooltip("Optional: write a CSV log of the tracked hands (wrist and palm in world coordinates, camera pose)")]
         public string csvPath;
 
@@ -67,7 +78,7 @@ namespace ARML.HandTracking
             {
                 _csv = new StreamWriter(csvPath, false);
                 _csv.WriteLine("unity_time,capture_time,hand,conf,gesture,stereo_calibrated,wrist_x,wrist_y,wrist_z," +
-                    "palm_x,palm_y,palm_z,cam_x,cam_y,cam_z,cam_qx,cam_qy,cam_qz,cam_qw,latency_ms,stereo_depth,hand_scale");
+                    "palm_x,palm_y,palm_z,cam_x,cam_y,cam_z,cam_qx,cam_qy,cam_qz,cam_qw,latency_ms,stereo_depth,hand_scale,raw_gesture");
                 tracker.Updated += LogHands;
             }
         }
@@ -110,7 +121,7 @@ namespace ARML.HandTracking
                 c.x.ToString("F4", ci), c.y.ToString("F4", ci), c.z.ToString("F4", ci),
                 q.x.ToString("F5", ci), q.y.ToString("F5", ci), q.z.ToString("F5", ci), q.w.ToString("F5", ci),
                 latencyMs.ToString("F1", ci),
-                hand.StereoDepth.ToString("F4", ci), hand.HandScale.ToString("F4", ci)
+                hand.StereoDepth.ToString("F4", ci), hand.HandScale.ToString("F4", ci), hand.RawGesture.ToString()
             }));
         }
 
@@ -274,7 +285,9 @@ namespace ARML.HandTracking
                 return;
             }
             Vector3 w = hand.Wrist;
-            _text.Append(hand.Gesture).Append(" conf ").Append(hand.Confidence.ToString("0.00"))
+            _text.Append(hand.Gesture.DisplayName());
+            if (hand.RawGesture != hand.Gesture) _text.Append(" (now ").Append(hand.RawGesture.DisplayName()).Append(")");
+            _text.Append("  conf ").Append(hand.Confidence.ToString("0.00"))
                 .Append(" wrist (").Append(w.x.ToString("0.00")).Append(", ").Append(w.y.ToString("0.00"))
                 .Append(", ").Append(w.z.ToString("0.00")).Append(") pinch ")
                 .Append((hand.PinchDistance * 100f).ToString("0.0")).Append(" cm")
@@ -300,6 +313,71 @@ namespace ARML.HandTracking
                 GUI.color = previous;
             }
             GUI.Label(new Rect(12, 8, textSize.x + 8, textSize.y + 4), text, _style);
+
+            if (showGestures && tracker != null) DrawGestures();
+        }
+
+        private static void DrawBox(Rect rect, float alpha)
+        {
+            Color previous = GUI.color;
+            GUI.color = new Color(0f, 0f, 0f, alpha);
+            GUI.DrawTexture(rect, Texture2D.whiteTexture);
+            GUI.color = previous;
+        }
+
+        // A readout per hand at the bottom of the screen, and a label above each tracked hand
+        private void DrawGestures()
+        {
+            int big = Mathf.Max(28, Screen.height / 15);
+            int small = Mathf.Max(14, Screen.height / 45);
+            if (_gestureStyle == null)
+            {
+                _captionStyle = new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Bold };
+                _gestureStyle = new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Bold };
+                _handLabelStyle = new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Bold };
+            }
+            _captionStyle.fontSize = small;
+            _gestureStyle.fontSize = big;
+            _handLabelStyle.fontSize = Mathf.Max(18, Screen.height / 28);
+
+            float panelWidth = Mathf.Min(Screen.width * 0.32f, big * 12f);
+            float panelHeight = big + small + 28f;
+            float y = Screen.height - panelHeight - 16f;
+            DrawGesturePanel(new Rect(Screen.width * 0.5f - panelWidth - 8f, y, panelWidth, panelHeight), tracker.Left, "LEFT HAND", LeftColor, small, big);
+            DrawGesturePanel(new Rect(Screen.width * 0.5f + 8f, y, panelWidth, panelHeight), tracker.Right, "RIGHT HAND", RightColor, small, big);
+
+            Camera camera = ResolveViewCamera();
+            if (camera != null)
+            {
+                DrawHandLabel(tracker.Left, camera, LeftColor);
+                DrawHandLabel(tracker.Right, camera, RightColor);
+            }
+        }
+
+        private void DrawGesturePanel(Rect rect, TrackedHandPose hand, string caption, Color color, int small, int big)
+        {
+            DrawBox(rect, 0.6f);
+            _captionStyle.normal.textColor = color;
+            GUI.Label(new Rect(rect.x, rect.y + 6f, rect.width, small + 8f), caption, _captionStyle);
+
+            string text = !hand.Tracked ? "no hand" : (hand.Gesture == HandGesture.None ? "-" : hand.Gesture.DisplayName());
+            _gestureStyle.normal.textColor = hand.Tracked ? Color.white : new Color(1f, 1f, 1f, 0.4f);
+            GUI.Label(new Rect(rect.x, rect.y + small + 12f, rect.width, big + 14f), text, _gestureStyle);
+        }
+
+        private void DrawHandLabel(TrackedHandPose hand, Camera camera, Color color)
+        {
+            if (!hand.Tracked || hand.Gesture == HandGesture.None) return;
+            Vector3 screen = camera.WorldToScreenPoint(hand.PalmCenter);
+            if (screen.z <= 0f) return;
+
+            var content = new GUIContent(hand.Gesture.DisplayName());
+            Vector2 size = _handLabelStyle.CalcSize(content);
+            // above the palm; the screen y axis of the camera points up, the one of the GUI points down
+            var rect = new Rect(screen.x - size.x * 0.5f - 8f, Screen.height - screen.y - size.y - 70f, size.x + 16f, size.y + 6f);
+            DrawBox(rect, 0.6f);
+            _handLabelStyle.normal.textColor = color;
+            GUI.Label(rect, content, _handLabelStyle);
         }
     }
 }

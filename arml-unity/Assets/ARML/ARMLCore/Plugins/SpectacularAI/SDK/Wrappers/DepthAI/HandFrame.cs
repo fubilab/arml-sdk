@@ -16,17 +16,51 @@ namespace SpectacularAI.DepthAI
         PinkyMcp, PinkyPip, PinkyDip, PinkyTip
     }
 
+    /// <summary>
+    /// Hand poses recognized from the landmarks (the rules of depthai_hand_tracker). A finger counts as open when it
+    /// is stretched, and as closed when it is curled. Numbers count the open fingers, the thumb included.
+    /// The numeric values come from the native plugin.
+    /// </summary>
     public enum HandGesture
     {
+        /// <summary>No known pose, for example fingers half curled</summary>
         None = 0,
+        /// <summary>Index finger only</summary>
         One = 1,
+        /// <summary>Thumb and index finger</summary>
         Two = 2,
+        /// <summary>Thumb, index and middle finger</summary>
         Three = 3,
+        /// <summary>Index, middle, ring and little finger, thumb closed</summary>
         Four = 4,
+        /// <summary>All five fingers open: the open hand</summary>
         Five = 5,
+        /// <summary>All fingers closed</summary>
         Fist = 6,
-        Ok = 7,
+        /// <summary>Thumb out, the other four fingers closed. The orientation of the hand is not checked.</summary>
+        ThumbsUp = 7,
+        /// <summary>Index and middle finger open, the others closed</summary>
         Peace = 8
+    }
+
+    public static class HandGestureExtensions
+    {
+        /// <summary>Name for the user interface</summary>
+        public static string DisplayName(this HandGesture gesture)
+        {
+            switch (gesture)
+            {
+                case HandGesture.One: return "One (1)";
+                case HandGesture.Two: return "Two (2)";
+                case HandGesture.Three: return "Three (3)";
+                case HandGesture.Four: return "Four (4)";
+                case HandGesture.Five: return "Open hand (5)";
+                case HandGesture.Fist: return "Fist";
+                case HandGesture.ThumbsUp: return "Thumbs up";
+                case HandGesture.Peace: return "Peace";
+                default: return "-";
+            }
+        }
     }
 
     /// <summary>
