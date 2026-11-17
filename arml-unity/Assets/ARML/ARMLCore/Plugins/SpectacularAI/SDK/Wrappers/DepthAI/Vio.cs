@@ -120,6 +120,12 @@ namespace SpectacularAI.DepthAI
         public static bool HandTrackingActive { get; private set; }
 
         /// <summary>
+        /// Why hand tracking is not running, empty when it runs. For the debug overlay, so the reason is visible on
+        /// the device without reading the log.
+        /// </summary>
+        public static string HandTrackingProblem { get; private set; } = "";
+
+        /// <summary>
         /// Transforms points from the (Unity) camera coordinates of the RGB camera to the (Unity) camera coordinates
         /// of the VIO output pose, which is what drives the camera object (PoseProvider). Constant, estimated from the
         /// VIO outputs. Identity until known, see RgbToOutputKnown.
@@ -211,6 +217,9 @@ namespace SpectacularAI.DepthAI
                 // the launcher can enable hand tracking, but never disables it when set in the scene
                 useHandTracking |= SettingsConfiguration.LoadFromDisk().useHandTracking;
             }
+            HandTrackingProblem = useHandTracking
+                ? ""
+                : "not enabled ('Enable Hand Tracking' on Vio and 'useHandTracking' in the launcher settings are off)";
             if (useHandTracking)
             {
                 string palmPath = Path.Combine(Application.streamingAssetsPath, HandTrackingModelFolder, PalmModelFile);
@@ -218,6 +227,7 @@ namespace SpectacularAI.DepthAI
                 if (!File.Exists(palmPath) || !File.Exists(landmarkPath))
                 {
                     Debug.LogError($"[VIO] Hand tracking models not found ({palmPath}, {landmarkPath}), hand tracking disabled.");
+                    HandTrackingProblem = "models not found in StreamingAssets/" + HandTrackingModelFolder;
                 }
                 else
                 {
@@ -277,6 +287,7 @@ namespace SpectacularAI.DepthAI
             if (Application.isEditor && !RunInEditor)
             {
                 Debug.Log("[VIO] Not started in the Editor (Run In Editor is off).");
+                HandTrackingProblem = "the VIO is not started in the Editor (Run In Editor is off)";
                 _handTrackingEnabled = false;
                 return;
             }
@@ -294,6 +305,7 @@ namespace SpectacularAI.DepthAI
                 _session = null;
                 _pipeline = null;
                 _handTrackingEnabled = false;
+                HandTrackingProblem = "the VIO session could not start: " + e.Message;
                 return;
             }
             HandTrackingActive = _handTrackingEnabled;
@@ -312,6 +324,7 @@ namespace SpectacularAI.DepthAI
             _session = null;
             _pipeline = null;
             HandTrackingActive = false;
+            HandTrackingProblem = "";
             HandOutput = null;
             RgbToOutputKnown = false;
             HandTrackingStalled = false;
@@ -395,6 +408,7 @@ namespace SpectacularAI.DepthAI
                 Debug.LogError("[VIO] The native spectacularAI_unity plugin has no hand tracking support, disabling hand tracking.");
                 _handTrackingEnabled = false;
                 HandTrackingActive = false;
+                HandTrackingProblem = "the native plugin (libspectacularAI_unity) is the old build without hand tracking";
             }
         }
     }

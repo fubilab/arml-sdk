@@ -66,9 +66,12 @@ plain git like the Vosk models). `hand_landmark_lite_sh4.blob` is faster but les
 * **Handedness.** The model classifies hands as it sees them. Depending on how the camera is mounted left and right
   can be swapped: use `HandTracker.swapHandedness`.
 * **Hand distance.** Without depth the size of an average hand is assumed, so the distance is only accurate to about
-  10%. Stereo depth fixes the size of the user's hand, but the right camera of ARML devices has an IR-pass lens, so
-  it only works with the OAK IR dot projector (`Hand Tracking Use Depth` and `Hand Tracking Ir Projector Intensity`
-  on `Vio`). The projector adds IR dots to the left camera image, which may affect the VIO: check before enabling.
+  10%. Stereo depth fixes the size of the user's hand (`Hand Tracking Use Depth` on `Vio`). The development OAK-D has
+  an IR-pass lens on its right camera, which is not the standard setup of the ARML: on it stereo only worked with the
+  OAK IR dot projector (`Hand Tracking Ir Projector Intensity`), which adds IR dots to the left camera image and may
+  affect the VIO. On a standard camera try depth with the projector off first. The depth results from the development
+  camera (stereo hand size about 1.5x the size-based one) are not trustworthy: the modified lens probably invalidates
+  the factory calibration of that camera.
 * **Latency.** The hand tracking runs at about 16-22 Hz with 100-160 ms from the camera exposure to the result. The
   hands are placed with the camera pose at the capture time and moved to the current camera pose, so camera motion
   during that time is compensated, but hand motion is not.
@@ -80,7 +83,12 @@ plain git like the Vosk models). `hand_landmark_lite_sh4.blob` is faster but les
   enclosure before relying on it.
 * **Color frame rate.** `Hand Tracking Color Fps` (15) lowers the frame rate of the color camera: it runs cooler and the
   networks answer faster, and hand tracking does not run faster than that anyway.
-* **Linux.** The native plugin (`spectacularAI_unity`) must be rebuilt for Linux, see
-  `sai-unity/plugin/README.md`. The old `.so` has no hand tracking: the `Vio` component logs an error and disables it.
+* **Linux.** The native plugin (`spectacularAI_unity`) must be rebuilt for Linux, on Ubuntu 22.04 (a build on a newer
+  Ubuntu does not load there), see `sai-unity/plugin/README.md`, and `libspectacularAI_unity.so` replaced in
+  `Plugins/SpectacularAI/Plugins/Linux_Ubuntu_x86-64`. The old `.so` has no hand tracking: the `Vio` component logs an
+  error and disables it, the VIO itself keeps working (the overlay then says `hand tracking is off:` with the reason,
+  the same text as `Vio.HandTrackingProblem`). On the ARML: close other users of the OAK, enable
+  `useHandTracking` in `launcherSettings.json` (or `Enable Hand Tracking` on `Vio`), and check hand labels, the
+  temperature in the overlay, latency and the VIO quality.
 * **Command line (example scene).** `-handDepth 0|1 -handIr 0..1 -handModel file.blob -handMaxHands 1|2 -handSwap 0|1
   -handSmooth 0|1 -handLog file.csv`.

@@ -65,6 +65,7 @@ namespace ARML.HandTracking
         private Texture2D _cameraTexture;
         private byte[] _cameraPixels;
         private long _cameraSequence = -1;
+        private string _cameraProblem = "";
         private GameObject _backgroundQuad;
         private Material _backgroundMaterial;
         private bool _oakFovKnown;
@@ -168,6 +169,7 @@ namespace ARML.HandTracking
             catch (EntryPointNotFoundException)
             {
                 Debug.LogWarning("[HandTracking] The native plugin cannot provide the camera image, camera view disabled.");
+                _cameraProblem = "the native plugin (libspectacularAI_unity) cannot provide the camera image, it is the old build";
                 showCameraView = false;
             }
         }
@@ -254,6 +256,19 @@ namespace ARML.HandTracking
             _text.Append(sep).Append("hand tracking ").Append(tracker.Active ? "ON" : "OFF")
                 .Append("  ").Append(tracker.ResultsPerSecond.ToString("0.0")).Append(" results/s")
                 .Append("  latency ").Append(tracker.LatencyMs.ToString("0")).Append(" ms");
+            if (!tracker.Active && !string.IsNullOrEmpty(Vio.HandTrackingProblem))
+            {
+                _text.Append(sep).Append("hand tracking is off: ").Append(Vio.HandTrackingProblem);
+            }
+            if (_cameraProblem.Length > 0)
+            {
+                _text.Append(sep).Append("camera view off: ").Append(_cameraProblem);
+            }
+            else if (showCameraView && _cameraTexture == null)
+            {
+                _text.Append(sep).Append("camera view: no image yet")
+                    .Append(Vio.HandTrackingActive ? "" : " (the color camera only runs with hand tracking)");
+            }
             if (_oakFovKnown)
             {
                 // to line up the 3D skeleton with the camera image, set the vertical field of view of the Unity camera
