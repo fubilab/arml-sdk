@@ -18,15 +18,32 @@ namespace ARML.HandTracking
         Stretch
     }
 
+    /// <summary>Solid color behind the 3D scene, to test the hand tracking under projected light and shadows</summary>
+    public enum ProjectionBackground
+    {
+        /// <summary>The background of the scene camera</summary>
+        SceneDefault,
+        Black,
+        Gray,
+        White,
+        Red,
+        Green,
+        Blue
+    }
+
     /// <summary>
     /// On screen diagnostics of the VIO and the hand tracking, and the image of the OAK color camera as the
-    /// background of the whole view, behind the 3D scene. F1 toggles the text, F2 the camera image.
+    /// background of the whole view, behind the 3D scene. F1 toggles the text, F2 the camera image, F3 the hand
+    /// visual (see <see cref="HandSkeletonVisualizer"/>), F4 the background color, Esc closes the application.
     /// </summary>
     public class HandTrackingDebugOverlay : MonoBehaviour
     {
         public HandTracker tracker;
         public KeyCode toggleKey = KeyCode.F1;
         public bool visible = true;
+
+        [Tooltip("Closes the application (stops Play mode in the Editor). None disables it.")]
+        public KeyCode quitKey = KeyCode.Escape;
 
         [Header("Camera view")]
         [Tooltip("Show the image of the OAK color camera as the background of the whole view, behind the 3D scene. F2 toggles it.")]
@@ -41,9 +58,19 @@ namespace ARML.HandTracking
         [Tooltip("The camera that renders the scene. Defaults to the camera of the HandTracker's camera object, or the main camera.")]
         public Camera viewCamera;
 
+        [Header("Projection test")]
+        [Tooltip("Solid color behind the 3D scene (the camera image must be off), to test the hand tracking under projected " +
+            "light and with the shadow of the hand. F4 cycles through the colors.")]
+        public ProjectionBackground background = ProjectionBackground.SceneDefault;
+
+        public KeyCode backgroundKey = KeyCode.F4;
+
         [Header("Gestures")]
         [Tooltip("Show the recognized gesture of each hand: a large readout at the bottom of the screen and a label at each hand.")]
         public bool showGestures = true;
+
+        [Tooltip("The label above each hand. Switch it off when projecting onto the hands: it lights the hand.")]
+        public bool showHandLabels = true;
 
         // same colors as HandSkeletonVisualizer
         private static readonly Color LeftColor = new Color(1f, 0.65f, 0f);
@@ -72,8 +99,15 @@ namespace ARML.HandTracking
         private float _oakFovHorizontal;
         private float _oakFovVertical;
 
+        private HandSkeletonVisualizer _visualizer;
+        private ProjectionBackground _appliedBackground = (ProjectionBackground)(-1);
+        private bool _backgroundSaved;
+        private CameraClearFlags _savedClearFlags;
+        private Color _savedBackgroundColor;
+
         private void Start()
         {
+            _visualizer = FindFirstObjectByType<HandSkeletonVisualizer>();
             if (tracker == null) tracker = FindFirstObjectByType<HandTracker>();
             if (tracker != null && !string.IsNullOrEmpty(csvPath))
             {
@@ -128,9 +162,25 @@ namespace ARML.HandTracking
 
         private void Update()
         {
+            if (quitKey != KeyCode.None && Input.GetKeyDown(quitKey))
+            {
+                Debug.Log("[HandTracking] " + quitKey + " pressed, closing the application.");
+#if UNITY_EDITOR
+                UnityEditor.EditorApplication.isPlaying = false;
+#else
+                Application.Quit();
+#endif
+                return;
+            }
             if (Input.GetKeyDown(toggleKey)) visible = !visible;
             if (Vio.Output != null) _vioStatus = Vio.Output.Status.ToString();
             if (Input.GetKeyDown(cameraViewToggleKey)) showCameraView = !showCameraView;
+            if (backgroundKey != KeyCode.None && Input.GetKeyDown(backgroundKey))
+            {
+                background = (ProjectionBackground)(((int)background + 1) % Enum.GetValues(typeof(ProjectionBackground)).Length);
+                Debug.Log("[HandTracking] Background: " + background);
+            }
+            ApplyBackground();
             if (showCameraView) UpdateCameraView();
 
             // Same information in the log, so it can be inspected without looking at the screen
@@ -172,6 +222,39 @@ namespace ARML.HandTracking
                 _cameraProblem = "the native plugin (libspectacularAI_unity) cannot provide the camera image, it is the old build";
                 showCameraView = false;
             }
+        }
+
+        // Solid color behind the scene, for tests with the projector
+        private void ApplyBackground()
+        {
+            if (background == _appliedBackground) return;
+            Camera camera = ResolveViewCamera();
+            if (camera == null) return;
+            if (!_backgroundSaved)
+            {
+                _savedClearFlags = camera.clearFlags;
+                _savedBackgroundColor = camera.backgroundColor;
+                _backgroundSaved = true;
+            }
+            _appliedBackground = background;
+            if (background == ProjectionBackground.SceneDefault)
+            {
+                camera.clearFlags = _savedClearFlags;
+                camera.backgroundColor = _savedBackgroundColor;
+                return;
+            }
+            Color color;
+            switch (background)
+            {
+                case ProjectionBackground.Gray: color = new Color(0.5f, 0.5f, 0.5f); break;
+                case ProjectionBackground.White: color = Color.white; break;
+                case ProjectionBackground.Red: color = new Color(1f, 0f, 0f); break;
+                case ProjectionBackground.Green: color = new Color(0f, 1f, 0f); break;
+                case ProjectionBackground.Blue: color = new Color(0f, 0f, 1f); break;
+                default: color = Color.black; break;
+            }
+            camera.clearFlags = CameraClearFlags.SolidColor;
+            camera.backgroundColor = color;
         }
 
         // The field of view of the OAK color camera, to compare with the field of view of the Unity camera
@@ -283,6 +366,13 @@ namespace ARML.HandTracking
                         .Append(" x ").Append(camera.fieldOfView.ToString("0.0")).Append(" deg");
                 }
             }
+            _text.Append(sep).Append("view: camera image ").Append(showCameraView ? "on" : "off")
+                .Append(", background ").Append(background)
+                .Append(", hand visual ").Append(_visualizer != null ? _visualizer.mode.ToString() : "-");
+            if (multiline)
+            {
+                _text.Append(sep).Append("keys: F1 text, F2 camera image, F3 hand visual, F4 background, Esc quit");
+            }
             _text.Append(sep).Append("camera ").Append(tracker.DeviceTemperature.ToString("0")).Append(" C");
             if (tracker.ThrottleLevel > 0) _text.Append("  SLOWED DOWN (level ").Append(tracker.ThrottleLevel).Append(")");
             if (tracker.Stalled) _text.Append("  STALLED - camera not answering");
@@ -319,14 +409,8 @@ namespace ARML.HandTracking
             }
             string text = Describe(true);
             Vector2 textSize = _style.CalcSize(new GUIContent(text));
-            if (showCameraView)
-            {
-                // keep the text readable over the camera image
-                Color previous = GUI.color;
-                GUI.color = new Color(0f, 0f, 0f, 0.6f);
-                GUI.DrawTexture(new Rect(8, 4, textSize.x + 16, textSize.y + 12), Texture2D.whiteTexture);
-                GUI.color = previous;
-            }
+            // keep the text readable over the camera image or a light background
+            DrawBox(new Rect(8, 4, textSize.x + 16, textSize.y + 12), 0.6f);
             GUI.Label(new Rect(12, 8, textSize.x + 8, textSize.y + 4), text, _style);
 
             if (showGestures && tracker != null) DrawGestures();
@@ -362,7 +446,7 @@ namespace ARML.HandTracking
             DrawGesturePanel(new Rect(Screen.width * 0.5f + 8f, y, panelWidth, panelHeight), tracker.Right, "RIGHT HAND", RightColor, small, big);
 
             Camera camera = ResolveViewCamera();
-            if (camera != null)
+            if (camera != null && showHandLabels)
             {
                 DrawHandLabel(tracker.Left, camera, LeftColor);
                 DrawHandLabel(tracker.Right, camera, RightColor);

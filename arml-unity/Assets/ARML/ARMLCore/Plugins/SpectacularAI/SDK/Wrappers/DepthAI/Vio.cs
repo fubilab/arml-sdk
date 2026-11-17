@@ -104,6 +104,13 @@ namespace SpectacularAI.DepthAI
             "faster, the hand tracking does not run faster than that anyway. 0 = 30 fps."), Range(0, 30)]
         public int HandTrackingColorFps = 15;
 
+        [Tooltip("When hand tracking has been stalled (the camera does not answer) for this many seconds, the VIO " +
+            "session is restarted, which also restarts hand tracking. The VIO starts again from its origin. 0 = never.")]
+        public float RestartOnStallSeconds = 8f;
+
+        [Tooltip("Restarts in a row, without hand tracking running normally for 30 s in between, before giving up")]
+        public int MaxStallRestarts = 3;
+
         /// <summary>
         /// Hand tracking result of this frame, null when there is no new result.
         /// </summary>
@@ -154,6 +161,17 @@ namespace SpectacularAI.DepthAI
         private float _nextStatusPoll;
 
         private bool _handTrackingEnabled;
+
+        // stall recovery, see RestartOnStallSeconds
+        private float _stalledSince = -1f;
+        private float _healthySince = -1f;
+        private int _stallRestarts;
+        private bool _restartPending;
+        private float _restartAt;
+        private bool _closingOldSession;
+        private float _closeStartedAt;
+        private volatile bool _oldSessionClosed;
+        private bool _launcherParametersAdded;
 
         private Pipeline _pipeline;
         private Session _session;
@@ -269,17 +287,22 @@ namespace SpectacularAI.DepthAI
 
                 config.UseSlam = UseSlam = _launcherSettings.useSlam;
 
-                if (_launcherSettings.vioInternalParameters == null)
+                // only once: the session can be started again after a stall
+                if (!_launcherParametersAdded)
                 {
-                    InternalParameters.Add(
-                        new VioParameter() { Key = "trackerMasks", Value = "0.314,0.347,0.700,0.748" }
-                    );
-                }
-                else
-                {
-                    foreach (var internalParameter in _launcherSettings.vioInternalParameters)
+                    _launcherParametersAdded = true;
+                    if (_launcherSettings.vioInternalParameters == null)
                     {
-                        InternalParameters.Add(internalParameter);
+                        InternalParameters.Add(
+                            new VioParameter() { Key = "trackerMasks", Value = "0.314,0.347,0.700,0.748" }
+                        );
+                    }
+                    else
+                    {
+                        foreach (var internalParameter in _launcherSettings.vioInternalParameters)
+                        {
+                            InternalParameters.Add(internalParameter);
+                        }
                     }
                 }
             }
@@ -330,6 +353,8 @@ namespace SpectacularAI.DepthAI
             HandTrackingStalled = false;
             HandTrackingThrottleLevel = 0;
             _handTrackingEnabled = false;
+            _restartPending = false;
+            _stalledSince = -1f;
         }
 
         private void Update()
@@ -342,6 +367,38 @@ namespace SpectacularAI.DepthAI
             }
 
             HandOutput = null;
+
+            if (_closingOldSession)
+            {
+                // the session of the stall is being closed on another thread
+                if (!_oldSessionClosed)
+                {
+                    if (Time.unscaledTime - _closeStartedAt > 20f)
+                    {
+                        Debug.LogError("[VIO] The stalled VIO session does not close, giving up the restart.");
+                        _closingOldSession = false;
+                        _stallRestarts = MaxStallRestarts + 1;
+                    }
+                    return;
+                }
+                _closingOldSession = false;
+                _restartPending = true;
+                _restartAt = Time.unscaledTime + 1f;
+            }
+            if (_restartPending)
+            {
+                if (Time.unscaledTime < _restartAt) return;
+                _restartPending = false;
+                StartSession();
+                if (_session == null && _stallRestarts < MaxStallRestarts)
+                {
+                    // the camera may need a moment after the stall
+                    _stallRestarts++;
+                    _restartPending = true;
+                    _restartAt = Time.unscaledTime + 5f;
+                }
+                return;
+            }
 
             if (_session != null && _handTrackingEnabled)
             {
@@ -367,6 +424,72 @@ namespace SpectacularAI.DepthAI
             DeviceTemperature = temperature;
             HandTrackingThrottleLevel = level;
             HandTrackingStalled = stalled;
+
+            if (stalled)
+            {
+                _healthySince = -1f;
+                if (_stalledSince < 0f) _stalledSince = Time.unscaledTime;
+                if (RestartOnStallSeconds > 0f && Time.unscaledTime - _stalledSince >= RestartOnStallSeconds)
+                {
+                    if (_stallRestarts < MaxStallRestarts)
+                    {
+                        RestartAfterStall();
+                    }
+                    else if (_stallRestarts == MaxStallRestarts)
+                    {
+                        _stallRestarts++;
+                        Debug.LogError("[VIO] Hand tracking stalled again after " + MaxStallRestarts + " restarts, not restarting any more.");
+                    }
+                }
+            }
+            else
+            {
+                _stalledSince = -1f;
+                if (_healthySince < 0f) _healthySince = Time.unscaledTime;
+                else if (Time.unscaledTime - _healthySince > 30f) _stallRestarts = 0;
+            }
+        }
+
+        // The camera stopped answering (the networks time out, the VIO outputs stop too). Close the session and start a
+        // new one. Closing a session whose camera hangs may block, so it is done on another thread.
+        private void RestartAfterStall()
+        {
+            _stallRestarts++;
+            Debug.LogWarning($"[VIO] Hand tracking has been stalled for {RestartOnStallSeconds:0} s, restarting the VIO session " +
+                $"({_stallRestarts}/{MaxStallRestarts}). The VIO starts again from its origin.");
+            Pipeline oldPipeline = _pipeline;
+            Session oldSession = _session;
+            _session = null;
+            _pipeline = null;
+            ActiveSession = null;
+            if (Output != null)
+            {
+                Output.Dispose();
+                Output = null;
+            }
+            HandOutput = null;
+            HandTrackingActive = false;
+            HandTrackingStalled = false;
+            HandTrackingThrottleLevel = 0;
+            RgbToOutputKnown = false;
+            _handTrackingEnabled = false;
+            _stalledSince = -1f;
+            _healthySince = -1f;
+            HandTrackingProblem = "restarting after a stall";
+
+            _oldSessionClosed = false;
+            _closingOldSession = true;
+            _closeStartedAt = Time.unscaledTime;
+            var closer = new System.Threading.Thread(() =>
+            {
+                try { if (oldSession != null) oldSession.Dispose(); }
+                catch (Exception e) { Debug.LogWarning("[VIO] Closing the stalled session failed: " + e.Message); }
+                try { if (oldPipeline != null) oldPipeline.Dispose(); }
+                catch (Exception e) { Debug.LogWarning("[VIO] Closing the stalled pipeline failed: " + e.Message); }
+                _oldSessionClosed = true;
+            });
+            closer.IsBackground = true;
+            closer.Start();
         }
 
         // With hand tracking all VIO outputs are consumed every frame: the camera pose of every output is needed to

@@ -13,7 +13,7 @@ second process and no conflict over the camera.
    `PinchDistance`.
 3. Optional: **HandSkeletonVisualizer** draws the joints, **HandTrackingDebugOverlay** shows rates and latency (F1).
 
-`Assets/ARML/Examples/HandTracking/Scenes/HandTrackingExample.unity` is the example scene (VIO, PoseProvider, hand tracking, skeleton, overlay). The overlay shows the OAK camera image as the background of the whole view, behind the 3D hands (F2 toggles it, F1 hides the text), to line the hands up with the real image and the projection. `Camera View Fit` chooses between filling the view (crops), fitting the whole image, or stretching. The overlay also prints the field of view of the OAK next to the one of the Unity camera: set the vertical field of view of the Unity camera to the OAK one for the 3D skeleton to line up with the image.
+`Assets/ARML/Examples/HandTracking/Scenes/HandTrackingExample.unity` is the example scene (VIO, PoseProvider, hand tracking, skeleton, overlay). The overlay shows the OAK camera image as the background of the whole view, behind the 3D hands (F2 toggles it, F1 hides the text, Esc closes the application), to line the hands up with the real image and the projection. `Camera View Fit` chooses between filling the view (crops), fitting the whole image, or stretching. The overlay also prints the field of view of the OAK next to the one of the Unity camera: set the vertical field of view of the Unity camera to the OAK one for the 3D skeleton to line up with the image.
 It also runs in the Unity Editor (Play) when the OAK-D is connected and not used by another program (`Run In Editor`
 on the `Vio` component, on by default). The Editor keeps the native plugin loaded, so `spectacularAI_unity.dll` can
 only be replaced after closing the Editor. If the camera cannot be opened, the `Vio` component logs the reason instead
@@ -72,6 +72,16 @@ plain git like the Vosk models). `hand_landmark_lite_sh4.blob` is faster but les
   affect the VIO. On a standard camera try depth with the projector off first. The depth results from the development
   camera (stereo hand size about 1.5x the size-based one) are not trustworthy: the modified lens probably invalidates
   the factory calibration of that camera.
+* **Finding hands.** The palm detection model only sees 128 x 128 pixels. Looking at the whole frame it misses hands
+  that are not big in the image (on an ARML screenshot a hand ~30 cm from the camera was not detected at all). While
+  no hand is tracked the plugin therefore looks at a different square crop of the frame at each search (center, left,
+  right, whole frame), so a hand is found within about 0.4 s at the idle search rate. Once a hand is tracked it is
+  followed at full resolution. The plugin env variable `SAI_HAND_SEARCH_CROPS=0` switches this off, and
+  `SAI_HAND_LOG` adds the palm and landmark scores for diagnosing a hand that is not found.
+* **Stalls.** On the ARML the camera pipeline once stopped answering in the middle of a session (the networks time
+  out, then the VIO outputs stop, with the chip at 42 C). `HandTracker.Stalled` and the overlay report it, and `Vio`
+  restarts the VIO session after `Restart On Stall Seconds` (8, 0 = never), up to `Max Stall Restarts` (3) in a row. The
+  VIO starts again from its origin, so the hand positions in the world jump back with it.
 * **Latency.** The hand tracking runs at about 16-22 Hz with 100-160 ms from the camera exposure to the result. The
   hands are placed with the camera pose at the capture time and moved to the current camera pose, so camera motion
   during that time is compensated, but hand motion is not.
@@ -91,4 +101,15 @@ plain git like the Vosk models). `hand_landmark_lite_sh4.blob` is faster but les
   `useHandTracking` in `launcherSettings.json` (or `Enable Hand Tracking` on `Vio`), and check hand labels, the
   temperature in the overlay, latency and the VIO quality.
 * **Command line (example scene).** `-handDepth 0|1 -handIr 0..1 -handModel file.blob -handMaxHands 1|2 -handSwap 0|1
-  -handSmooth 0|1 -handLog file.csv`.
+  -handSmooth 0|1 -handLog file.csv`, and for projection tests `-handFeed 0|1 -handVisual off|dots|skeleton
+  -handBackground default|black|gray|white|red|green|blue -handLabels 0|1 -handText 0|1` (see below).
+* **Projection tests.** The camera sees what the projector puts on the hands, so a camera image or a full skeleton
+  drawn on them can look like a hand, and the light and the shadow of the hand change how it looks. For tests with the
+  projector on, the example scene can draw almost nothing on the hands: F2 switches the camera image off, F3 cycles the
+  hand visual (`Dots` = a small dot at the wrist and at each fingertip plus a white dot at the pinch point, `Skeleton`,
+  `Off`), F4 cycles the background through black, gray, white, red, green and blue (strong light, shadows and
+  colored light on the hands), and `Show Hand Labels` switches the floating label above each hand off. The text and
+  the two gesture panels stay at the edges of the view. The same can be set at start with the command line options
+  above, e.g. `-handFeed 0 -handVisual dots -handBackground white -handLabels 0`. The example scene also passes the
+  launcher's default VIO tracker mask (`trackerMasks 0.314,0.347,0.700,0.748`) so the VIO does not use the projected
+  area and the hands for tracking.

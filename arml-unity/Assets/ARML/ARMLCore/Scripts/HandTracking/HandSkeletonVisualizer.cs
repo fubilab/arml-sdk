@@ -3,17 +3,41 @@ using UnityEngine;
 
 namespace ARML.HandTracking
 {
+    /// <summary>What <see cref="HandSkeletonVisualizer"/> draws</summary>
+    public enum HandVisualMode
+    {
+        /// <summary>Nothing</summary>
+        Off,
+        /// <summary>
+        /// Only a small dot at the wrist and each fingertip. Light enough to project onto a hand without looking like
+        /// a hand to the camera, which sees the projection.
+        /// </summary>
+        Dots,
+        /// <summary>A sphere per joint and a line per bone</summary>
+        Skeleton
+    }
+
     /// <summary>
-    /// Debug visualization of the tracked hands: a sphere per joint and a line per bone.
-    /// Put it on any GameObject in the scene, next to a <see cref="HandTracker"/>.
+    /// Debug visualization of the tracked hands: a sphere per joint and a line per bone, or only dots at the wrist and
+    /// the fingertips. Put it on any GameObject in the scene, next to a <see cref="HandTracker"/>.
+    /// A white dot marks the pinch point while a hand pinches.
     /// </summary>
     public class HandSkeletonVisualizer : MonoBehaviour
     {
         [Tooltip("Defaults to the HandTracker in the scene")]
         public HandTracker tracker;
 
-        [Tooltip("Joint sphere diameter in meters")]
+        [Tooltip("What to draw. F3 cycles through the modes. Dots is meant for tests with a projector: the camera sees " +
+            "what is projected onto the hands, and a full skeleton drawn on them can look like a hand to it.")]
+        public HandVisualMode mode = HandVisualMode.Skeleton;
+
+        public KeyCode modeKey = KeyCode.F3;
+
+        [Tooltip("Joint sphere diameter in meters (Skeleton mode)")]
         public float jointSize = 0.012f;
+
+        [Tooltip("Dot diameter in meters (Dots mode)")]
+        public float dotSize = 0.010f;
 
         [Tooltip("Bone line width in meters")]
         public float boneWidth = 0.004f;
@@ -39,10 +63,17 @@ namespace ARML.HandTracking
             public GameObject Root;
             public Transform[] Joints;
             public LineRenderer[] Bones;
+            public Transform PinchDot;
         }
 
         private HandVisual _left;
         private HandVisual _right;
+
+        // wrist and the five fingertips: joints 0, 4, 8, 12, 16 and 20
+        private static bool IsDot(int joint)
+        {
+            return joint % 4 == 0;
+        }
 
         private void Start()
         {
@@ -87,8 +118,26 @@ namespace ARML.HandTracking
                 line.startColor = line.endColor = color;
                 visual.Bones[i] = line;
             }
+
+            GameObject pinchDot = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            pinchDot.name = "Pinch point";
+            Destroy(pinchDot.GetComponent<Collider>());
+            pinchDot.GetComponent<MeshRenderer>().sharedMaterial = new Material(material) { color = Color.white };
+            pinchDot.transform.SetParent(visual.Root.transform, false);
+            pinchDot.SetActive(false);
+            visual.PinchDot = pinchDot.transform;
+
             visual.Root.SetActive(false);
             return visual;
+        }
+
+        private void Update()
+        {
+            if (modeKey != KeyCode.None && Input.GetKeyDown(modeKey))
+            {
+                mode = (HandVisualMode)(((int)mode + 1) % 3);
+                Debug.Log("[HandTracking] Hand visual: " + mode);
+            }
         }
 
         private void LateUpdate()
@@ -101,20 +150,36 @@ namespace ARML.HandTracking
         private void Apply(HandVisual visual, TrackedHandPose pose)
         {
             if (visual == null) return;
-            if (visual.Root.activeSelf != pose.Tracked) visual.Root.SetActive(pose.Tracked);
-            if (!pose.Tracked) return;
+            bool show = mode != HandVisualMode.Off && pose.Tracked;
+            if (visual.Root.activeSelf != show) visual.Root.SetActive(show);
+            if (!show) return;
 
+            bool skeleton = mode == HandVisualMode.Skeleton;
+            float size = skeleton ? jointSize : dotSize;
             for (int i = 0; i < visual.Joints.Length; i++)
             {
+                bool on = skeleton || IsDot(i);
+                if (visual.Joints[i].gameObject.activeSelf != on) visual.Joints[i].gameObject.SetActive(on);
+                if (!on) continue;
                 visual.Joints[i].position = pose.Joints[i];
-                visual.Joints[i].localScale = Vector3.one * jointSize;
+                visual.Joints[i].localScale = Vector3.one * size;
             }
             for (int i = 0; i < visual.Bones.Length; i++)
             {
                 LineRenderer line = visual.Bones[i];
+                if (line.gameObject.activeSelf != skeleton) line.gameObject.SetActive(skeleton);
+                if (!skeleton) continue;
                 line.startWidth = line.endWidth = boneWidth;
                 line.SetPosition(0, pose.Joints[Bones[i, 0]]);
                 line.SetPosition(1, pose.Joints[Bones[i, 1]]);
+            }
+
+            bool pinching = pose.Gesture == HandGesture.Pinch;
+            if (visual.PinchDot.gameObject.activeSelf != pinching) visual.PinchDot.gameObject.SetActive(pinching);
+            if (pinching)
+            {
+                visual.PinchDot.position = pose.PinchPoint;
+                visual.PinchDot.localScale = Vector3.one * size * 1.8f;
             }
         }
     }
