@@ -4,6 +4,9 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/ARML/Examples/HandTracking/Scenes/HandTrackingExample.unity
+    guid: caec0e1c410221b449a5e00d0153c4f4
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0
