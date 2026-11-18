@@ -42,6 +42,9 @@ namespace ARML.DebugTools
         /// <param name="state">True to enable the renderer, false to disable it.</param>
         public void SetRenderer(bool state)
         {
+            if(meshRenderer == null)
+                meshRenderer = GetComponent<MeshRenderer>();
+            
             meshRenderer.enabled = state;
         }
     }

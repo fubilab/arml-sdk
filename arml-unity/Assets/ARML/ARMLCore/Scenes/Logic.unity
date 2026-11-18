@@ -6569,12 +6569,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f25c4cbd81e9763429c09d87cea85472, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  showFPSCounterAlways: 0
   debugPanel: {fileID: 4389858559451682377}
   settingsPanel: {fileID: 605775683}
   trackingText: {fileID: 6935890984551065554}
   micInputText: {fileID: 2074122585147605699}
   camParentController: {fileID: 1610943365}
-  fpsText: {fileID: 658745898}
+  fpsText: {fileID: 658745901}
 --- !u!224 &5908441680850053407
 RectTransform:
   m_ObjectHideFlags: 0
