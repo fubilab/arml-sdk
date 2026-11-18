@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace ARML.Interaction
 {
@@ -75,21 +76,21 @@ namespace ARML.Interaction
             
             Vector3 direction = Vector3.zero;
 
-            // Move camera based on arrow key inputs
-            if (Input.GetKey(KeyCode.LeftArrow))
+            // Move camera based on arrow key inputs (the keyboard, or the OSC remote's virtual arrow keys)
+            if (Input.GetKey(KeyCode.LeftArrow) || RemoteControl.IsArrowHeld(MoveDirection.Left))
             {
                 direction += Vector3.left;
             }
-            if (Input.GetKey(KeyCode.RightArrow))
+            if (Input.GetKey(KeyCode.RightArrow) || RemoteControl.IsArrowHeld(MoveDirection.Right))
             {
                 direction += Vector3.right;
             }
-            if (Input.GetKey(KeyCode.UpArrow))
+            if (Input.GetKey(KeyCode.UpArrow) || RemoteControl.IsArrowHeld(MoveDirection.Up))
             {
                 Vector3 v = moveUpDown ? Vector3.up : Vector3.forward;
                 direction += v;
             }
-            if (Input.GetKey(KeyCode.DownArrow))
+            if (Input.GetKey(KeyCode.DownArrow) || RemoteControl.IsArrowHeld(MoveDirection.Down))
             {
                 Vector3 v = moveUpDown ? Vector3.down : Vector3.back;
                 direction += v;

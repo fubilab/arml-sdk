@@ -35,8 +35,12 @@ namespace ARML.DebugTools
             public Slider slider;
             public TMP_Text valueText;
             public TMP_Text labelText;
+            public float lastValue; // last field value shown on the slider (bools as 0/1)
         }
-        
+
+        private const float RefreshInterval = 0.1f;
+        private float nextRefresh;
+
         private void Awake()
         {
             // Get or find EventSystem
@@ -56,10 +60,49 @@ namespace ARML.DebugTools
             SceneController.Instance.OnGameSceneLoaded += (scene) => ReScanTweakables();
         }
 
+        private void Update()
+        {
+            if (Time.unscaledTime < nextRefresh) return;
+            nextRefresh = Time.unscaledTime + RefreshInterval;
+
+            if (tweakerPanel != null && !tweakerPanel.activeInHierarchy) return;
+            RefreshValuesFromFields();
+        }
+
         private void ReScanTweakables()
         {
             DiscoverTweakableFields();
             GenerateUI();
+        }
+
+        /// <summary>
+        /// Pulls the current field values into the sliders, so changes made outside the panel
+        /// (the OSC remote, other scripts, ...) show up here. Sliders only move when the field
+        /// actually changed, so this never fights the user dragging a slider.
+        /// </summary>
+        public void RefreshValuesFromFields()
+        {
+            foreach (TweakableField tweakable in tweakableFields)
+            {
+                if (tweakable.slider == null || tweakable.targetObjects.Count == 0) continue;
+
+                object target = tweakable.targetObjects[0];
+                if (target is UnityEngine.Object unityObject && unityObject == null) continue; // destroyed
+
+                bool isBoolean = tweakable.fieldInfo.FieldType == typeof(bool);
+                object raw = tweakable.fieldInfo.GetValue(target);
+                float value = isBoolean ? ((bool)raw ? 1f : 0f) : (float)raw;
+
+                if (Mathf.Approximately(value, tweakable.lastValue)) continue;
+                tweakable.lastValue = value;
+
+                bool log = !isBoolean && tweakable.attribute.UseLogScale;
+                tweakable.slider.SetValueWithoutNotify(
+                    log ? LinearToLogarithmic(value, tweakable.slider.minValue, tweakable.slider.maxValue) : value);
+
+                if (isBoolean) UpdateValueText(tweakable, value >= 0.5f);
+                else UpdateValueText(tweakable, value);
+            }
         }
 
         /// <summary>
@@ -214,6 +257,7 @@ namespace ARML.DebugTools
 
                 object fieldValue = tweakable.fieldInfo.GetValue(tweakable.targetObjects[0]);
                 float currentValue = isBoolean ? ((bool)fieldValue ? 1f : 0f) : (float)fieldValue;
+                tweakable.lastValue = currentValue;
 
                 if (!isBoolean && tweakable.attribute.UseLogScale)
                 {
@@ -285,6 +329,7 @@ namespace ARML.DebugTools
             if (tweakerPanel != null)
             {
                 tweakerPanel.SetActive(isPanelVisible);
+                if (isPanelVisible) RefreshValuesFromFields();
 
                 // Select first slider when panel opens
                 if (isPanelVisible && firstSlider != null && eventSystem != null)
@@ -310,6 +355,7 @@ namespace ARML.DebugTools
             if (isBoolean)
             {
                 bool boolValue = sliderValue >= 0.5f;
+                tweakable.lastValue = boolValue ? 1f : 0f;
                 foreach (object targetObject in tweakable.targetObjects)
                 {
                     tweakable.fieldInfo.SetValue(targetObject, boolValue);
@@ -323,6 +369,8 @@ namespace ARML.DebugTools
             {
                 actualValue = LogarithmicToLinear(sliderValue, tweakable.attribute.Min, tweakable.attribute.Max);
             }
+
+            tweakable.lastValue = actualValue;
 
             // Set the value on ALL target objects (for global, this updates all instances)
             foreach (object targetObject in tweakable.targetObjects)
