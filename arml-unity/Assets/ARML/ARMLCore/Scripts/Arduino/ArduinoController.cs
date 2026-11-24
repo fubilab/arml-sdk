@@ -10,9 +10,26 @@ using UnityEngine;
 using ARML.Voice;
 using System.Runtime.InteropServices;
 using UnityEngine.Serialization;
+using HandTracker = ARML.HandTracking.HandTracker;
+using TrackedHandPose = ARML.HandTracking.TrackedHandPose;
 
 namespace ARML.Arduino
 {
+    /// <summary>
+    /// What the LED strip is used for.
+    /// </summary>
+    public enum ArduinoLedMode
+    {
+        /// <summary>The lights show when an object is interactable (the scene scripts drive the strip).</summary>
+        Interactable,
+
+        /// <summary>
+        /// The lights show the hand tracking quality: off until a hand is tracked, then yellow for the left hand,
+        /// green for the right hand and half and half for both. The interactable lights are ignored.
+        /// </summary>
+        HandTrackingQuality
+    }
+
     /// <summary>
     /// The ArduinoController class is responsible for managing communication between Unity and an Arduino device. 
     /// It handles sending color and animation commands to the Arduino, receiving feedback, and managing LED displays.
@@ -36,6 +53,40 @@ namespace ARML.Arduino
 
         [SerializeField, Tooltip("If true, all received messages will be printed in the console.")]
         private bool printAllMessages;
+
+        [Header("LED Mode")]
+        [SerializeField, OnValueChanged("onLedModeChanged"),
+         Tooltip("Interactable: the lights show when an object is interactable (default). " +
+                 "HandTrackingQuality: the lights show the hand tracking quality and the interactable lights are ignored.")]
+        private ArduinoLedMode ledMode = ArduinoLedMode.Interactable;
+
+        [Header("Hand Tracking Quality Settings")]
+        [SerializeField, ShowIf("isHandQualityMode"), Tooltip("Strip color while the left hand is tracked.")]
+        private Color leftHandColor = new Color(1f, 0.7f, 0f);
+
+        [SerializeField, ShowIf("isHandQualityMode"), Tooltip("Strip color while the right hand is tracked.")]
+        private Color rightHandColor = Color.green;
+
+        [SerializeField, ShowIf("isHandQualityMode"),
+         Tooltip("Strip color while no hand is tracked. Black turns the lights off.")]
+        private Color noHandColor = Color.black;
+
+        [SerializeField, ShowIf("isHandQualityMode"),
+         Tooltip("When both hands are tracked, the left hand color is on the first half of the strip and the right " +
+                 "hand color on the second half. Enable to swap the halves.")]
+        private bool swapHandHalves;
+
+        [SerializeField, ShowIf("isHandQualityMode"), Range(0f, 1f),
+         Tooltip("Hands with a lower landmark confidence do not count as detected.")]
+        private float handMinConfidence = 0.6f;
+
+        [SerializeField, ShowIf("isHandQualityMode"), Min(0f),
+         Tooltip("A hand must be detected this long (seconds) before its light turns on. Avoids flashes.")]
+        private float handConfirmTime = 0.1f;
+
+        [SerializeField, ShowIf("isHandQualityMode"), Min(0f),
+         Tooltip("A hand can be lost for this long (seconds) before its light turns off. Avoids flicker.")]
+        private float handLostGraceTime = 0.25f;
 
         [Header("Color Settings")] [SerializeField, Tooltip("The solid color used for the Arduino display."),
             OnValueChanged("onSolidColorChanged")]
@@ -187,6 +238,8 @@ namespace ARML.Arduino
         private bool buttonDown = false;
         private void Update()
         {
+            if (ledMode == ArduinoLedMode.HandTrackingQuality)
+                UpdateHandQualityLights();
 
             // trigger lights on click
             if (solidColorOnButtonClick)
@@ -217,6 +270,145 @@ namespace ARML.Arduino
         {
             AddMessageToQueue("ARML_ENABLE_BNO");
         }
+
+        #region LED Mode
+
+        /// <summary>
+        /// What the LED strip shows. Can be changed at runtime.
+        /// </summary>
+        public ArduinoLedMode LedMode
+        {
+            get => ledMode;
+            set
+            {
+                if (ledMode == value) return;
+                ledMode = value;
+                if (Application.isPlaying) ApplyLedMode();
+            }
+        }
+
+        private bool isHandQualityMode => ledMode == ArduinoLedMode.HandTrackingQuality;
+
+        private void onLedModeChanged()
+        {
+            if (!Application.isPlaying) return;
+            ApplyLedMode();
+        }
+
+        /// <summary>
+        /// Drops the lights of the previous mode that are still waiting in the queue and starts the new mode.
+        /// </summary>
+        private void ApplyLedMode()
+        {
+            messagesList.RemoveAll(IsLightMessage);
+            ResetHandQualityLights();
+
+            // Hand quality lights are sent by Update, the interactable ones go back to the default lights
+            if (ledMode == ArduinoLedMode.Interactable)
+                SetArduinoDefault();
+        }
+
+        /// <summary>
+        /// True for messages that change the lights, false for messages about the state of the Arduino.
+        /// </summary>
+        private static bool IsLightMessage(string msg)
+        {
+            return !(msg.StartsWith("ARML_READY") || msg.StartsWith("ARML_LOADING") ||
+                     msg.StartsWith("ARML_B") || msg.StartsWith("ARML_ENABLE_BNO"));
+        }
+
+        /// <summary>
+        /// Tracks if a hand counts as detected, with a delay before it turns on and a grace time before it turns off.
+        /// </summary>
+        private sealed class HandPresence
+        {
+            public bool Active { get; private set; }
+            private float goodSince = -1f;
+            private float lastGoodTime;
+
+            public bool Update(bool good, float now, float confirmTime, float graceTime)
+            {
+                if (good)
+                {
+                    if (goodSince < 0f) goodSince = now;
+                    lastGoodTime = now;
+                    if (!Active && now - goodSince >= confirmTime) Active = true;
+                }
+                else
+                {
+                    goodSince = -1f;
+                    if (Active && now - lastGoodTime > graceTime) Active = false;
+                }
+                return Active;
+            }
+
+            public void Reset()
+            {
+                Active = false;
+                goodSince = -1f;
+            }
+        }
+
+        private const string SplitCommandPrefix = "ARML_SPLIT_";
+        private const int HandStateUnknown = -1;
+        private const int HandStateLeft = 1;
+        private const int HandStateRight = 2;
+
+        private readonly HandPresence leftPresence = new HandPresence();
+        private readonly HandPresence rightPresence = new HandPresence();
+        private int sentHandState = HandStateUnknown;
+
+        /// <summary>
+        /// Forgets the hand state, so the lights are sent again with the next update.
+        /// </summary>
+        private void ResetHandQualityLights()
+        {
+            leftPresence.Reset();
+            rightPresence.Reset();
+            sentHandState = HandStateUnknown;
+        }
+
+        private bool IsHandDetected(TrackedHandPose pose)
+        {
+            return pose.Tracked && pose.Confidence >= handMinConfidence;
+        }
+
+        /// <summary>
+        /// Sends the hand tracking quality to the Arduino when it changed.
+        /// </summary>
+        private void UpdateHandQualityLights()
+        {
+            HandTracker tracker = HandTracker.Instance;
+            float now = Time.unscaledTime;
+
+            bool left = leftPresence.Update(tracker != null && IsHandDetected(tracker.Left),
+                now, handConfirmTime, handLostGraceTime);
+            bool right = rightPresence.Update(tracker != null && IsHandDetected(tracker.Right),
+                now, handConfirmTime, handLostGraceTime);
+
+            int state = (left ? HandStateLeft : 0) | (right ? HandStateRight : 0);
+            if (state == sentHandState) return;
+            sentHandState = state;
+
+            Color firstHalf, secondHalf;
+            if (left && right)
+            {
+                firstHalf = swapHandHalves ? rightHandColor : leftHandColor;
+                secondHalf = swapHandHalves ? leftHandColor : rightHandColor;
+            }
+            else if (left)
+                firstHalf = secondHalf = leftHandColor;
+            else if (right)
+                firstHalf = secondHalf = rightHandColor;
+            else
+                firstHalf = secondHalf = noHandColor;
+
+            // Only the newest hand state matters, drop older ones that were not sent yet
+            messagesList.RemoveAll(msg => msg.StartsWith(SplitCommandPrefix));
+            AddMessageToQueue($"{SplitCommandPrefix}{GetColorCommand(firstHalf, 0)}_{GetColorCommand(secondHalf, 0)}");
+        }
+
+        #endregion
 
         public void ResetOrientation() 
         {
@@ -341,6 +533,7 @@ namespace ARML.Arduino
         private void OnEnable()
         {
             readyToSend = true;
+            ResetHandQualityLights();
 
             try
             {
@@ -394,11 +587,22 @@ namespace ARML.Arduino
         /// <returns>The command string.</returns>
         private string GetSolidColorCommand(Color solidColor)
         {
-            return $"R{(solidColor.r * 255):F0}" +
-                   $"G{(solidColor.g * 255):F0}" +
-                   $"B{(solidColor.b * 255):F0}" +
-                   $"W{whiteBrightness:F0}" +
-                   $"A{(solidColor.a * 255):F0}" +
+            return GetColorCommand(solidColor, whiteBrightness);
+        }
+
+        /// <summary>
+        /// Generates the color part of a command: red, green, blue, white and alpha.
+        /// </summary>
+        /// <param name="color">The color to set.</param>
+        /// <param name="white">The brightness of the white channel.</param>
+        /// <returns>The command string.</returns>
+        private static string GetColorCommand(Color color, int white)
+        {
+            return $"R{(color.r * 255):F0}" +
+                   $"G{(color.g * 255):F0}" +
+                   $"B{(color.b * 255):F0}" +
+                   $"W{white:F0}" +
+                   $"A{(color.a * 255):F0}" +
                    "E"; // E used to set end of command, used to prevent wrong colors by ignoring anything after this
         }
 
@@ -418,12 +622,15 @@ namespace ARML.Arduino
 
         /// <summary>
         /// Sets the Arduino to display a specified color.
+        /// Ignored in <see cref="ArduinoLedMode.HandTrackingQuality"/> mode, where the strip shows the hand tracking.
         /// </summary>
         /// <param name="color">The color to set.</param>
         /// <param name="brightness">The brightness level.</param>
         /// <param name="force">If true, forces the command to be sent immediately, ignoring the queue.</param>
         public void SetArduinoColor(Color color, bool force = false)
         {
+            if (isHandQualityMode) return;
+
             solidColor = color;
             if (!force)
                 AddMessageToQueue(GetSolidColorCommand(color));
@@ -433,10 +640,13 @@ namespace ARML.Arduino
 
         /// <summary>
         /// Sets the Arduino to display default lights.
+        /// Ignored in <see cref="ArduinoLedMode.HandTrackingQuality"/> mode, where the strip shows the hand tracking.
         /// </summary>
         /// <param name="force">If true, forces the command to be sent immediately, ignoring the queue.</param>
         public void SetArduinoDefault(bool force = false)
         {
+            if (isHandQualityMode) return;
+
             if (!force)
                 AddMessageToQueue("ARML_DEFAULT");
             else
@@ -445,12 +655,15 @@ namespace ARML.Arduino
 
         /// <summary>
         /// Animates a fade from a color to another over a given duration.
+        /// Ignored in <see cref="ArduinoLedMode.HandTrackingQuality"/> mode, where the strip shows the hand tracking.
         /// </summary>
         /// <param name="from">Color to fade from.</param>
         /// <param name="to">Color to fade to.</param>
         /// <param name="duration">Duration of the fade in seconds.</param>
         public void SetArduinoFade(Color from, Color to, float duration)
         {
+            if (isHandQualityMode) return;
+
             SetArduinoColor(from);
             int fadeSteps = Mathf.RoundToInt(duration * 10f - 2f);
             for (int i = 0; i < fadeSteps; i++)
@@ -464,6 +677,7 @@ namespace ARML.Arduino
 
         /// <summary>
         /// Sets the Arduino animation with specified parameters.
+        /// Ignored in <see cref="ArduinoLedMode.HandTrackingQuality"/> mode, where the strip shows the hand tracking.
         /// </summary>
         /// <param name="bgColor">The background color.</param>
         /// <param name="aColor">The animation color.</param>
@@ -475,6 +689,8 @@ namespace ARML.Arduino
         public void SetArduinoAnimation(Color bgColor, Color aColor, float rate = -1,
             int length = -1, int startPixelIndex = -1, int endPixelIndex = -1)
         {
+            if (isHandQualityMode) return;
+
             if (rate == -1)
                 rate = animationTime;
 

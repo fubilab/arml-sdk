@@ -65,6 +65,15 @@ int endPixelIndex = LED_COUNT;
 byte backwardsMode = LOW;
 byte clearPixelsOutsideRange = LOW;
 
+// Split mode: the strip is two solid halves (first half colour A, second half colour B). Used by Unity to show
+// the hand tracking quality. While active, it is redrawn when the loading -> ready fade ends, so the fade
+// cannot overwrite it.
+#define SPLIT_PREFIX "ARML_SPLIT_"
+#define SPLIT_PREFIX_LENGTH 11
+bool splitMode = false;
+int splitColorA[] = { 0, 0, 0, 0, 255 };
+int splitColorB[] = { 0, 0, 0, 0, 255 };
+
 void setup(void) {
   Serial.begin(115200);
 
@@ -87,7 +96,8 @@ void loop(void) {
   updateLoadingReady();
   updateColorProgress();
 
-  if (Serial.available()) {
+  // Read everything that arrived, but stop at the end of a command so the next one is not appended to it
+  while (Serial.available() && !stringComplete) {
     char inChar = (char)Serial.read();
     if (inChar == '\n') {
       stringComplete = true;
@@ -119,8 +129,9 @@ int numRainbowLoops = 20;
 int rainbowLoopCount = 0;
 
 void showDefault() {
+  splitMode = false;
   strip.setBrightness(brightness);
-  
+
   float GB = 128 * fadeVal / fadeMax;
   float W = 255 * fadeVal / fadeMax;
   //show default patterns
@@ -159,11 +170,72 @@ void updateLoadingReady() {
   if (armlLoading) {
     showLoadingLoop();
   } else if(fadeVal < fadeMax) {
-    showDefault();
+    showIdle();
   }
   if (fadeVal > fadeMax) {
     fadeVal = fadeMax;
   }
+}
+
+// What is shown when loading is done: the split colours when Unity set them, the default lights otherwise
+void showIdle() {
+  if (splitMode) {
+    showSplit();
+  } else {
+    showDefault();
+  }
+}
+
+// Two solid halves: first half colour A, second half colour B. A hand tracking quality of nothing is both black.
+void showSplit() {
+  int half = LED_COUNT / 2;
+  strip.fill(strip.Color(splitColorA[0], splitColorA[1], splitColorA[2], splitColorA[3]), 0, half);
+  strip.fill(strip.Color(splitColorB[0], splitColorB[1], splitColorB[2], splitColorB[3]), half, LED_COUNT - half);
+  strip.show();
+  solidColorState = HIGH;  // stop animations
+}
+
+// Parses "R<r>G<g>B<b>W<w>A<a>E" into color[5] and applies the alpha. Returns false when it is malformed.
+bool parseColorCmd(String cmd, int color[]) {
+  int r = cmd.indexOf('R');
+  int g = cmd.indexOf('G');
+  int b = cmd.indexOf('B');
+  int w = cmd.indexOf('W');
+  int a = cmd.indexOf('A');
+  int e = cmd.indexOf('E');
+  if (r != 0 || g < 0 || b < 0 || w < 0 || a < 0 || e < 0)
+    return false;
+  if (!(r < g && g < b && b < w && w < a && a < e))
+    return false;
+
+  color[0] = cmd.substring(r + 1, g).toInt();
+  color[1] = cmd.substring(g + 1, b).toInt();
+  color[2] = cmd.substring(b + 1, w).toInt();
+  color[3] = cmd.substring(w + 1, a).toInt();
+  color[4] = cmd.substring(a + 1, e).toInt();
+  applyAlphaValue(color);
+  return true;
+}
+
+// ARML_SPLIT_<colorA>_<colorB>, each colour in the solid colour format, e.g.
+// ARML_SPLIT_R255G160B0W0A255E_R0G255B0W0A255E
+void processSplitCmd(String cmd) {
+  String body = cmd.substring(SPLIT_PREFIX_LENGTH);
+  int separator = body.indexOf('_');
+  if (separator < 0)
+    return;
+
+  int colorA[5];
+  int colorB[5];
+  if (!parseColorCmd(body.substring(0, separator), colorA) || !parseColorCmd(body.substring(separator + 1), colorB))
+    return;
+
+  for (int i = 0; i < 5; i++) {
+    splitColorA[i] = colorA[i];
+    splitColorB[i] = colorB[i];
+  }
+  splitMode = true;
+  showSplit();
 }
 
 
@@ -211,7 +283,9 @@ void receiveCmdLoop() {
     Serial.print("CMD received: ");
     Serial.println(inputString);
     inputString.trim();
-    if (inputString.indexOf("P_") >= 0) {  //If command contains "P_", set progress colour
+    if (inputString.indexOf(SPLIT_PREFIX) == 0) {  // checked first: split colours (hand tracking quality)
+      processSplitCmd(inputString);
+    } else if (inputString.indexOf("P_") >= 0) {  //If command contains "P_", set progress colour
       //processSetProgressColorCmd(inputString);
     } else if (inputString.indexOf("Anim") >= 0) {
       processAnimationColorCmd(inputString);
@@ -244,6 +318,8 @@ void processBrightnessCmd(String cmd) {
 void processSetSolidColorCmd(String cmd) {
   //Serial.println("Set Solid Color: " + cmd);
   solidColorState = HIGH;
+
+  splitMode = false;
 
   //Safe checks to ignore non-valid commands
   if (cmd.substring(0, 1) != "R" || cmd.substring(cmd.length(), cmd.length() - 1) != "E" || cmd.length() > 19)
@@ -346,6 +422,7 @@ void processAnimationColorCmd(String cmd) {
   previousLedPixelChangeMillis = millis();
 
   solidColorState = LOW;
+  splitMode = false;
 }
 
 void updateColorProgress() {
